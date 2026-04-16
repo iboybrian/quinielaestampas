@@ -6,17 +6,28 @@
 -- ── Profiles (extends auth.users) ───────────────────────────
 CREATE TABLE IF NOT EXISTS public.profiles (
   id          UUID        REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  email       TEXT,
   username    TEXT        UNIQUE,
   avatar_url  TEXT,
   country     TEXT,
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Auto-create profile on signup
+-- Auto-create profile on signup (reads username/country from auth metadata)
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS $$
 BEGIN
-  INSERT INTO public.profiles (id) VALUES (NEW.id) ON CONFLICT DO NOTHING;
+  INSERT INTO public.profiles (id, email, username, country)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    NEW.raw_user_meta_data->>'username',
+    NEW.raw_user_meta_data->>'country'
+  )
+  ON CONFLICT (id) DO UPDATE SET
+    email    = EXCLUDED.email,
+    username = EXCLUDED.username,
+    country  = EXCLUDED.country;
   RETURN NEW;
 END;
 $$;
