@@ -1,22 +1,24 @@
 import { motion } from 'framer-motion'
 import { Star, Edit3, User } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
-
-const buttons = [
-  { icon: Star, label: 'My Album', path: '/marketplace', activeColor: 'text-amber-400', activeBg: 'bg-amber-400/10' },
-  { icon: Edit3, label: 'Predictions', path: '/quiniela', activeColor: 'text-emerald-400', activeBg: 'bg-emerald-400/10' },
-  { icon: User, label: 'Profile', path: '/profile', activeColor: 'text-blue-400', activeBg: 'bg-blue-400/10' },
-]
+import { useLang } from '../../contexts/LangContext'
 
 export default function Footer() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { t } = useLang()
+
+  const buttons = [
+    { icon: Star,  label: t.footer.myAlbum,     path: '/marketplace', activeColor: 'text-amber-400',   activeBg: 'bg-amber-400/10'   },
+    { icon: Edit3, label: t.footer.predictions,  path: '/quiniela',    activeColor: 'text-emerald-400', activeBg: 'bg-emerald-400/10' },
+    { icon: User,  label: t.footer.profile,      path: '/profile',     activeColor: 'text-blue-400',    activeBg: 'bg-blue-400/10'    },
+  ]
 
   return (
     <motion.footer
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.4 }}
+      transition={{ delay: 0.3, duration: 0.35, ease: 'easeOut' }}
       className="md:hidden fixed bottom-0 left-0 right-0 z-30 h-16 safe-area-inset-bottom"
     >
       <div className="absolute inset-0 bg-[#050B1A]/90 backdrop-blur-xl border-t border-white/5" />

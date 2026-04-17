@@ -1,35 +1,43 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Zap, Users, Trophy, Star, Shield, TrendingUp, ArrowRight } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import { useLang } from '../contexts/LangContext'
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-}
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 15 } },
-}
+// Custom images (imported as ES modules from src/public/)
+import trophyImg    from '../public/assets/images/home/trophy.png'
+import stickersImg  from '../public/assets/images/home/stickers.png'
+import scoreboardImg from '../public/assets/images/home/scoreboard_2.png'
 
-const features = [
-  { icon: Zap,        label: 'Live Scores',   desc: 'Real-time via API-Football', color: 'text-amber-400',   bg: 'bg-amber-400/10'  },
-  { icon: Users,      label: 'Group Play',    desc: 'Invite friends by code',     color: 'text-blue-400',    bg: 'bg-blue-400/10'   },
-  { icon: Trophy,     label: 'Leaderboards',  desc: 'Climb the rankings',         color: 'text-purple-400',  bg: 'bg-purple-400/10' },
-  { icon: Star,       label: '900+ Stickers', desc: '48 teams + specials',        color: 'text-amber-400',   bg: 'bg-amber-400/10'  },
-  { icon: Shield,     label: 'Fair Play',     desc: 'Predictions auto-lock',      color: 'text-emerald-400', bg: 'bg-emerald-400/10'},
-  { icon: TrendingUp, label: 'Analytics',     desc: 'Track your predictions',     color: 'text-pink-400',    bg: 'bg-pink-400/10'   },
+const FEATURE_ICONS = [Zap, Users, Trophy, Star, Shield, TrendingUp]
+const FEATURE_COLORS = [
+  { color: 'text-amber-400',   bg: 'bg-amber-400/10'   },
+  { color: 'text-blue-400',    bg: 'bg-blue-400/10'    },
+  { color: 'text-purple-400',  bg: 'bg-purple-400/10'  },
+  { color: 'text-amber-400',   bg: 'bg-amber-400/10'   },
+  { color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
+  { color: 'text-pink-400',    bg: 'bg-pink-400/10'    },
 ]
 
 export default function Home() {
   const navigate = useNavigate()
+  const { t } = useLang()
+  const shouldReduce = useReducedMotion()
+
+  const container = {
+    hidden: { opacity: 0 },
+    show:   { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+  }
+  const item = {
+    hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
+    show:   { opacity: 1, y: 0, transition: { type: 'tween', ease: 'easeOut', duration: 0.3 } },
+  }
 
   return (
     <PageTransition>
-      {/* pt-12 on mobile, pt-20 on desktop — creates breathing room below the fixed header */}
       <div className="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-start pt-12 md:pt-20 px-4 overflow-hidden">
 
-        {/* Animated background orbs */}
+        {/* Animated background orbs — CSS-driven, GPU-accelerated */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-1/3 -right-32 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl animate-float-slow delay-3000" />
@@ -38,7 +46,8 @@ export default function Home() {
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
               backgroundSize: '60px 60px',
             }}
           />
@@ -50,30 +59,31 @@ export default function Home() {
           animate="show"
           className="relative z-10 text-center max-w-4xl mx-auto w-full"
         >
-          {/* Trophy hero */}
-          <motion.div variants={item} className="flex justify-center mb-8">
+          {/* Trophy image hero */}
+          <motion.div variants={item} className="flex justify-center mb-6">
             <div className="relative inline-block">
               <div className="absolute inset-0 bg-amber-400/20 blur-3xl scale-150 rounded-full" />
-              <motion.div
-                animate={{ y: [0, -12, 0], rotate: [0, 2, 0, -2, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative text-7xl md:text-8xl"
-              >
-                🏆
-              </motion.div>
+              <motion.img
+                src={trophyImg}
+                alt="World Cup Trophy"
+                animate={shouldReduce ? {} : { y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop' }}
+                style={{ willChange: 'transform' }}
+                className="relative w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-[0_0_24px_rgba(251,191,36,0.4)]"
+              />
             </div>
           </motion.div>
 
           {/* Title */}
           <motion.h1 variants={item} className="text-5xl md:text-7xl font-black mb-4 leading-tight tracking-tight">
-            <span className="text-white">WORLD CUP</span>
+            <span className="text-white">{t.home.title1}</span>
             <br />
-            <span className="gold-text">2026 HUB</span>
+            <span className="gold-text">{t.home.title2}</span>
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p variants={item} className="text-lg md:text-xl text-slate-400 mb-12 max-w-xl mx-auto leading-relaxed">
-            Predict match scores, compete with friends in quinielas, and complete your ultimate sticker collection.
+            {t.home.subtitle}
           </motion.p>
 
           {/* CTA Cards — side-by-side on md+ */}
@@ -81,50 +91,48 @@ export default function Home() {
 
             {/* Sticker Album */}
             <motion.button
-              whileHover={{ scale: 1.03, y: -4 }}
+              whileHover={{ scale: 1.02, y: -3 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/marketplace')}
               className="group relative glass rounded-3xl p-8 text-left overflow-hidden hover:border-amber-400/30 transition-all duration-300"
+              style={{ willChange: 'transform' }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/0 to-amber-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/0 to-transparent group-hover:via-amber-400/40 transition-all duration-300" />
               <div className="relative z-10">
-                <motion.div
-                  animate={{ rotate: [0, 8, 0, -8, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="text-5xl mb-5"
-                >📦</motion.div>
-                <h2 className="text-2xl font-black text-white mb-2">Sticker Album</h2>
-                <p className="text-slate-400 text-sm leading-relaxed mb-5">
-                  Track your collection across 48 teams, find trade partners, and unlock legendary stickers.
-                </p>
+                <img
+                  src={stickersImg}
+                  alt="Sticker Album"
+                  className="w-14 h-14 object-contain mb-5"
+                />
+                <h2 className="text-2xl font-black text-white mb-2">{t.home.album.title}</h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5">{t.home.album.desc}</p>
                 <div className="inline-flex items-center gap-2 text-amber-400 font-bold text-sm group-hover:gap-3 transition-all">
-                  Open Album <ArrowRight className="w-4 h-4" />
+                  {t.home.album.cta} <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
             </motion.button>
 
             {/* Quinielas */}
             <motion.button
-              whileHover={{ scale: 1.03, y: -4 }}
+              whileHover={{ scale: 1.02, y: -3 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/quiniela')}
               className="group relative glass rounded-3xl p-8 text-left overflow-hidden hover:border-emerald-400/30 transition-all duration-300"
+              style={{ willChange: 'transform' }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 to-emerald-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/0 to-transparent group-hover:via-emerald-400/40 transition-all duration-300" />
               <div className="relative z-10">
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity }}
-                  className="text-5xl mb-5"
-                >🎯</motion.div>
-                <h2 className="text-2xl font-black text-white mb-2">Quinielas</h2>
-                <p className="text-slate-400 text-sm leading-relaxed mb-5">
-                  Create prediction groups, score points for correct results, and watch the bracket live.
-                </p>
+                <img
+                  src={scoreboardImg}
+                  alt="Quinielas"
+                  className="w-14 h-14 object-contain mb-5"
+                />
+                <h2 className="text-2xl font-black text-white mb-2">{t.home.quiniela.title}</h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5">{t.home.quiniela.desc}</p>
                 <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm group-hover:gap-3 transition-all">
-                  Start Predicting <ArrowRight className="w-4 h-4" />
+                  {t.home.quiniela.cta} <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
             </motion.button>
@@ -133,16 +141,20 @@ export default function Home() {
 
           {/* Feature grid */}
           <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
-            {features.map((f) => (
-              <div
-                key={f.label}
-                className={`${f.bg} rounded-2xl p-4 flex flex-col items-center text-center backdrop-blur-sm border border-white/5`}
-              >
-                <f.icon className={`w-5 h-5 mb-2 ${f.color}`} />
-                <div className="font-bold text-white text-sm">{f.label}</div>
-                <div className="text-slate-500 text-xs mt-0.5">{f.desc}</div>
-              </div>
-            ))}
+            {t.home.features.map((f, i) => {
+              const Icon = FEATURE_ICONS[i]
+              const { color, bg } = FEATURE_COLORS[i]
+              return (
+                <div
+                  key={f.label}
+                  className={`${bg} rounded-2xl p-4 flex flex-col items-center text-center backdrop-blur-sm border border-white/5`}
+                >
+                  <Icon className={`w-5 h-5 mb-2 ${color}`} />
+                  <div className="font-bold text-white text-sm">{f.label}</div>
+                  <div className="text-slate-500 text-xs mt-0.5">{f.desc}</div>
+                </div>
+              )
+            })}
           </motion.div>
         </motion.div>
       </div>
