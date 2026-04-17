@@ -13,12 +13,12 @@ const item = {
 }
 
 const features = [
-  { icon: Zap, label: 'Live Scores', desc: 'Real-time via API-Football', color: 'text-amber-400', bg: 'bg-amber-400/10' },
-  { icon: Users, label: 'Group Play', desc: 'Invite friends by code', color: 'text-blue-400', bg: 'bg-blue-400/10' },
-  { icon: Trophy, label: 'Leaderboards', desc: 'Climb the rankings', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { icon: Star, label: '900+ Stickers', desc: '48 teams + specials', color: 'text-amber-400', bg: 'bg-amber-400/10' },
-  { icon: Shield, label: 'Fair Play', desc: 'Predictions auto-lock', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-  { icon: TrendingUp, label: 'Analytics', desc: 'Track your predictions', color: 'text-pink-400', bg: 'bg-pink-400/10' },
+  { icon: Zap,        label: 'Live Scores',   desc: 'Real-time via API-Football', color: 'text-amber-400',   bg: 'bg-amber-400/10'  },
+  { icon: Users,      label: 'Group Play',    desc: 'Invite friends by code',     color: 'text-blue-400',    bg: 'bg-blue-400/10'   },
+  { icon: Trophy,     label: 'Leaderboards',  desc: 'Climb the rankings',         color: 'text-purple-400',  bg: 'bg-purple-400/10' },
+  { icon: Star,       label: '900+ Stickers', desc: '48 teams + specials',        color: 'text-amber-400',   bg: 'bg-amber-400/10'  },
+  { icon: Shield,     label: 'Fair Play',     desc: 'Predictions auto-lock',      color: 'text-emerald-400', bg: 'bg-emerald-400/10'},
+  { icon: TrendingUp, label: 'Analytics',     desc: 'Track your predictions',     color: 'text-pink-400',    bg: 'bg-pink-400/10'   },
 ]
 
 export default function Home() {
@@ -26,16 +26,15 @@ export default function Home() {
 
   return (
     <PageTransition>
-      {/* Full-viewport hero */}
-      <div className="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 overflow-hidden">
+      {/* pt-12 on mobile, pt-20 on desktop — creates breathing room below the fixed header */}
+      <div className="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-start pt-12 md:pt-20 px-4 overflow-hidden">
+
         {/* Animated background orbs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-1/3 -right-32 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl animate-float-slow delay-3000" />
           <div className="absolute top-2/3 left-1/3 w-72 h-72 bg-purple-500/8 rounded-full blur-3xl animate-float delay-5000" />
           <div className="absolute top-10 right-1/4 w-64 h-64 bg-blue-500/6 rounded-full blur-3xl animate-float-slow delay-2000" />
-
-          {/* Subtle grid pattern */}
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -77,9 +76,10 @@ export default function Home() {
             Predict match scores, compete with friends in quinielas, and complete your ultimate sticker collection.
           </motion.p>
 
-          {/* CTA Cards */}
+          {/* CTA Cards — side-by-side on md+ */}
           <motion.div variants={item} className="grid md:grid-cols-2 gap-5 max-w-2xl mx-auto mb-16">
-            {/* Marketplace */}
+
+            {/* Sticker Album */}
             <motion.button
               whileHover={{ scale: 1.03, y: -4 }}
               whileTap={{ scale: 0.98 }}
@@ -104,7 +104,7 @@ export default function Home() {
               </div>
             </motion.button>
 
-            {/* Quiniela */}
+            {/* Quinielas */}
             <motion.button
               whileHover={{ scale: 1.03, y: -4 }}
               whileTap={{ scale: 0.98 }}
@@ -128,6 +128,7 @@ export default function Home() {
                 </div>
               </div>
             </motion.button>
+
           </motion.div>
 
           {/* Feature grid */}
