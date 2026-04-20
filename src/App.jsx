@@ -10,6 +10,7 @@ import Home from './pages/Home'
 import Auth from './pages/Auth'
 import QuinielaHub from './pages/QuinielaHub'
 import QuinielaGroup from './pages/QuinielaGroup'
+import ManageQuiniela from './pages/ManageQuiniela'
 import Marketplace from './pages/Marketplace'
 import Profile from './pages/Profile'
 import PrivacyPolicy from './pages/PrivacyPolicy'
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/quiniela" element={<QuinielaHub />} />
           <Route path="/quiniela/:id" element={<QuinielaGroup />} />
+          <Route path="/quiniela/:id/manage" element={<ManageQuiniela />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Profile />} />

@@ -13,9 +13,11 @@ export function useMyQuinielas() {
     try {
       const { data } = await supabase
         .from('quiniela_members')
-        .select('quiniela_id, quinielas(id, name, code, created_by, created_at)')
+        .select('quiniela_id, role, quinielas(id, name, code, created_by, created_at)')
         .eq('user_id', user.id)
-      setQuinielas(data?.map((r) => r.quinielas).filter(Boolean) ?? [])
+      setQuinielas(
+        data?.map((r) => ({ ...r.quinielas, myRole: r.role })).filter(Boolean) ?? []
+      )
     } catch { setQuinielas([]) }
     finally { setLoading(false) }
   }, [user])
@@ -30,21 +32,31 @@ export function useQuinielaGroup(quinielaId) {
   const [members, setMembers] = useState([])
   const [predictions, setPredictions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const fetchData = useCallback(async () => {
     if (!quinielaId) return
     try {
       const [{ data: q }, { data: m }, { data: p }] = await Promise.all([
         supabase.from('quinielas').select('*').eq('id', quinielaId).single(),
-        supabase.from('quiniela_members').select('user_id, profiles(id, username, avatar_url)').eq('quiniela_id', quinielaId),
+        supabase.from('quiniela_members')
+          .select('user_id, role, has_paid, profiles(id, username, avatar_url)')
+          .eq('quiniela_id', quinielaId),
         supabase.from('predictions').select('*').eq('quiniela_id', quinielaId),
       ])
       setQuiniela(q)
-      setMembers(m?.map((r) => r.profiles).filter(Boolean) ?? [])
+      const enrichedMembers = m?.map((r) => ({
+        ...r.profiles,
+        role: r.role,
+        hasPaid: r.has_paid,
+      })).filter((r) => r.id) ?? []
+      setMembers(enrichedMembers)
       setPredictions(p ?? [])
+      const myMember = m?.find((r) => r.user_id === user?.id)
+      setIsAdmin(myMember?.role === 'admin')
     } catch { console.error('Failed to load quiniela group') }
     finally { setLoading(false) }
-  }, [quinielaId])
+  }, [quinielaId, user])
 
   useEffect(() => {
     fetchData()
@@ -66,7 +78,7 @@ export function useQuinielaGroup(quinielaId) {
   }, [user, quinielaId, fetchData])
 
   const myPredictions = predictions.filter((p) => p.user_id === user?.id)
-  return { quiniela, members, predictions, myPredictions, loading, savePrediction, refresh: fetchData }
+  return { quiniela, members, predictions, myPredictions, loading, isAdmin, savePrediction, refresh: fetchData }
 }
 
 export async function createQuiniela(name, userId) {
@@ -77,22 +89,49 @@ export async function createQuiniela(name, userId) {
     .select()
     .single()
   if (error) throw error
-  await supabase.from('quiniela_members').insert({ quiniela_id: data.id, user_id: userId })
+  await supabase.from('quiniela_members').insert({ quiniela_id: data.id, user_id: userId, role: 'admin' })
   return data
 }
 
 export async function joinQuiniela(code, userId) {
   const { data: q, error: qErr } = await supabase
     .from('quinielas')
-    .select('*')
+    .select('*, quiniela_members(count)')
     .eq('code', code.toUpperCase())
     .single()
   if (qErr || !q) throw new Error('Quiniela not found. Check the code and try again.')
+
+  if (q.participant_limit != null) {
+    const { count } = await supabase
+      .from('quiniela_members')
+      .select('*', { count: 'exact', head: true })
+      .eq('quiniela_id', q.id)
+    if (count >= q.participant_limit) throw new Error('This group has reached its participant limit.')
+  }
+
   const { error: mErr } = await supabase
     .from('quiniela_members')
-    .insert({ quiniela_id: q.id, user_id: userId })
+    .insert({ quiniela_id: q.id, user_id: userId, role: 'member' })
   if (mErr && mErr.code !== '23505') throw mErr  // 23505 = already member
   return q
+}
+
+export async function updateQuiniela(quinielaId, fields) {
+  const allowed = ['prediction_deadline_minutes', 'entry_fee', 'participant_limit', 'description', 'info_contact']
+  const payload = Object.fromEntries(
+    Object.entries(fields).filter(([k]) => allowed.includes(k))
+  )
+  const { error } = await supabase.from('quinielas').update(payload).eq('id', quinielaId)
+  if (error) throw error
+}
+
+export async function toggleMemberPaid(quinielaId, memberId, hasPaid) {
+  const { error } = await supabase
+    .from('quiniela_members')
+    .update({ has_paid: hasPaid })
+    .eq('quiniela_id', quinielaId)
+    .eq('user_id', memberId)
+  if (error) throw error
 }
 
 function generateCode() {

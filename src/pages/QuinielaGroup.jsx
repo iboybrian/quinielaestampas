@@ -15,7 +15,7 @@ const TABS = ['Standings', 'Matches', 'Bracket']
 export default function QuinielaGroup() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { quiniela, members, predictions, myPredictions, loading, savePrediction } = useQuinielaGroup(id)
+  const { quiniela, members, predictions, myPredictions, loading, isAdmin, savePrediction } = useQuinielaGroup(id)
   const [activeTab, setActiveTab] = useState('Standings')
   const [predModal, setPredModal] = useState({ open: false, match: null })
   const [copied, setCopied] = useState(false)
@@ -113,6 +113,7 @@ export default function QuinielaGroup() {
                       match={match}
                       prediction={pred}
                       onPredict={openPredict}
+                      deadlineMinutes={quiniela?.prediction_deadline_minutes ?? 10}
                     />
                   )
                 })}

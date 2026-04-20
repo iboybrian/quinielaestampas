@@ -3,9 +3,10 @@ import { Lock, Clock, CheckCircle, Edit3 } from 'lucide-react'
 import { format, isPast } from 'date-fns'
 import { getPointLabel } from '../../lib/scoring'
 
-export default function MatchCard({ match, prediction, onPredict }) {
+export default function MatchCard({ match, prediction, onPredict, deadlineMinutes = 10 }) {
   const matchTime = new Date(match.starts_at)
-  const isLocked = isPast(matchTime) && match.status !== 'scheduled'
+  const deadlineCutoff = new Date(matchTime.getTime() - deadlineMinutes * 60 * 1000)
+  const isLocked = match.status !== 'scheduled' || isPast(deadlineCutoff)
   const isLive = match.status === 'live'
   const isFinished = match.status === 'finished'
   const hasPrediction = prediction != null

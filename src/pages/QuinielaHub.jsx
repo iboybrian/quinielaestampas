@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Key, Trophy, Copy, Check, ChevronRight, Users, Loader2 } from 'lucide-react'
+import { Plus, Key, Trophy, Copy, Check, ChevronRight, Users, Settings, Loader2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import { useMyQuinielas, createQuiniela, joinQuiniela } from '../hooks/useQuiniela'
@@ -9,24 +9,43 @@ import PageTransition from '../components/layout/PageTransition'
 
 function QuinielaCard({ quiniela }) {
   const navigate = useNavigate()
+  const { t } = useLang()
+  const isAdmin = quiniela.myRole === 'admin'
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
-      whileHover={{ x: 4 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={() => navigate(`/quiniela/${quiniela.id}`)}
-      className="flex items-center gap-4 glass rounded-2xl p-4 cursor-pointer hover:border-white/20 transition-all"
+      className="flex items-center gap-4 glass rounded-2xl p-4 hover:border-white/20 transition-all"
     >
       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/20 flex items-center justify-center text-2xl flex-shrink-0">
         🎯
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-bold text-white truncate">{quiniela.name}</div>
-        <div className="text-xs text-slate-500 mt-0.5 font-mono">Code: {quiniela.code}</div>
+        <div className="text-xs text-slate-500 mt-0.5 font-mono">{t.quiniela.codeLabel}: {quiniela.code}</div>
       </div>
-      <ChevronRight className="w-4 h-4 text-slate-600 flex-shrink-0" />
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {isAdmin && (
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); navigate(`/quiniela/${quiniela.id}/manage`) }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold hover:bg-amber-500/20 transition-all"
+          >
+            <Settings className="w-3 h-3" />
+            {t.quiniela.manage}
+          </motion.button>
+        )}
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={() => navigate(`/quiniela/${quiniela.id}`)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-xs font-bold hover:bg-white/10 transition-all"
+        >
+          {t.quiniela.view}
+          <ChevronRight className="w-3 h-3" />
+        </motion.button>
+      </div>
     </motion.div>
   )
 }
