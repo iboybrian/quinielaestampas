@@ -2,6 +2,39 @@ import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { calculatePoints } from '../lib/scoring'
+import { getFixtures, isGroupStage, MOCK_FIXTURES } from '../lib/footballApi'
+
+export function useFixtures() {
+  const [fixtures, setFixtures] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      try {
+        const all = await getFixtures()
+        if (cancelled) return
+
+        // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied
+        const group = all.filter(isGroupStage)
+        if (group.length) {
+          await supabase.from('matches').upsert(group, { onConflict: 'id' })
+        }
+
+        setFixtures(all)
+      } catch (e) {
+        console.error('[useFixtures]', e)
+        if (!cancelled) setFixtures(MOCK_FIXTURES)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  return { fixtures, loading }
+}
 
 export function useMyQuinielas() {
   const { user } = useAuth()

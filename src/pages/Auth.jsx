@@ -5,38 +5,39 @@ import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Globe, Search, X } from 'luci
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import PageTransition from '../components/layout/PageTransition'
+import Flag from '../components/ui/Flag'
 
 const COUNTRIES = [
-  { flag: '🇦🇱', name: 'Albania' }, { flag: '🇩🇿', name: 'Algeria' }, { flag: '🇦🇴', name: 'Angola' },
-  { flag: '🇦🇷', name: 'Argentina' }, { flag: '🇦🇲', name: 'Armenia' }, { flag: '🇦🇺', name: 'Australia' },
-  { flag: '🇦🇹', name: 'Austria' }, { flag: '🇦🇿', name: 'Azerbaijan' }, { flag: '🇧🇭', name: 'Bahrain' },
-  { flag: '🇧🇩', name: 'Bangladesh' }, { flag: '🇧🇪', name: 'Belgium' }, { flag: '🇧🇴', name: 'Bolivia' },
-  { flag: '🇧🇦', name: 'Bosnia & Herzegovina' }, { flag: '🇧🇷', name: 'Brazil' }, { flag: '🇧🇬', name: 'Bulgaria' },
-  { flag: '🇨🇲', name: 'Cameroon' }, { flag: '🇨🇦', name: 'Canada' }, { flag: '🇨🇱', name: 'Chile' },
-  { flag: '🇨🇳', name: 'China' }, { flag: '🇨🇴', name: 'Colombia' }, { flag: '🇨🇷', name: 'Costa Rica' },
-  { flag: '🇭🇷', name: 'Croatia' }, { flag: '🇨🇺', name: 'Cuba' }, { flag: '🇨🇿', name: 'Czech Republic' },
-  { flag: '🇨🇩', name: 'DR Congo' }, { flag: '🇩🇰', name: 'Denmark' }, { flag: '🇪🇨', name: 'Ecuador' },
-  { flag: '🇪🇬', name: 'Egypt' }, { flag: '🇸🇻', name: 'El Salvador' }, { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', name: 'England' },
-  { flag: '🇫🇮', name: 'Finland' }, { flag: '🇫🇷', name: 'France' }, { flag: '🇩🇪', name: 'Germany' },
-  { flag: '🇬🇭', name: 'Ghana' }, { flag: '🇬🇷', name: 'Greece' }, { flag: '🇬🇹', name: 'Guatemala' },
-  { flag: '🇭🇳', name: 'Honduras' }, { flag: '🇭🇺', name: 'Hungary' }, { flag: '🇮🇩', name: 'Indonesia' },
-  { flag: '🇮🇷', name: 'Iran' }, { flag: '🇮🇶', name: 'Iraq' }, { flag: '🇮🇪', name: 'Ireland' },
-  { flag: '🇮🇱', name: 'Israel' }, { flag: '🇮🇹', name: 'Italy' }, { flag: '🇨🇮', name: 'Ivory Coast' },
-  { flag: '🇯🇲', name: 'Jamaica' }, { flag: '🇯🇵', name: 'Japan' }, { flag: '🇯🇴', name: 'Jordan' },
-  { flag: '🇰🇿', name: 'Kazakhstan' }, { flag: '🇰🇪', name: 'Kenya' }, { flag: '🇰🇼', name: 'Kuwait' },
-  { flag: '🇲🇽', name: 'Mexico' }, { flag: '🇲🇦', name: 'Morocco' }, { flag: '🇳🇱', name: 'Netherlands' },
-  { flag: '🇳🇿', name: 'New Zealand' }, { flag: '🇳🇬', name: 'Nigeria' }, { flag: '🇳🇴', name: 'Norway' },
-  { flag: '🇴🇲', name: 'Oman' }, { flag: '🇵🇦', name: 'Panama' }, { flag: '🇵🇾', name: 'Paraguay' },
-  { flag: '🇵🇪', name: 'Peru' }, { flag: '🇵🇭', name: 'Philippines' }, { flag: '🇵🇱', name: 'Poland' },
-  { flag: '🇵🇹', name: 'Portugal' }, { flag: '🇶🇦', name: 'Qatar' }, { flag: '🇷🇴', name: 'Romania' },
-  { flag: '🇷🇺', name: 'Russia' }, { flag: '🇸🇦', name: 'Saudi Arabia' }, { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', name: 'Scotland' },
-  { flag: '🇸🇳', name: 'Senegal' }, { flag: '🇷🇸', name: 'Serbia' }, { flag: '🇸🇰', name: 'Slovakia' },
-  { flag: '🇸🇮', name: 'Slovenia' }, { flag: '🇿🇦', name: 'South Africa' }, { flag: '🇰🇷', name: 'South Korea' },
-  { flag: '🇪🇸', name: 'Spain' }, { flag: '🇸🇪', name: 'Sweden' }, { flag: '🇨🇭', name: 'Switzerland' },
-  { flag: '🇹🇳', name: 'Tunisia' }, { flag: '🇹🇷', name: 'Turkey' }, { flag: '🇦🇪', name: 'UAE' },
-  { flag: '🇺🇦', name: 'Ukraine' }, { flag: '🇺🇸', name: 'United States' }, { flag: '🇺🇾', name: 'Uruguay' },
-  { flag: '🇻🇪', name: 'Venezuela' }, { flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', name: 'Wales' }, { flag: '🇾🇪', name: 'Yemen' },
-  { flag: '🇿🇲', name: 'Zambia' }, { flag: '🇿🇼', name: 'Zimbabwe' },
+  { code: 'al', name: 'Albania' },       { code: 'dz', name: 'Algeria' },        { code: 'ao', name: 'Angola' },
+  { code: 'ar', name: 'Argentina' },     { code: 'am', name: 'Armenia' },        { code: 'au', name: 'Australia' },
+  { code: 'at', name: 'Austria' },       { code: 'az', name: 'Azerbaijan' },     { code: 'bh', name: 'Bahrain' },
+  { code: 'bd', name: 'Bangladesh' },    { code: 'be', name: 'Belgium' },        { code: 'bo', name: 'Bolivia' },
+  { code: 'ba', name: 'Bosnia & Herzegovina' }, { code: 'br', name: 'Brazil' }, { code: 'bg', name: 'Bulgaria' },
+  { code: 'cm', name: 'Cameroon' },      { code: 'ca', name: 'Canada' },         { code: 'cl', name: 'Chile' },
+  { code: 'cn', name: 'China' },         { code: 'co', name: 'Colombia' },       { code: 'cr', name: 'Costa Rica' },
+  { code: 'hr', name: 'Croatia' },       { code: 'cu', name: 'Cuba' },           { code: 'cz', name: 'Czech Republic' },
+  { code: 'cd', name: 'DR Congo' },      { code: 'dk', name: 'Denmark' },        { code: 'ec', name: 'Ecuador' },
+  { code: 'eg', name: 'Egypt' },         { code: 'sv', name: 'El Salvador' },    { code: 'gb-eng', name: 'England' },
+  { code: 'fi', name: 'Finland' },       { code: 'fr', name: 'France' },         { code: 'de', name: 'Germany' },
+  { code: 'gh', name: 'Ghana' },         { code: 'gr', name: 'Greece' },         { code: 'gt', name: 'Guatemala' },
+  { code: 'hn', name: 'Honduras' },      { code: 'hu', name: 'Hungary' },        { code: 'id', name: 'Indonesia' },
+  { code: 'ir', name: 'Iran' },          { code: 'iq', name: 'Iraq' },           { code: 'ie', name: 'Ireland' },
+  { code: 'il', name: 'Israel' },        { code: 'it', name: 'Italy' },          { code: 'ci', name: 'Ivory Coast' },
+  { code: 'jm', name: 'Jamaica' },       { code: 'jp', name: 'Japan' },          { code: 'jo', name: 'Jordan' },
+  { code: 'kz', name: 'Kazakhstan' },    { code: 'ke', name: 'Kenya' },          { code: 'kw', name: 'Kuwait' },
+  { code: 'mx', name: 'Mexico' },        { code: 'ma', name: 'Morocco' },        { code: 'nl', name: 'Netherlands' },
+  { code: 'nz', name: 'New Zealand' },   { code: 'ng', name: 'Nigeria' },        { code: 'no', name: 'Norway' },
+  { code: 'om', name: 'Oman' },          { code: 'pa', name: 'Panama' },         { code: 'py', name: 'Paraguay' },
+  { code: 'pe', name: 'Peru' },          { code: 'ph', name: 'Philippines' },    { code: 'pl', name: 'Poland' },
+  { code: 'pt', name: 'Portugal' },      { code: 'qa', name: 'Qatar' },          { code: 'ro', name: 'Romania' },
+  { code: 'ru', name: 'Russia' },        { code: 'sa', name: 'Saudi Arabia' },   { code: 'gb-sct', name: 'Scotland' },
+  { code: 'sn', name: 'Senegal' },       { code: 'rs', name: 'Serbia' },         { code: 'sk', name: 'Slovakia' },
+  { code: 'si', name: 'Slovenia' },      { code: 'za', name: 'South Africa' },   { code: 'kr', name: 'South Korea' },
+  { code: 'es', name: 'Spain' },         { code: 'se', name: 'Sweden' },         { code: 'ch', name: 'Switzerland' },
+  { code: 'tn', name: 'Tunisia' },       { code: 'tr', name: 'Turkey' },         { code: 'ae', name: 'UAE' },
+  { code: 'ua', name: 'Ukraine' },       { code: 'us', name: 'United States' },  { code: 'uy', name: 'Uruguay' },
+  { code: 've', name: 'Venezuela' },     { code: 'gb-wls', name: 'Wales' },      { code: 'ye', name: 'Yemen' },
+  { code: 'zm', name: 'Zambia' },        { code: 'zw', name: 'Zimbabwe' },
 ]
 
 function InputField({ icon: Icon, type = 'text', placeholder, value, onChange, rightEl }) {
@@ -87,7 +88,7 @@ function CountrySelect({ value, onChange, open, setOpen, t }) {
         className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 text-left cursor-pointer transition-colors"
       >
         <span className="shrink-0 text-slate-500 flex items-center justify-center w-5">
-          {selected ? <span className="text-sm leading-none">{selected.flag}</span> : <Globe className="w-3.5 h-3.5" />}
+          {selected ? <Flag code={selected.code} size="xs" /> : <Globe className="w-3.5 h-3.5" />}
         </span>
         <span className={`flex-1 text-sm ${selected ? 'text-white' : 'text-slate-500'}`}>
           {selected ? selected.name : t.auth.selectCountry}
@@ -144,7 +145,7 @@ function CountrySelect({ value, onChange, open, setOpen, t }) {
                         value === c.name ? 'bg-amber-500/15 text-amber-300' : 'text-slate-300 hover:bg-white/10 hover:text-white'
                       }`}
                     >
-                      <span className="text-sm w-5 text-center shrink-0">{c.flag}</span>
+                      <Flag code={c.code} size="xs" className="shrink-0" />
                       <span className="flex-1">{c.name}</span>
                       {value === c.name && <span className="text-amber-400 text-xs">✓</span>}
                     </button>

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Lock, Clock, CheckCircle, Edit3 } from 'lucide-react'
 import { format, isPast } from 'date-fns'
 import { getPointLabel } from '../../lib/scoring'
+import Flag from '../ui/Flag'
 
 export default function MatchCard({ match, prediction, onPredict, deadlineMinutes = 10 }) {
   const matchTime = new Date(match.starts_at)
@@ -45,7 +46,7 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
         <div className="flex items-center gap-3">
           {/* Home */}
           <div className="flex-1 flex items-center gap-2.5">
-            <span className="text-3xl">{match.home_flag}</span>
+            <Flag code={match.home_flag} size="lg" />
             <span className="font-bold text-white text-sm leading-tight">{match.home_team}</span>
           </div>
 
@@ -78,7 +79,7 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
 
           {/* Away */}
           <div className="flex-1 flex items-center gap-2.5 flex-row-reverse">
-            <span className="text-3xl">{match.away_flag}</span>
+            <Flag code={match.away_flag} size="lg" />
             <span className="font-bold text-white text-sm leading-tight text-right">{match.away_team}</span>
           </div>
         </div>

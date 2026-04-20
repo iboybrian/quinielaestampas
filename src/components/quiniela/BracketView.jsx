@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import { MOCK_BRACKET } from '../../lib/footballApi'
+import Flag from '../ui/Flag'
 
 function getWinner(match) {
   if (match.status !== 'finished') return null
@@ -20,7 +21,7 @@ function BracketTeamRow({ team, isWinner, isLoser }) {
         isLoser ? 'opacity-25 grayscale' : ''
       } ${isWinner ? 'bg-amber-500/10' : ''}`}
     >
-      <span className="text-xl flex-shrink-0">{team.flag}</span>
+      <Flag code={team.flag} size="sm" className="flex-shrink-0" />
       <span className={`text-sm font-semibold flex-1 truncate ${isWinner ? 'text-white' : 'text-slate-300'}`}>
         {team.team}
       </span>
@@ -64,10 +65,17 @@ function BracketMatch({ match }) {
       />
 
       {match.status === 'finished' && (
-        <div className="bg-white/5 px-3 py-1 flex justify-between text-xs font-bold text-slate-400">
-          <span>{match.homeScore}</span>
-          <span className="text-slate-600">–</span>
-          <span>{match.awayScore}</span>
+        <div className="bg-white/5 px-3 py-1.5 text-xs font-bold text-slate-400 text-center">
+          <div className="flex justify-between">
+            <span>{match.homeScore}</span>
+            <span className="text-slate-600">–</span>
+            <span>{match.awayScore}</span>
+          </div>
+          {match.homePenalties != null && match.awayPenalties != null && (
+            <div className="text-[10px] text-slate-600 mt-0.5">
+              (pen. {match.homePenalties} – {match.awayPenalties})
+            </div>
+          )}
         </div>
       )}
 

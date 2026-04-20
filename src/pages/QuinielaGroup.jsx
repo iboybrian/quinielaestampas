@@ -1,27 +1,41 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Copy, Check, Loader2, Share2 } from 'lucide-react'
-import { useQuinielaGroup } from '../hooks/useQuiniela'
-import { MOCK_FIXTURES } from '../lib/footballApi'
+import { ArrowLeft, Copy, Check, Loader2 } from 'lucide-react'
+import { useQuinielaGroup, useFixtures } from '../hooks/useQuiniela'
+import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
+import { useLang } from '../contexts/LangContext'
 import Standings from '../components/quiniela/Standings'
-import MatchCard from '../components/quiniela/MatchCard'
+import GroupsView from '../components/quiniela/GroupsView'
+import PredictionsView from '../components/quiniela/PredictionsView'
+import MatchesView from '../components/quiniela/MatchesView'
 import BracketView from '../components/quiniela/BracketView'
 import PredictionModal from '../components/quiniela/PredictionModal'
 import PageTransition from '../components/layout/PageTransition'
 
-const TABS = ['Standings', 'Matches', 'Bracket']
-
 export default function QuinielaGroup() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { quiniela, members, predictions, myPredictions, loading, isAdmin, savePrediction } = useQuinielaGroup(id)
+  const { t, lang } = useLang()
+
+  const { quiniela, members, predictions, myPredictions, loading, savePrediction } = useQuinielaGroup(id)
+  const { fixtures, loading: fixturesLoading } = useFixtures()
+
   const [activeTab, setActiveTab] = useState('Standings')
+  const [showPredictions, setShowPredictions] = useState(false)
   const [predModal, setPredModal] = useState({ open: false, match: null })
   const [copied, setCopied] = useState(false)
 
-  // Demo: use mock fixtures if no real ones
-  const matches = MOCK_FIXTURES
+  // Bracket tab appears only when knockout fixtures exist
+  const hasKnockouts = fixtures.some(isKnockoutStage)
+  const bracket = hasKnockouts ? normalizeBracket(fixtures) : MOCK_BRACKET
+
+  const TABS = [
+    { key: 'Standings', label: `🏆 ${lang === 'es' ? 'Posiciones' : 'Standings'}` },
+    { key: 'Groups',    label: `⚽ ${t.quiniela.groupsTab}` },
+    { key: 'Matches',   label: `📋 ${t.quiniela.matchesTab}` },
+    ...(hasKnockouts ? [{ key: 'Bracket', label: `🌳 ${t.quiniela.bracketTab}` }] : []),
+  ]
 
   const copyCode = () => {
     if (!quiniela?.code) return
@@ -30,11 +44,13 @@ export default function QuinielaGroup() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const openPredict = (match) => setPredModal({ open: true, match })
+  const openPredict  = (match) => setPredModal({ open: true, match })
   const closePredict = () => setPredModal({ open: false, match: null })
+  const handleSave   = async (matchId, home, away) => { await savePrediction(matchId, home, away) }
 
-  const handleSave = async (matchId, home, away) => {
-    await savePrediction(matchId, home, away)
+  const handleTabChange = (key) => {
+    setActiveTab(key)
+    setShowPredictions(false)
   }
 
   if (loading) {
@@ -51,6 +67,7 @@ export default function QuinielaGroup() {
   return (
     <PageTransition>
       <div className="max-w-2xl mx-auto px-4 py-6">
+
         {/* Back + title */}
         <div className="flex items-center gap-3 mb-6">
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate('/quiniela')}
@@ -67,22 +84,20 @@ export default function QuinielaGroup() {
               </motion.button>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span>{members.length} members</span>
-          </div>
+          <span className="text-sm text-slate-500 flex-shrink-0">{members.length} members</span>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6">
           {TABS.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.key}
+              onClick={() => handleTabChange(tab.key)}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                activeTab === tab ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-slate-300'
+                activeTab === tab.key ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {tab === 'Standings' ? '🏆 ' : tab === 'Matches' ? '⚽ ' : '🌳 '}{tab}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -90,34 +105,46 @@ export default function QuinielaGroup() {
         {/* Tab content */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab}
+            key={activeTab + (showPredictions ? '-pred' : '-groups')}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.18 }}
           >
             {activeTab === 'Standings' && (
               <Standings quinielaId={id} members={members} predictions={predictions} />
             )}
 
+            {activeTab === 'Groups' && !showPredictions && (
+              <GroupsView onMakePredictions={() => setShowPredictions(true)} t={t} />
+            )}
+
+            {activeTab === 'Groups' && showPredictions && (
+              fixturesLoading ? (
+                <div className="flex items-center justify-center py-16 text-slate-500">
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  Loading fixtures…
+                </div>
+              ) : (
+                <PredictionsView
+                  fixtures={fixtures}
+                  myPredictions={myPredictions}
+                  onBack={() => setShowPredictions(false)}
+                  onPredict={openPredict}
+                  t={t}
+                />
+              )
+            )}
+
             {activeTab === 'Matches' && (
-              <div className="space-y-4">
-                <p className="text-xs text-slate-600 text-center">
-                  Predictions lock when a match kicks off. Showing World Cup 2026 fixtures.
-                </p>
-                {matches.map((match) => {
-                  const pred = myPredictions.find((p) => p.match_id === match.id)
-                  return (
-                    <MatchCard
-                      key={match.id}
-                      match={match}
-                      prediction={pred}
-                      onPredict={openPredict}
-                      deadlineMinutes={quiniela?.prediction_deadline_minutes ?? 10}
-                    />
-                  )
-                })}
-              </div>
+              fixturesLoading ? (
+                <div className="flex items-center justify-center py-16 text-slate-500">
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  Loading fixtures…
+                </div>
+              ) : (
+                <MatchesView fixtures={fixtures} />
+              )
             )}
 
             {activeTab === 'Bracket' && (
@@ -125,7 +152,7 @@ export default function QuinielaGroup() {
                 <p className="text-xs text-slate-600 text-center mb-6">
                   Live knockout bracket — winners advance, losers fade out.
                 </p>
-                <BracketView />
+                <BracketView bracket={bracket} />
               </div>
             )}
           </motion.div>

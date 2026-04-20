@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
+import Flag from '../ui/Flag'
 
 function ScoreInput({ value, onChange, label }) {
   return (
@@ -84,12 +85,12 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
               {/* Teams */}
               <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="text-center">
-                  <div className="text-4xl mb-1">{match.home_flag}</div>
+                  <div className="flex justify-center mb-2"><Flag code={match.home_flag} size="xl" /></div>
                   <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{match.home_team}</div>
                 </div>
                 <span className="text-slate-600 font-bold">vs</span>
                 <div className="text-center">
-                  <div className="text-4xl mb-1">{match.away_flag}</div>
+                  <div className="flex justify-center mb-2"><Flag code={match.away_flag} size="xl" /></div>
                   <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{match.away_team}</div>
                 </div>
               </div>
