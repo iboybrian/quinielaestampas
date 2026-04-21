@@ -10,6 +10,7 @@ import GroupsView from '../components/quiniela/GroupsView'
 import PredictionsView from '../components/quiniela/PredictionsView'
 import MatchesView from '../components/quiniela/MatchesView'
 import BracketView from '../components/quiniela/BracketView'
+import ResultsMatrix from '../components/quiniela/ResultsMatrix'
 import PredictionModal from '../components/quiniela/PredictionModal'
 import PageTransition from '../components/layout/PageTransition'
 
@@ -32,6 +33,7 @@ export default function QuinielaGroup() {
 
   const TABS = [
     { key: 'Standings', label: `🏆 ${lang === 'es' ? 'Posiciones' : 'Standings'}` },
+    { key: 'Matrix',    label: `📊 ${lang === 'es' ? 'Matriz' : 'Matrix'}` },
     { key: 'Groups',    label: `⚽ ${t.quiniela.groupsTab}` },
     { key: 'Matches',   label: `📋 ${t.quiniela.matchesTab}` },
     ...(hasKnockouts ? [{ key: 'Bracket', label: `🌳 ${t.quiniela.bracketTab}` }] : []),
@@ -113,6 +115,17 @@ export default function QuinielaGroup() {
           >
             {activeTab === 'Standings' && (
               <Standings quinielaId={id} members={members} predictions={predictions} />
+            )}
+
+            {activeTab === 'Matrix' && (
+              fixturesLoading ? (
+                <div className="flex items-center justify-center py-16 text-slate-500">
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  Loading fixtures…
+                </div>
+              ) : (
+                <ResultsMatrix members={members} predictions={predictions} fixtures={fixtures} />
+              )
             )}
 
             {activeTab === 'Groups' && !showPredictions && (
