@@ -135,23 +135,26 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
 
       const stickers = stickersRef.current
       const counters = countersRef.current
-      let changed = false
 
-      cells.forEach((cell, i) => {
-        if (i >= counters.length) return
-        const prev = counters[i]
-        counters[i] = cell.filled
-          ? Math.min(CONFIRM_FRAMES, prev + 1)
-          : Math.max(0, prev - 2)
-        if (counters[i] !== prev) changed = true
-      })
-
-      if (changed) {
-        const confirmed = counters
-          .map((c, i) => (c >= CONFIRM_FRAMES ? stickers[i] : null))
-          .filter(Boolean)
-        setConfirmedIds([...confirmed])
+      if (!isMobile) {
+        // Static image — confirm immediately (no multi-frame accumulation needed)
+        cells.forEach((cell, i) => {
+          if (i < counters.length) counters[i] = cell.filled ? CONFIRM_FRAMES : 0
+        })
+      } else {
+        // Live camera — incremental confirmation over ~1 s
+        cells.forEach((cell, i) => {
+          if (i >= counters.length) return
+          counters[i] = cell.filled
+            ? Math.min(CONFIRM_FRAMES, counters[i] + 1)
+            : Math.max(0, counters[i] - 2)
+        })
       }
+
+      const confirmed = counters
+        .map((c, i) => (c >= CONFIRM_FRAMES ? stickers[i] : null))
+        .filter(Boolean)
+      setConfirmedIds([...confirmed])
 
       if (isMobile) {
         drawMobileOverlay(cells)
@@ -225,7 +228,14 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
   const drawDesktopOverlay = useCallback((cells) => {
     const canvas = uploadCanvasRef.current
     if (!canvas || !imageBitmapRef.current) return
-    const { clientWidth: dW, clientHeight: dH } = canvas
+
+    // Canvas may not be laid out yet — defer one frame
+    const dW = canvas.clientWidth
+    const dH = canvas.clientHeight
+    if (!dW || !dH) {
+      requestAnimationFrame(() => drawDesktopOverlay(cells))
+      return
+    }
     if (canvas.width !== dW)  canvas.width  = dW
     if (canvas.height !== dH) canvas.height = dH
 
@@ -234,20 +244,20 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
     const ctx  = canvas.getContext('2d')
     ctx.clearRect(0, 0, dW, dH)
 
-    // Draw image (cover fit)
+    // Draw image (cover fit — fills canvas, crops edges)
     const bm = imageBitmapRef.current
     const { ox, oy, sw, sh } = coverGeometry(bm.width, bm.height, dW, dH)
     ctx.drawImage(bm, ox, oy, sw, sh)
 
-    // Semi-transparent overlay across image area to improve cell visibility
-    ctx.fillStyle = 'rgba(0,0,0,0.25)'
+    // Light tint only — keep image clearly visible
+    ctx.fillStyle = 'rgba(0,0,0,0.10)'
     ctx.fillRect(ox, oy, sw, sh)
 
-    // Grid drawn over the FULL image area
+    // Grid drawn over the full image area
     drawCells(ctx, cells, ox, oy, sw, sh, cols, rows)
 
     // Page label
-    ctx.fillStyle = 'rgba(245,158,11,0.9)'
+    ctx.fillStyle = 'rgba(245,158,11,0.95)'
     ctx.font = 'bold 13px system-ui'
     const half = activePage === 'SPEC' ? 'SPECIAL' : `PAGE ${pageHalf}`
     ctx.fillText(half, ox + 8, oy + 18)
@@ -316,20 +326,35 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
   // ── Desktop: analyze uploaded image ─────────────────────────────────────────
   const analyzeDesktopImage = useCallback((bitmap) => {
     if (!bitmap || !workerRef.current) return
+    // Always reset stuck state before sending a new job
+    workerBusyRef.current = false
     setIsAnalyzing(true)
 
-    // Scale to max 1000px wide for analysis (keep ratio)
-    const MAX = 1000
+    // Scale to max 1200px wide for analysis; keep aspect ratio
+    const MAX = 1200
     const scale = Math.min(1, MAX / bitmap.width)
     const w = Math.floor(bitmap.width * scale)
     const h = Math.floor(bitmap.height * scale)
 
     const offscreen = new OffscreenCanvas(w, h)
-    offscreen.getContext('2d').drawImage(bitmap, 0, 0, w, h)
-    const imageData = offscreen.getContext('2d').getImageData(0, 0, w, h)
+    const ctx2d = offscreen.getContext('2d')
+    ctx2d.drawImage(bitmap, 0, 0, w, h)
+    const imageData = ctx2d.getImageData(0, 0, w, h)
     const buffer    = imageData.data.buffer
 
     workerBusyRef.current = true
+    // Safety: if worker never responds (e.g. OOM), unfreeze after 8 s
+    const safety = setTimeout(() => {
+      workerBusyRef.current = false
+      setIsAnalyzing(false)
+    }, 8000)
+    const origOnMessage = workerRef.current.onmessage
+    workerRef.current.onmessage = (e) => {
+      clearTimeout(safety)
+      workerRef.current.onmessage = origOnMessage
+      origOnMessage(e)
+    }
+
     workerRef.current.postMessage(
       { type: 'PROCESS_FRAME', pixelBuffer: buffer, width: w, height: h,
         gridCols: colsRef.current, gridRows: rowsRef.current },
@@ -606,8 +631,8 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
                 <p className="text-white font-bold text-sm mb-1">Upload album page photo</p>
                 <p className="text-white/40 text-xs">Drag & drop or click to browse</p>
                 <p className="text-white/25 text-xs mt-3">
-                  Take a photo of one album page<br />
-                  with your phone, then upload here
+                  Take a portrait photo of ONE album page<br />
+                  (not both pages together) then upload
                 </p>
               </div>
               {activeTeam && (
