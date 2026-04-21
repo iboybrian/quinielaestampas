@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Copy, Check, Loader2 } from 'lucide-react'
+import { ArrowLeft, Copy, Check, Loader2, DollarSign, Clock, Users, Info, Phone } from 'lucide-react'
 import { useQuinielaGroup, useFixtures } from '../hooks/useQuiniela'
 import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
@@ -88,6 +88,41 @@ export default function QuinielaGroup() {
           </div>
           <span className="text-sm text-slate-500 flex-shrink-0">{members.length} members</span>
         </div>
+
+        {/* Info chips — only render configured fields */}
+        {quiniela && (quiniela.entry_fee || quiniela.prediction_deadline_minutes !== 10 || quiniela.participant_limit || quiniela.description || quiniela.info_contact) && (
+          <div className="mb-5 space-y-2">
+            {quiniela.description && (
+              <p className="text-xs text-slate-400 leading-relaxed px-1">{quiniela.description}</p>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {quiniela.entry_fee && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <DollarSign className="w-3 h-3 text-amber-400 flex-shrink-0" />
+                  <span className="text-xs text-amber-300 font-semibold">{t.quiniela.entryFee}: {quiniela.entry_fee}</span>
+                </div>
+              )}
+              {quiniela.prediction_deadline_minutes != null && quiniela.prediction_deadline_minutes !== 10 && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                  <Clock className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                  <span className="text-xs text-slate-400">{t.quiniela.predClose}: {quiniela.prediction_deadline_minutes} {t.quiniela.minutesBefore}</span>
+                </div>
+              )}
+              {quiniela.participant_limit && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                  <Users className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                  <span className="text-xs text-slate-400">{members.length} / {quiniela.participant_limit} {t.quiniela.limit}</span>
+                </div>
+              )}
+              {quiniela.info_contact && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                  <Phone className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                  <span className="text-xs text-slate-400">{quiniela.info_contact}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6">

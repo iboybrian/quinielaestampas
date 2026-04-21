@@ -58,27 +58,27 @@ function GroupCard({ group, index }) {
 export default function GroupsView({ onMakePredictions, t }) {
   return (
     <div>
+      {/* CTA — top */}
+      <motion.button
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={onMakePredictions}
+        className="w-full py-4 btn-primary rounded-2xl text-base font-black flex items-center justify-center gap-3 shadow-lg shadow-amber-500/20 mb-6"
+      >
+        ⚽ {t.quiniela.makePredictions}
+      </motion.button>
+
       {/* Subtitle */}
       <p className="text-xs text-slate-500 text-center mb-5">
         WC 2022 groups (A–H) · Groups I–L set at 2026 draw
       </p>
 
       {/* 12-group grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {WC2022_GROUPS.map((group, i) => (
           <GroupCard key={group.letter} group={group} index={i} />
         ))}
       </div>
-
-      {/* CTA */}
-      <motion.button
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={onMakePredictions}
-        className="w-full py-4 btn-primary rounded-2xl text-base font-black flex items-center justify-center gap-3 shadow-lg shadow-amber-500/20"
-      >
-        ⚽ {t.quiniela.makePredictions}
-      </motion.button>
     </div>
   )
 }

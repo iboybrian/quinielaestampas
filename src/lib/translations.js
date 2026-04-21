@@ -87,6 +87,11 @@ export const translations = {
       details: 'Detalles',
       prevPage: 'Anterior',
       nextPage: 'Siguiente',
+      entryFee: 'Cuota',
+      predClose: 'Cierre',
+      minutesBefore: 'min antes del partido',
+      limit: 'participantes máx.',
+      contact: 'Contacto',
     },
     admin: {
       title: 'Administrar Quiniela',
@@ -238,6 +243,11 @@ export const translations = {
       details: 'Details',
       prevPage: 'Previous',
       nextPage: 'Next',
+      entryFee: 'Entry fee',
+      predClose: 'Lock',
+      minutesBefore: 'min before kickoff',
+      limit: 'max participants',
+      contact: 'Contact',
     },
     admin: {
       title: 'Manage Quiniela',
