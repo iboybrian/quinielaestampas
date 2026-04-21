@@ -54,12 +54,35 @@ export function useMyCollection() {
   const hasSticker = (id) => Boolean(collection[id]?.quantity > 0)
   const needsSticker = (id) => Boolean(collection[id]?.isNeeded)
 
+  const bulkUpsertStickers = useCallback(async (stickerIds) => {
+    if (!user || !stickerIds.length) return false
+    const rows = stickerIds.map((id) => ({
+      user_id: user.id,
+      sticker_id: id,
+      quantity: 1,
+      is_needed: false,
+    }))
+    const { error } = await supabase
+      .from('user_stickers')
+      .upsert(rows, { onConflict: 'user_id,sticker_id' })
+    if (!error) {
+      setCollection((prev) => {
+        const next = { ...prev }
+        stickerIds.forEach((id) => {
+          next[id] = { quantity: 1, isNeeded: prev[id]?.isNeeded ?? false }
+        })
+        return next
+      })
+    }
+    return !error
+  }, [user])
+
   const stats = {
     owned: Object.values(collection).filter((s) => s.quantity > 0).length,
     needed: Object.values(collection).filter((s) => s.isNeeded).length,
   }
 
-  return { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, stats, refresh: fetchCollection }
+  return { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, bulkUpsertStickers, stats, refresh: fetchCollection }
 }
 
 export async function findTradeMatches(userId) {

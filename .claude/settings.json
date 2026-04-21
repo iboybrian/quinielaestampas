@@ -1,0 +1,10 @@
+{
+  "enabledPlugins": {
+    "caveman@caveman": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)"
+    ]
+  }
+}

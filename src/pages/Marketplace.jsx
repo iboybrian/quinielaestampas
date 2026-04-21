@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRightLeft, BookOpen, Loader2 } from 'lucide-react'
+import { ArrowRightLeft, BookOpen, Loader2, ScanLine } from 'lucide-react'
 import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
 import { useLang } from '../contexts/LangContext'
@@ -9,6 +9,7 @@ import TradeMatcher from '../components/marketplace/TradeMatcher'
 import TradeChat from '../components/marketplace/TradeChat'
 import AchievementOverlay, { useAchievements } from '../components/animations/AchievementOverlay'
 import PageTransition from '../components/layout/PageTransition'
+import ScannerView from '../components/scanner/ScannerView'
 
 const FILTER_KEYS = ['All', 'Have', 'Needed', 'Missing']
 
@@ -47,7 +48,8 @@ export default function Marketplace() {
   const [selectedTeam, setSelectedTeam] = useState('ALL')
   const [filter, setFilter] = useState('All')
   const [chatPartner, setChatPartner] = useState(null)
-  const { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, stats } = useMyCollection()
+  const [scannerOpen, setScannerOpen] = useState(false)
+  const { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, bulkUpsertStickers, stats } = useMyCollection()
   const { achievement, trigger: triggerAchievement, dismiss: dismissAchievement } = useAchievements()
 
   const MAIN_TABS = [
@@ -119,6 +121,14 @@ export default function Marketplace() {
                 className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full"
               />
             </div>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setScannerOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-400 text-xs font-bold hover:bg-amber-500/25 transition-colors"
+            >
+              <ScanLine className="w-3.5 h-3.5" />
+              Scan
+            </motion.button>
           </div>
         </motion.div>
 
@@ -220,6 +230,14 @@ export default function Marketplace() {
 
       <TradeChat isOpen={Boolean(chatPartner)} onClose={() => setChatPartner(null)} partner={chatPartner} />
       <AchievementOverlay achievement={achievement} onDismiss={dismissAchievement} />
+
+      {scannerOpen && (
+        <ScannerView
+          onBulkSave={bulkUpsertStickers}
+          collection={collection}
+          onClose={() => setScannerOpen(false)}
+        />
+      )}
     </PageTransition>
   )
 }
