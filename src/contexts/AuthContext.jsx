@@ -41,12 +41,21 @@ export function AuthProvider({ children }) {
   }
 
   async function signUp(email, password, username, country) {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { username, country } },
     })
     if (error) throw error
+
+    // Fallback: upsert profile directly in case the DB trigger didn't fire
+    // (e.g. email confirmation enabled, trigger missing, or race condition)
+    if (data?.user?.id) {
+      await supabase.from('profiles').upsert(
+        { id: data.user.id, email, username, country },
+        { onConflict: 'id' }
+      )
+    }
   }
 
   async function signOut() {
