@@ -555,17 +555,34 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col overflow-hidden">
+      {/* Single shared file input — used by both desktop path and mobile camera-error fallback */}
+      <input ref={fileInputRef} type="file" accept="image/*" capture="environment" className="hidden"
+        onChange={handleFileInput} />
       {header}
 
       {/* ── Camera view (mobile) ──────────────────────────────────────────── */}
       {isMobile && (
         <div className="relative flex-1 overflow-hidden">
           {cameraError ? (
-            <div className="flex flex-col items-center justify-center h-full gap-3 text-white/60 px-6 text-center">
-              <AlertCircle className="w-10 h-10 text-red-400" />
-              <p className="text-sm">{cameraError}</p>
-              <p className="text-xs text-white/40">Allow camera access in browser settings</p>
-            </div>
+            hasImage ? (
+              <div className="relative w-full h-full">
+                <canvas ref={uploadCanvasRef} className="w-full h-full" style={{ display: 'block' }} />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full gap-4 text-white/60 px-6 text-center">
+                <AlertCircle className="w-10 h-10 text-red-400" />
+                <div>
+                  <p className="text-sm text-white/70 font-semibold mb-1">Camera not available</p>
+                  <p className="text-xs text-white/40">Use Chrome or Safari 14.5+ for camera, or upload a photo instead.</p>
+                </div>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 text-black font-bold text-sm active:scale-95 transition-transform">
+                  <Upload className="w-4 h-4" />
+                  Upload photo instead
+                </button>
+              </div>
+            )
           ) : (
             <>
               <Webcam ref={webcamRef} audio={false}
@@ -582,10 +599,6 @@ export default function ScannerView({ onBulkSave, collection = {}, onClose }) {
       {/* ── Upload view (desktop) ────────────────────────────────────────── */}
       {!isMobile && (
         <div className="relative flex-1 overflow-hidden flex items-center justify-center bg-slate-950">
-          {/* Hidden file input */}
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden"
-            onChange={handleFileInput} />
-
           {hasImage ? (
             /* Image + overlay canvas */
             <div className="relative w-full h-full">
