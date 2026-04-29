@@ -1,11 +1,18 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { handleCors, corsHeaders } from '../_shared/cors.ts'
 
 serve(async (req) => {
+  const corsResp = handleCors(req)
+  if (corsResp) return corsResp
+
+  const origin = req.headers.get('origin')
+  const headers = corsHeaders(origin)
+
   const payload = await req.json()
   // DB webhook sends { type, table, record, old_record }
   const record = payload.record
-  if (!record) return new Response('ok')
+  if (!record) return new Response('ok', { headers })
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -21,7 +28,7 @@ serve(async (req) => {
 
   if (!trade) {
     console.error('Trade not found for trade_id:', record.trade_id)
-    return new Response('ok')
+    return new Response('ok', { headers })
   }
 
   // Notify the recipient (not the sender)
@@ -54,5 +61,5 @@ serve(async (req) => {
     }),
   })
 
-  return new Response('ok')
+  return new Response('ok', { headers })
 })

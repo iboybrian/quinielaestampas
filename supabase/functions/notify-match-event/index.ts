@@ -1,15 +1,22 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { handleCors, corsHeaders } from '../_shared/cors.ts'
 
 serve(async (req) => {
+  const corsResp = handleCors(req)
+  if (corsResp) return corsResp
+
+  const origin = req.headers.get('origin')
+  const headers = corsHeaders(origin)
+
   const payload = await req.json()
   const record     = payload.record
   const old_record = payload.old_record
-  if (!record) return new Response('ok')
+  if (!record) return new Response('ok', { headers })
 
   // Only fire when match status transitions to 'finished'
   if (record.status !== 'finished' || old_record?.status === 'finished') {
-    return new Response('ok')
+    return new Response('ok', { headers })
   }
 
   const supabase = createClient(
@@ -23,7 +30,7 @@ serve(async (req) => {
     .select('user_id, home_score, away_score')
     .eq('match_id', record.id)
 
-  if (!predictions?.length) return new Response('ok')
+  if (!predictions?.length) return new Response('ok', { headers })
 
   const homeScore = record.home_score ?? 0
   const awayScore = record.away_score ?? 0
@@ -71,5 +78,5 @@ serve(async (req) => {
     })
   )
 
-  return new Response('ok')
+  return new Response('ok', { headers })
 })

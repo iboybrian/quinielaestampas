@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import webpush from 'https://esm.sh/web-push@3.6.7'
+import { handleCors, corsHeaders } from '../_shared/cors.ts'
 
 const VAPID_PUBLIC_KEY  = Deno.env.get('VAPID_PUBLIC_KEY')!
 const VAPID_PRIVATE_KEY = Deno.env.get('VAPID_PRIVATE_KEY')!
@@ -9,10 +10,16 @@ const VAPID_SUBJECT     = Deno.env.get('VAPID_SUBJECT')!
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
 
 serve(async (req) => {
+  const corsResp = handleCors(req)
+  if (corsResp) return corsResp
+
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 })
 
+  const origin = req.headers.get('origin')
+  const headers = { ...corsHeaders(origin), 'Content-Type': 'application/json' }
+
   const { user_id, title, body, url, tag } = await req.json()
-  if (!user_id) return new Response(JSON.stringify({ error: 'Missing user_id' }), { status: 400 })
+  if (!user_id) return new Response(JSON.stringify({ error: 'Missing user_id' }), { status: 400, headers })
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
@@ -26,11 +33,11 @@ serve(async (req) => {
 
   if (error) {
     console.error('DB error:', error)
-    return new Response(JSON.stringify({ sent: 0, error: error.message }), { headers: { 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ sent: 0, error: error.message }), { headers })
   }
 
   if (!subs?.length) {
-    return new Response(JSON.stringify({ sent: 0 }), { headers: { 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ sent: 0 }), { headers })
   }
 
   const payload = JSON.stringify({ title, body, url: url ?? '/', tag: tag ?? 'wc2026' })
@@ -64,5 +71,5 @@ serve(async (req) => {
   })
 
   const sent = results.filter((r) => r.status === 'fulfilled').length
-  return new Response(JSON.stringify({ sent, total: subs.length }), { headers: { 'Content-Type': 'application/json' } })
+  return new Response(JSON.stringify({ sent, total: subs.length }), { headers })
 })

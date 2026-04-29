@@ -144,12 +144,12 @@ export async function findTradeMatches(userId) {
   const needIds = myNeeds.map((s) => s.sticker_id)
   const extraIds = myExtras.map((s) => s.sticker_id)
 
-  // Find users who have what I need
+  // Find users who have what I need (quantity > 1 = has extras to trade)
   const { data: haveWhatINeed } = await supabase
     .from('user_stickers')
     .select('user_id, sticker_id')
     .in('sticker_id', needIds)
-    .gt('quantity', 0)
+    .gt('quantity', 1)
     .neq('user_id', userId)
 
   // Find users who need what I have
