@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { WC2022_GROUPS } from '../../lib/footballApi'
+import { WC2026_GROUPS } from '../../lib/footballApi'
 import Flag from '../ui/Flag'
 
 // Full class names required for Tailwind purge — no template literals for colour names
@@ -75,7 +75,7 @@ export default function GroupsView({ onMakePredictions, t }) {
 
       {/* 12-group grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {WC2022_GROUPS.map((group, i) => (
+        {WC2026_GROUPS.map((group, i) => (
           <GroupCard key={group.letter} group={group} index={i} />
         ))}
       </div>

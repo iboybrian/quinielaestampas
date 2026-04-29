@@ -5,7 +5,7 @@ const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY
 const BASE_URL = 'https://v3.football.api-sports.io'
 
 export const WC_LEAGUE = 1
-export const WC_SEASON = 2022   // using 2022 for testing (free-tier compatible)
+export const WC_SEASON = 2026
 
 // ── Cache ─────────────────────────────────────────────────────────────────────
 const FIXTURES_TTL = 60 * 60 * 1000  // 1 hour
@@ -150,6 +150,13 @@ const TEAM_TO_CODE = {
   'angola':                 'ao',
   'dr congo':               'cd',
   'democratic republic of the congo': 'cd',
+  'curacao':                'cw',
+  'curaçao':                'cw',
+  'cabo verde':             'cv',
+  'cape verde':             'cv',
+  'uzbekistan':             'uz',
+  'congo dr':               'cd',
+  'türkiye':                'tr',
   'ireland':                'ie',
   'northern ireland':       'gb-nir',
   'albania':                'al',
@@ -165,7 +172,7 @@ function teamToCode(teamName) {
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 // Bump this when the shape of normalizeFixture changes to bust stale caches
-const CACHE_VERSION = 3
+const CACHE_VERSION = 4
 
 export async function getFixtures() {
   const CACHE_KEY = `wc_fixtures_${WC_SEASON}_v${CACHE_VERSION}`
@@ -294,61 +301,80 @@ function normalizeStatus(s) {
   return 'scheduled'
 }
 
-// ── WC 2022 group data — hardcoded to save API calls ─────────────────────────
-export const WC2022_GROUPS = [
+// ── WC 2026 group data — draw held Dec 5, 2025 ───────────────────────────────
+export const WC2026_GROUPS = [
   { letter: 'A', teams: [
-    { name: 'Qatar',       code: 'qa' },
-    { name: 'Ecuador',     code: 'ec' },
-    { name: 'Senegal',     code: 'sn' },
-    { name: 'Netherlands', code: 'nl' },
+    { name: 'Mexico',       code: 'mx' },
+    { name: 'South Africa', code: 'za' },
+    { name: 'South Korea',  code: 'kr' },
+    { name: 'Czechia',      code: 'cz' },
   ]},
   { letter: 'B', teams: [
-    { name: 'England', code: 'gb-eng' },
-    { name: 'Iran',    code: 'ir'     },
-    { name: 'USA',     code: 'us'     },
-    { name: 'Wales',   code: 'gb-wls' },
+    { name: 'Canada',                code: 'ca' },
+    { name: 'Bosnia & Herzegovina',  code: 'ba' },
+    { name: 'Qatar',                 code: 'qa' },
+    { name: 'Switzerland',           code: 'ch' },
   ]},
   { letter: 'C', teams: [
-    { name: 'Argentina',    code: 'ar' },
-    { name: 'Saudi Arabia', code: 'sa' },
-    { name: 'Mexico',       code: 'mx' },
-    { name: 'Poland',       code: 'pl' },
+    { name: 'Brazil',  code: 'br'     },
+    { name: 'Morocco', code: 'ma'     },
+    { name: 'Haiti',   code: 'ht'     },
+    { name: 'Scotland',code: 'gb-sct' },
   ]},
   { letter: 'D', teams: [
-    { name: 'France',    code: 'fr' },
+    { name: 'USA',       code: 'us' },
+    { name: 'Paraguay',  code: 'py' },
     { name: 'Australia', code: 'au' },
-    { name: 'Denmark',   code: 'dk' },
-    { name: 'Tunisia',   code: 'tn' },
+    { name: 'Turkey',    code: 'tr' },
   ]},
   { letter: 'E', teams: [
-    { name: 'Spain',      code: 'es' },
-    { name: 'Costa Rica', code: 'cr' },
-    { name: 'Germany',    code: 'de' },
-    { name: 'Japan',      code: 'jp' },
+    { name: 'Germany',        code: 'de' },
+    { name: 'Curaçao',        code: 'cw' },
+    { name: "Côte d'Ivoire",  code: 'ci' },
+    { name: 'Ecuador',        code: 'ec' },
   ]},
   { letter: 'F', teams: [
-    { name: 'Belgium', code: 'be' },
-    { name: 'Canada',  code: 'ca' },
-    { name: 'Morocco', code: 'ma' },
-    { name: 'Croatia', code: 'hr' },
+    { name: 'Netherlands', code: 'nl' },
+    { name: 'Japan',       code: 'jp' },
+    { name: 'Sweden',      code: 'se' },
+    { name: 'Tunisia',     code: 'tn' },
   ]},
   { letter: 'G', teams: [
-    { name: 'Brazil',      code: 'br' },
-    { name: 'Serbia',      code: 'rs' },
-    { name: 'Switzerland', code: 'ch' },
-    { name: 'Cameroon',    code: 'cm' },
+    { name: 'Belgium',     code: 'be' },
+    { name: 'Egypt',       code: 'eg' },
+    { name: 'Iran',        code: 'ir' },
+    { name: 'New Zealand', code: 'nz' },
   ]},
   { letter: 'H', teams: [
-    { name: 'Portugal',    code: 'pt' },
-    { name: 'Ghana',       code: 'gh' },
-    { name: 'Uruguay',     code: 'uy' },
-    { name: 'South Korea', code: 'kr' },
+    { name: 'Spain',         code: 'es' },
+    { name: 'Cabo Verde',    code: 'cv' },
+    { name: 'Saudi Arabia',  code: 'sa' },
+    { name: 'Uruguay',       code: 'uy' },
   ]},
-  // WC 2026 groups — draw pending
-  { letter: 'I', teams: null },
-  { letter: 'J', teams: null },
-  { letter: 'K', teams: null },
-  { letter: 'L', teams: null },
+  { letter: 'I', teams: [
+    { name: 'France',  code: 'fr' },
+    { name: 'Senegal', code: 'sn' },
+    { name: 'Norway',  code: 'no' },
+    { name: 'Iraq',    code: 'iq' },
+  ]},
+  { letter: 'J', teams: [
+    { name: 'Argentina', code: 'ar' },
+    { name: 'Algeria',   code: 'dz' },
+    { name: 'Austria',   code: 'at' },
+    { name: 'Jordan',    code: 'jo' },
+  ]},
+  { letter: 'K', teams: [
+    { name: 'Portugal',   code: 'pt' },
+    { name: 'Uzbekistan', code: 'uz' },
+    { name: 'Colombia',   code: 'co' },
+    { name: 'Congo DR',   code: 'cd' },
+  ]},
+  { letter: 'L', teams: [
+    { name: 'England', code: 'gb-eng' },
+    { name: 'Croatia', code: 'hr'     },
+    { name: 'Ghana',   code: 'gh'     },
+    { name: 'Panama',  code: 'pa'     },
+  ]},
 ]
 
 // ── Mock data (fallback when no API key) ──────────────────────────────────────

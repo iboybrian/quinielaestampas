@@ -51,11 +51,13 @@ Hooks in `src/hooks/` abstract all Supabase queries:
 - `usePushNotifications()` — Web Push subscribe/unsubscribe, stores subscription in `push_subscriptions` table. Requires `VITE_VAPID_PUBLIC_KEY` and `/sw.js` service worker.
 
 ### Match data — API-Football v3
-`src/lib/footballApi.js` connects to API-Football (free tier: 100 req/day, league `1`, season `2022` for testing). All responses are **cached in localStorage**:
-- Fixtures: 1-hour TTL (`wc_fixtures_2022_v3`)
+`src/lib/footballApi.js` connects to API-Football (free tier: 100 req/day, league `1`, season `2026`). All responses are **cached in localStorage**:
+- Fixtures: 1-hour TTL (`wc_fixtures_2026_v4`)
 - Stats: 7-day TTL per fixture (`wc_stats_{id}`)
 
-Bump `CACHE_VERSION` (currently `3`) when `normalizeFixture`'s output shape changes — this busts all stale cached data. Without an API key, `getFixtures()` returns `MOCK_FIXTURES`.
+Bump `CACHE_VERSION` (currently `4`) when `normalizeFixture`'s output shape changes — this busts all stale cached data. Without an API key, `getFixtures()` returns `MOCK_FIXTURES`.
+
+`WC2026_GROUPS` in `footballApi.js` has all 12 groups (A–L) from the Dec 5 2025 draw. `GroupsView.jsx` imports `WC2026_GROUPS` directly.
 
 `home_flag` / `away_flag` fields on fixtures store **lowercase ISO 3166-1 alpha-2 codes** (e.g. `'ar'`, `'gb-eng'`), not emoji. Team name → code lookup is via the `TEAM_TO_CODE` map in that file.
 
