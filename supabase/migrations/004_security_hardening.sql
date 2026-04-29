@@ -7,19 +7,19 @@
 ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS is_global_admin BOOLEAN NOT NULL DEFAULT FALSE;
 
--- After running this migration, set yourself as admin in Supabase SQL editor:
+-- After running this migration, set yourself as admin:
 -- UPDATE public.profiles SET is_global_admin = TRUE WHERE email = 'nicoleiboy98@gmail.com';
 
 
 -- ── 2. Matches: restrict UPDATE/DELETE to global admins ───────
--- INSERT stays open to any auth user — required for useFixtures() upsert from browser.
+-- INSERT stays open to any auth user (required for useFixtures() upsert from browser).
 -- UPDATE/DELETE restricted so no regular user can corrupt match scores via API.
 
-DROP POLICY IF EXISTS "matches_insert_admin" ON public.matches;
-DROP POLICY IF EXISTS "matches_update_admin" ON public.matches;
-DROP POLICY IF EXISTS "matches_insert_auth"         ON public.matches;
-DROP POLICY IF EXISTS "matches_update_global_admin" ON public.matches;
-DROP POLICY IF EXISTS "matches_delete_global_admin" ON public.matches;
+DROP POLICY IF EXISTS "matches_insert_admin"         ON public.matches;
+DROP POLICY IF EXISTS "matches_update_admin"         ON public.matches;
+DROP POLICY IF EXISTS "matches_insert_auth"          ON public.matches;
+DROP POLICY IF EXISTS "matches_update_global_admin"  ON public.matches;
+DROP POLICY IF EXISTS "matches_delete_global_admin"  ON public.matches;
 
 CREATE POLICY "matches_insert_auth" ON public.matches
   FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
@@ -42,8 +42,7 @@ CREATE POLICY "matches_delete_global_admin" ON public.matches
 
 
 -- ── 3. Quinielas: explicit DELETE protection ──────────────────
--- No DELETE policy existed before (blocked by default).
--- Make it explicit: only creator or global admin can delete a quiniela.
+-- Only the creator or a global admin can delete a quiniela.
 
 DROP POLICY IF EXISTS "quinielas_delete_creator" ON public.quinielas;
 
@@ -58,31 +57,29 @@ CREATE POLICY "quinielas_delete_creator" ON public.quinielas
 
 
 -- ── 4. user_stickers: fix overly-permissive SELECT ────────────
--- Old policy "stickers_select_others_for_matching" used USING (true),
--- which OR'd with stickers_select_own → everyone could see all stickers.
--- New single policy: own stickers always visible; others only if they
--- have duplicates (quantity >= 2) or marked as needed — preserves marketplace.
+-- The old "stickers_select_others_for_matching" used USING (true),
+-- which OR-ed with stickers_select_own → everyone saw all stickers.
+-- New single policy: own rows always visible; others visible only if
+-- they have duplicates (quantity >= 2) or marked as needed.
 
-DROP POLICY IF EXISTS "stickers_select_own"                  ON public.user_stickers;
-DROP POLICY IF EXISTS "stickers_select_others_for_matching"  ON public.user_stickers;
-DROP POLICY IF EXISTS "stickers_select"                      ON public.user_stickers;
+DROP POLICY IF EXISTS "stickers_select_own"                 ON public.user_stickers;
+DROP POLICY IF EXISTS "stickers_select_others_for_matching" ON public.user_stickers;
+DROP POLICY IF EXISTS "stickers_select"                     ON public.user_stickers;
 
 CREATE POLICY "stickers_select" ON public.user_stickers
   FOR SELECT USING (
-    auth.uid() = user_id    -- always see your own collection
-    OR quantity >= 2         -- see others' duplicates (DuplicateSearch / TradeMatcher)
-    OR is_needed = TRUE      -- see others' needs (TradeMatcher)
+    auth.uid() = user_id
+    OR quantity >= 2
+    OR is_needed = TRUE
   );
 
 
 -- ── 5. Predictions: DB-level deadline enforcement ─────────────
--- Complements client-side masking already implemented in maskPredictions().
--- A prediction is readable only if:
---   (a) it belongs to the viewer, OR
---   (b) the match has started (starts_at <= NOW() - deadline) or is live/finished
+-- Complements client-side masking in maskPredictions().
+-- Own predictions always visible; others only after match deadline.
 
-DROP POLICY IF EXISTS "predictions_select_group"                ON public.predictions;
-DROP POLICY IF EXISTS "predictions_select_with_deadline"        ON public.predictions;
+DROP POLICY IF EXISTS "predictions_select_group"         ON public.predictions;
+DROP POLICY IF EXISTS "predictions_select_with_deadline" ON public.predictions;
 
 CREATE POLICY "predictions_select_with_deadline" ON public.predictions
   FOR SELECT USING (
@@ -106,6 +103,7 @@ CREATE POLICY "predictions_select_with_deadline" ON public.predictions
 
 
 -- ── 6. Predictions: allow users to delete their own ──────────
+
 DROP POLICY IF EXISTS "predictions_delete_own" ON public.predictions;
 
 CREATE POLICY "predictions_delete_own" ON public.predictions
