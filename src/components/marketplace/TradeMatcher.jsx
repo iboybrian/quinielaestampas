@@ -3,6 +3,19 @@ import { motion } from 'framer-motion'
 import { Users, ArrowRightLeft, MessageCircle, Loader2 } from 'lucide-react'
 import { findTradeMatches } from '../../hooks/useStickers'
 import { useAuth } from '../../contexts/AuthContext'
+import { ALL_STICKERS } from '../../lib/stickerData'
+
+const MAX_STICKER_CHIPS = 3
+
+function StickerChip({ stickerId, colorClass }) {
+  const sticker = ALL_STICKERS.find((s) => s.id === stickerId)
+  if (!sticker) return null
+  return (
+    <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold ${colorClass}`}>
+      #{sticker.id.split('-').pop()} {sticker.name.split(' ')[0]}
+    </span>
+  )
+}
 
 function MatchScoreBar({ score, max = 10 }) {
   const pct = Math.min(100, (score / max) * 100)
@@ -18,47 +31,89 @@ function MatchScoreBar({ score, max = 10 }) {
   )
 }
 
-function TraderCard({ trader, onChat }) {
+function TraderCard({ trader, onChat, unread }) {
   const letter = trader.username?.[0]?.toUpperCase() ?? '?'
+  const hasUnread = unread && unread.count > 0
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass rounded-2xl p-4 flex items-center gap-4"
+      className={`glass rounded-2xl p-4 flex flex-col gap-3 ${hasUnread ? 'border border-amber-400/30' : ''}`}
     >
-      {/* Avatar */}
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-black font-black text-lg flex-shrink-0">
-        {letter}
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="font-bold text-white truncate">{trader.username ?? 'Collector'}</div>
-        {trader.country && (
-          <div className="text-xs text-slate-500 mt-0.5">{trader.country}</div>
-        )}
-        <div className="mt-2">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-slate-500">Match score</span>
-            <span className="text-xs text-emerald-400 font-bold">{trader.matchScore} stickers</span>
+      <div className="flex items-center gap-4">
+        {/* Avatar + unread dot */}
+        <div className="relative flex-shrink-0">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-black font-black text-lg">
+            {letter}
           </div>
-          <MatchScoreBar score={trader.matchScore} />
+          {hasUnread && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-400 text-black text-[10px] font-black flex items-center justify-center">
+              {unread.count > 9 ? '9+' : unread.count}
+            </span>
+          )}
         </div>
+
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <div className="font-bold text-white truncate">{trader.username ?? 'Collector'}</div>
+          {trader.country && (
+            <div className="text-xs text-slate-500 mt-0.5">{trader.country}</div>
+          )}
+          {hasUnread && (
+            <div className="text-xs text-amber-400 mt-0.5 truncate">💬 {unread.lastMsg}</div>
+          )}
+          <div className="mt-2">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs text-slate-500">Match</span>
+              <span className="text-xs text-emerald-400 font-bold">{trader.matchScore} stickers</span>
+            </div>
+            <MatchScoreBar score={trader.matchScore} />
+          </div>
+        </div>
+
+        {/* Chat button */}
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onChat(trader, { type: 'trade' })}
+          className={`flex-shrink-0 w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
+            hasUnread
+              ? 'bg-amber-400/20 border-amber-400/40 text-amber-400 hover:bg-amber-400/30'
+              : 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30'
+          }`}
+        >
+          <MessageCircle className="w-5 h-5" />
+        </motion.button>
       </div>
 
-      {/* Chat button */}
-      <motion.button
-        whileTap={{ scale: 0.9 }}
-        onClick={() => onChat(trader)}
-        className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/30 transition-colors"
-      >
-        <MessageCircle className="w-5 h-5" />
-      </motion.button>
+      {/* Sticker context rows */}
+      {trader.theyHaveINeed?.length > 0 && (
+        <div className="flex flex-wrap gap-1 items-center">
+          <span className="text-[10px] text-slate-500 mr-0.5">Ellos tienen:</span>
+          {trader.theyHaveINeed.slice(0, MAX_STICKER_CHIPS).map((id) => (
+            <StickerChip key={id} stickerId={id} colorClass="bg-emerald-500/15 text-emerald-400" />
+          ))}
+          {trader.theyHaveINeed.length > MAX_STICKER_CHIPS && (
+            <span className="text-[10px] text-slate-500">+{trader.theyHaveINeed.length - MAX_STICKER_CHIPS} más</span>
+          )}
+        </div>
+      )}
+      {trader.iHaveTheyNeed?.length > 0 && (
+        <div className="flex flex-wrap gap-1 items-center">
+          <span className="text-[10px] text-slate-500 mr-0.5">Yo les doy:</span>
+          {trader.iHaveTheyNeed.slice(0, MAX_STICKER_CHIPS).map((id) => (
+            <StickerChip key={id} stickerId={id} colorClass="bg-blue-500/15 text-blue-400" />
+          ))}
+          {trader.iHaveTheyNeed.length > MAX_STICKER_CHIPS && (
+            <span className="text-[10px] text-slate-500">+{trader.iHaveTheyNeed.length - MAX_STICKER_CHIPS} más</span>
+          )}
+        </div>
+      )}
     </motion.div>
   )
 }
 
-export default function TradeMatcher({ onOpenChat }) {
+export default function TradeMatcher({ onOpenChat, unreadByUserId = {} }) {
   const { user } = useAuth()
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
@@ -75,7 +130,7 @@ export default function TradeMatcher({ onOpenChat }) {
     return (
       <div className="text-center py-12 text-slate-500">
         <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
-        <p>Sign in to find trade partners</p>
+        <p>Inicia sesión para encontrar socios de intercambio</p>
       </div>
     )
   }
@@ -84,7 +139,7 @@ export default function TradeMatcher({ onOpenChat }) {
     return (
       <div className="flex items-center justify-center py-16 text-slate-500">
         <Loader2 className="w-6 h-6 animate-spin mr-3" />
-        Finding matches…
+        Buscando coincidencias…
       </div>
     )
   }
@@ -93,8 +148,8 @@ export default function TradeMatcher({ onOpenChat }) {
     return (
       <div className="text-center py-16">
         <ArrowRightLeft className="w-10 h-10 mx-auto mb-3 text-slate-600" />
-        <p className="text-slate-400 font-semibold mb-1">No trade matches yet</p>
-        <p className="text-slate-600 text-sm">Mark which stickers you have extras of and which you need to find collectors near you.</p>
+        <p className="text-slate-400 font-semibold mb-1">Sin coincidencias aún</p>
+        <p className="text-slate-600 text-sm">Marca qué estampas tienes de más y cuáles buscas para encontrar socios.</p>
       </div>
     )
   }
@@ -103,11 +158,16 @@ export default function TradeMatcher({ onOpenChat }) {
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-4">
         <ArrowRightLeft className="w-4 h-4 text-emerald-400" />
-        <h3 className="font-bold text-white">Trade Matches</h3>
+        <h3 className="font-bold text-white">Socios de Intercambio</h3>
         <span className="text-xs bg-emerald-400/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full">{matches.length}</span>
       </div>
       {matches.map((trader) => (
-        <TraderCard key={trader.id} trader={trader} onChat={onOpenChat} />
+        <TraderCard
+          key={trader.id}
+          trader={trader}
+          onChat={onOpenChat}
+          unread={unreadByUserId[trader.id]}
+        />
       ))}
     </div>
   )

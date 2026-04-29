@@ -14,6 +14,7 @@ import ManageQuiniela from './pages/ManageQuiniela'
 import Marketplace from './pages/Marketplace'
 import Profile from './pages/Profile'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import ResetPassword from './pages/ResetPassword'
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Profile />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/* Catch-all → home */}
           <Route path="*" element={<Home />} />
         </Routes>

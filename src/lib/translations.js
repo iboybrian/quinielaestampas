@@ -45,6 +45,19 @@ export const translations = {
       loading: 'Cargando…',
       successMsg: '¡Cuenta creada! Revisa tu correo para confirmar, luego inicia sesión.',
       somethingWrong: 'Algo salió mal',
+      forgotPassword: '¿Olvidaste tu contraseña?',
+      resetTitle: 'Recuperar Contraseña',
+      resetDesc: 'Ingresa tu correo y te enviaremos un link de recuperación.',
+      sendReset: 'Enviar Link',
+      resetSent: 'Revisa tu bandeja de entrada. Si el correo existe, recibirás el link en breve.',
+      newPassword: 'Nueva contraseña',
+      confirmPassword: 'Confirmar contraseña',
+      updateTitle: 'Nueva Contraseña',
+      updateDesc: 'Ingresa y confirma tu nueva contraseña.',
+      updatePassword: 'Actualizar Contraseña',
+      updateSuccess: '¡Contraseña actualizada! Redirigiendo…',
+      passwordTooShort: 'Mínimo 6 caracteres',
+      passwordMismatch: 'Las contraseñas no coinciden',
     },
     quiniela: {
       title: 'Quinielas',
@@ -127,16 +140,36 @@ export const translations = {
       country: 'País (opcional)',
       cancel: 'Cancelar',
       save: 'Guardar',
+      notificationsOn: '🔔 Notificaciones activadas',
+      notificationsOff: '🔕 Activar notificaciones push',
     },
     marketplace: {
       title: 'Álbum de Estampas',
       myAlbum: 'Mi Álbum',
       trade: 'Intercambios',
+      mercado: 'Mercado',
+      chats: 'Chats',
       allTeams: 'Todos los Equipos',
       special: '⭐ Especiales',
       filters: { All: 'Todos', Have: 'Tengo', Needed: 'Busco', Missing: 'Faltan' },
       loadingCollection: 'Cargando colección…',
       stickersLabel: 'estampas',
+      duplicate: 'Repetida',
+      duplicates: 'repetidas',
+      markDuplicate: '+Repetida',
+      removeDuplicate: '-Repetida',
+      mercadoTitle: 'Mercado de Estampas',
+      mercadoSubtitle: '¿Quién tiene la estampa que buscas?',
+      selectTeam: 'Selecciona un equipo',
+      selectSticker: 'Selecciona una estampa',
+      searchSticker: 'Buscar por nombre o número…',
+      ownersTitle: 'Usuarios con esta repetida',
+      noOwners: 'Nadie tiene esta estampa repetida aún.',
+      loadingOwners: 'Buscando coleccionistas…',
+      contact: 'Contactar',
+      backToStickers: '← Volver',
+      signInMercado: 'Inicia sesión para ver el mercado',
+      extras: 'extra',
     },
     sidebar: {
       myProfile: 'Mi Perfil',
@@ -152,6 +185,77 @@ export const translations = {
       myAlbum: 'Mi Álbum',
       predictions: 'Predicciones',
       profile: 'Perfil',
+    },
+    privacy: {
+      title: 'Política de Privacidad',
+      lastUpdated: 'Última actualización: 14 de abril de 2026',
+      back: 'Volver',
+      footer: 'WC 2026 Hub — construido con React, Supabase & ❤️',
+      sections: [
+        {
+          title: 'Información que Recopilamos',
+          paragraphs: [
+            'Recopilamos la información que nos proporcionas directamente al crear una cuenta, incluyendo tu correo electrónico, nombre de usuario y país (opcional).',
+            'También recopilamos datos de uso como las predicciones de partidos que envías, las estampas que marcas en tu colección y los mensajes que envías a través del chat de intercambio.',
+            'Al usar la app, recibimos automáticamente información técnica básica como el tipo de navegador, dirección IP e identificadores de sesión.',
+          ],
+        },
+        {
+          title: 'Cómo Usamos tu Información',
+          paragraphs: [
+            'Tu información se usa para operar y proveer los servicios de WC 2026 Hub, incluyendo el mantenimiento de tu cuenta, la visualización de clasificaciones y el intercambio de estampas.',
+            'No vendemos, alquilamos ni compartimos tu información personal con terceros para sus fines de marketing.',
+            'Las predicciones de partidos son visibles para los demás miembros del mismo grupo de Quiniela después del inicio del partido.',
+          ],
+        },
+        {
+          title: 'Almacenamiento de Datos',
+          paragraphs: [
+            'Todos los datos de usuario se almacenan de forma segura en Supabase, que proporciona almacenamiento cifrado y seguridad a nivel de fila. Solo tú puedes leer y modificar tus propias predicciones, colección de estampas e información de perfil.',
+            'Los mensajes de chat dentro de las conversaciones de intercambio se almacenan y son visibles solo para los dos participantes del intercambio.',
+          ],
+        },
+        {
+          title: 'Cookies y Almacenamiento Local',
+          paragraphs: [
+            'Usamos el almacenamiento local del navegador para mantener tu sesión activa entre visitas. No se utilizan cookies de seguimiento de terceros.',
+          ],
+        },
+        {
+          title: 'Servicios de Terceros',
+          paragraphs: [
+            'Supabase — proveedor de base de datos y autenticación. Sujeto a la política de privacidad de Supabase.',
+            'API-Football — usado para obtener marcadores en vivo. No se comparten datos personales con este servicio.',
+            'Google Fonts — la tipografía Inter se carga desde el CDN de Google. Google puede registrar solicitudes de fuentes.',
+          ],
+          richFirstWord: ['Supabase', 'API-Football', 'Google Fonts'],
+        },
+        {
+          title: 'Tus Derechos',
+          paragraphs: [
+            'Puedes solicitar la eliminación de tu cuenta y todos los datos asociados en cualquier momento contactándonos. Tras la eliminación, tus predicciones, datos de estampas y mensajes de chat serán eliminados permanentemente.',
+            'Puedes actualizar tu nombre de usuario y país en cualquier momento desde la página de Perfil.',
+          ],
+        },
+        {
+          title: 'Privacidad de Menores',
+          paragraphs: [
+            'WC 2026 Hub no está dirigido a menores de 13 años. No recopilamos conscientemente información personal de niños.',
+          ],
+        },
+        {
+          title: 'Cambios a esta Política',
+          paragraphs: [
+            'Podemos actualizar esta política de privacidad de vez en cuando. Te notificaremos de cualquier cambio actualizando la fecha en la parte superior de este documento. El uso continuado de la app después de los cambios constituye la aceptación de la política revisada.',
+          ],
+        },
+        {
+          title: 'Contacto',
+          paragraphs: [
+            'Si tienes preguntas sobre esta política de privacidad, abre un issue en el repositorio del proyecto o contacta al administrador de tu instancia de WC 2026 Hub.',
+          ],
+        },
+      ],
     },
   },
 
@@ -201,6 +305,19 @@ export const translations = {
       loading: 'Loading…',
       successMsg: 'Account created! Check your email to confirm, then sign in.',
       somethingWrong: 'Something went wrong',
+      forgotPassword: 'Forgot your password?',
+      resetTitle: 'Reset Password',
+      resetDesc: 'Enter your email and we\'ll send you a recovery link.',
+      sendReset: 'Send Link',
+      resetSent: 'Check your inbox. If that email exists, you\'ll receive a link shortly.',
+      newPassword: 'New password',
+      confirmPassword: 'Confirm password',
+      updateTitle: 'Set New Password',
+      updateDesc: 'Enter and confirm your new password.',
+      updatePassword: 'Update Password',
+      updateSuccess: 'Password updated! Redirecting…',
+      passwordTooShort: 'Minimum 6 characters',
+      passwordMismatch: 'Passwords do not match',
     },
     quiniela: {
       title: 'Quinielas',
@@ -283,16 +400,36 @@ export const translations = {
       country: 'Country (optional)',
       cancel: 'Cancel',
       save: 'Save',
+      notificationsOn: '🔔 Notifications on',
+      notificationsOff: '🔕 Enable push notifications',
     },
     marketplace: {
       title: 'Sticker Album',
       myAlbum: 'My Album',
       trade: 'Trade',
+      mercado: 'Market',
+      chats: 'Chats',
       allTeams: 'All Teams',
       special: '⭐ Special',
       filters: { All: 'All', Have: 'Have', Needed: 'Needed', Missing: 'Missing' },
       loadingCollection: 'Loading collection…',
       stickersLabel: 'stickers',
+      duplicate: 'Duplicate',
+      duplicates: 'duplicates',
+      markDuplicate: '+Duplicate',
+      removeDuplicate: '-Duplicate',
+      mercadoTitle: 'Sticker Market',
+      mercadoSubtitle: 'Who has the sticker you need?',
+      selectTeam: 'Select a team',
+      selectSticker: 'Select a sticker',
+      searchSticker: 'Search by name or number…',
+      ownersTitle: 'Users with this duplicate',
+      noOwners: 'Nobody has this sticker as a duplicate yet.',
+      loadingOwners: 'Finding collectors…',
+      contact: 'Contact',
+      backToStickers: '← Back',
+      signInMercado: 'Sign in to view the market',
+      extras: 'extra',
     },
     sidebar: {
       myProfile: 'My Profile',
@@ -308,6 +445,77 @@ export const translations = {
       myAlbum: 'My Album',
       predictions: 'Predictions',
       profile: 'Profile',
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      lastUpdated: 'Last updated: April 14, 2026',
+      back: 'Back',
+      footer: 'WC 2026 Hub — built with React, Supabase & ❤️',
+      sections: [
+        {
+          title: 'Information We Collect',
+          paragraphs: [
+            'We collect information you provide directly to us when you create an account, including your email address, username, and optional country.',
+            'We also collect usage data such as match predictions you submit, stickers you mark in your collection, and messages you send through the trade chat.',
+            'When using the app, we automatically receive basic technical information such as your browser type, IP address, and session identifiers.',
+          ],
+        },
+        {
+          title: 'How We Use Your Information',
+          paragraphs: [
+            'Your information is used to operate and provide the WC 2026 Hub services, including maintaining your account, displaying leaderboards, and enabling sticker trading.',
+            'We do not sell, rent, or share your personal information with third parties for their marketing purposes.',
+            'Match predictions are visible to other members of the same Quiniela group after match kick-off.',
+          ],
+        },
+        {
+          title: 'Data Storage',
+          paragraphs: [
+            'All user data is stored securely in Supabase, which provides encrypted storage and row-level security. Only you can read and modify your own predictions, sticker collection, and profile information.',
+            'Chat messages within trade conversations are stored and visible only to the two participants of the trade.',
+          ],
+        },
+        {
+          title: 'Cookies & Local Storage',
+          paragraphs: [
+            'We use browser local storage to maintain your session so you remain logged in across visits. No third-party tracking cookies are used.',
+          ],
+        },
+        {
+          title: 'Third-Party Services',
+          paragraphs: [
+            'Supabase — database and authentication provider. Subject to Supabase\'s privacy policy.',
+            'API-Football — used to fetch live match scores. No personal data is shared with this service.',
+            'Google Fonts — the Inter typeface is loaded from Google\'s CDN. Google may log font requests.',
+          ],
+          richFirstWord: ['Supabase', 'API-Football', 'Google Fonts'],
+        },
+        {
+          title: 'Your Rights',
+          paragraphs: [
+            'You may request deletion of your account and all associated data at any time by contacting us. Upon deletion, your predictions, sticker data, and chat messages will be permanently removed.',
+            'You can update your username and country at any time from the Profile page.',
+          ],
+        },
+        {
+          title: "Children's Privacy",
+          paragraphs: [
+            'WC 2026 Hub is not directed at children under the age of 13. We do not knowingly collect personal information from children.',
+          ],
+        },
+        {
+          title: 'Changes to This Policy',
+          paragraphs: [
+            'We may update this privacy policy from time to time. We will notify you of any changes by updating the date at the top of this document. Continued use of the app after changes constitutes acceptance of the revised policy.',
+          ],
+        },
+        {
+          title: 'Contact',
+          paragraphs: [
+            'If you have questions about this privacy policy, please open an issue in the project repository or contact the administrator of your WC 2026 Hub instance.',
+          ],
+        },
+      ],
     },
   },
 }

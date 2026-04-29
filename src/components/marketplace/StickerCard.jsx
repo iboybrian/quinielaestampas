@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
-import { Star, Plus, Check } from 'lucide-react'
+import { Star, Plus, Check, Copy, CopyMinus } from 'lucide-react'
 import { RARITY_STYLES } from '../../lib/stickerData'
 
-export default function StickerCard({ sticker, hasIt, needsIt, onToggleHave, onToggleNeed, compact = false }) {
+export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, onToggleHave, onToggleNeed, onMarkDuplicate, onRemoveDuplicate, compact = false }) {
   const style = RARITY_STYLES[sticker.rarity] ?? RARITY_STYLES.common
   const isLegendary = sticker.rarity === 'legendary'
   const isRare = sticker.rarity === 'rare'
@@ -81,6 +81,30 @@ export default function StickerCard({ sticker, hasIt, needsIt, onToggleHave, onT
             Need
           </motion.button>
         </div>
+
+        {/* Duplicate row — only when owned */}
+        {hasIt && onMarkDuplicate && (
+          <div className="flex gap-1 mt-1">
+            <motion.button
+              whileTap={{ scale: 0.88 }}
+              onClick={(e) => { e.stopPropagation(); onMarkDuplicate(sticker.id) }}
+              className="flex-1 rounded-lg py-1 text-[10px] font-bold transition-all flex items-center justify-center gap-1 bg-violet-500/15 text-violet-400 border border-violet-500/25 hover:bg-violet-500/25"
+            >
+              <Copy className="w-3 h-3" />
+              +Rep
+            </motion.button>
+            {duplicates > 0 && (
+              <motion.button
+                whileTap={{ scale: 0.88 }}
+                onClick={(e) => { e.stopPropagation(); onRemoveDuplicate?.(sticker.id) }}
+                className="flex-1 rounded-lg py-1 text-[10px] font-bold transition-all flex items-center justify-center gap-1 bg-white/5 text-slate-500 border border-white/5 hover:bg-rose-500/10 hover:text-rose-400"
+              >
+                <CopyMinus className="w-3 h-3" />
+                x{duplicates}
+              </motion.button>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   )

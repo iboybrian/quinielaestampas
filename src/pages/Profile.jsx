@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Edit3, Save, LogIn, Trophy, Star, Target, Loader2 } from 'lucide-react'
+import { Edit3, Save, LogIn, Trophy, Star, Target, Loader2, Bell, BellOff } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import { useMyCollection } from '../hooks/useStickers'
 import { useMyQuinielas } from '../hooks/useQuiniela'
+import { usePushNotifications } from '../hooks/usePushNotifications'
 import PageTransition from '../components/layout/PageTransition'
 
 function StatCard({ icon: Icon, value, label, color }) {
@@ -24,6 +25,7 @@ export default function Profile() {
   const { t } = useLang()
   const { stats: stickerStats } = useMyCollection()
   const { quinielas } = useMyQuinielas()
+  const { supported: pushSupported, subscribed: pushOn, loading: pushLoading, toggle: togglePush } = usePushNotifications()
   const [editing, setEditing] = useState(false)
   const [username, setUsername] = useState(profile?.username ?? '')
   const [country, setCountry] = useState(profile?.country ?? '')
@@ -157,6 +159,28 @@ export default function Profile() {
               {action.label}
             </motion.button>
           ))}
+
+          {pushSupported && (
+            <motion.button
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={togglePush}
+              disabled={pushLoading}
+              className={`w-full glass rounded-2xl p-4 text-left font-semibold text-sm transition-all flex items-center gap-3 ${
+                pushOn
+                  ? 'text-amber-400 hover:border-amber-400/20'
+                  : 'text-slate-400 hover:border-slate-400/20'
+              }`}
+            >
+              {pushLoading
+                ? <Loader2 className="w-4 h-4 animate-spin flex-shrink-0" />
+                : pushOn
+                  ? <Bell className="w-4 h-4 flex-shrink-0" />
+                  : <BellOff className="w-4 h-4 flex-shrink-0" />
+              }
+              {pushOn ? t.profile.notificationsOn : t.profile.notificationsOff}
+            </motion.button>
+          )}
         </motion.div>
       </div>
     </PageTransition>

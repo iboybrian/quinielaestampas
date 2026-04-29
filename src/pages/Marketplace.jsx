@@ -1,17 +1,19 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRightLeft, BookOpen, Loader2, ScanLine } from 'lucide-react'
+import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare } from 'lucide-react'
 import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
+import { useTradeNotifications } from '../hooks/useTradeNotifications'
 import { useLang } from '../contexts/LangContext'
 import StickerCard from '../components/marketplace/StickerCard'
 import TradeMatcher from '../components/marketplace/TradeMatcher'
 import TradeChat from '../components/marketplace/TradeChat'
+import DuplicateSearch from '../components/marketplace/DuplicateSearch'
+import ChatInbox from '../components/marketplace/ChatInbox'
 import AchievementOverlay, { useAchievements } from '../components/animations/AchievementOverlay'
 import PageTransition from '../components/layout/PageTransition'
-import ScannerView from '../components/scanner/ScannerView'
 
-const FILTER_KEYS = ['All', 'Have', 'Needed', 'Missing']
+const FILTER_KEYS = ['All', 'Have', 'Missing']
 
 function TeamTab({ team, isActive, ownedCount, totalCount, onClick }) {
   const pct = Math.round((ownedCount / totalCount) * 100)
@@ -48,13 +50,32 @@ export default function Marketplace() {
   const [selectedTeam, setSelectedTeam] = useState('ALL')
   const [filter, setFilter] = useState('All')
   const [chatPartner, setChatPartner] = useState(null)
-  const [scannerOpen, setScannerOpen] = useState(false)
-  const { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, bulkUpsertStickers, stats } = useMyCollection()
+  const [chatContext, setChatContext] = useState(null)
+  const { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, duplicateCount, markDuplicate, removeDuplicate, stats } = useMyCollection()
   const { achievement, trigger: triggerAchievement, dismiss: dismissAchievement } = useAchievements()
+  const { unreadTrades, tradePartners, totalUnread, markTradeRead } = useTradeNotifications()
+
+  // unreadByUserId for TradeMatcher dots
+  const unreadByUserId = useMemo(() => {
+    const map = {}
+    Object.entries(unreadTrades).forEach(([tradeId, info]) => {
+      const partner = tradePartners[tradeId]
+      if (partner) map[partner.partnerId] = { tradeId, ...info }
+    })
+    return map
+  }, [unreadTrades, tradePartners])
+
+  // Handler: open chat with optional context (type, sticker) from any source
+  const openChat = (partner, context = null) => {
+    setChatPartner(partner)
+    setChatContext(context ?? null)
+  }
 
   const MAIN_TABS = [
-    { key: 'My Album', label: t.marketplace.myAlbum, icon: BookOpen       },
-    { key: 'Trade',    label: t.marketplace.trade,   icon: ArrowRightLeft  },
+    { key: 'My Album', label: t.marketplace.myAlbum, icon: BookOpen      },
+    { key: 'Trade',    label: t.marketplace.trade,   icon: ArrowRightLeft },
+    { key: 'Mercado',  label: t.marketplace.mercado, icon: ShoppingBag   },
+    { key: 'Chats',    label: t.marketplace.chats,   icon: MessageSquare },
   ]
 
   const handleToggleHave = async (stickerId) => {
@@ -121,14 +142,6 @@ export default function Marketplace() {
                 className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full"
               />
             </div>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setScannerOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-400 text-xs font-bold hover:bg-amber-500/25 transition-colors"
-            >
-              <ScanLine className="w-3.5 h-3.5" />
-              Scan
-            </motion.button>
           </div>
         </motion.div>
 
@@ -136,11 +149,16 @@ export default function Marketplace() {
         <div className="flex gap-1 p-1 bg-white/5 rounded-2xl mb-6">
           {MAIN_TABS.map(({ key, label, icon: Icon }) => (
             <button key={key} onClick={() => setMainTab(key)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2.5 rounded-xl font-bold transition-all flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 relative ${
                 mainTab === key ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-slate-300'
               }`}>
-              <Icon className="w-4 h-4" />
-              {label}
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span className="text-[10px] md:text-sm leading-tight text-center">{label}</span>
+              {(key === 'Trade' || key === 'Chats') && totalUnread > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-black text-[9px] font-black flex items-center justify-center">
+                  {totalUnread > 9 ? '9+' : totalUnread}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -212,32 +230,43 @@ export default function Marketplace() {
                         sticker={sticker}
                         hasIt={hasSticker(sticker.id)}
                         needsIt={needsSticker(sticker.id)}
+                        duplicates={duplicateCount(sticker.id)}
                         onToggleHave={handleToggleHave}
                         onToggleNeed={toggleNeed}
+                        onMarkDuplicate={markDuplicate}
+                        onRemoveDuplicate={removeDuplicate}
                       />
                     ))}
                   </AnimatePresence>
                 </motion.div>
               )}
             </motion.div>
-          ) : (
+          ) : mainTab === 'Trade' ? (
             <motion.div key="trade" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <TradeMatcher onOpenChat={setChatPartner} />
+              <TradeMatcher onOpenChat={openChat} unreadByUserId={unreadByUserId} />
+            </motion.div>
+          ) : mainTab === 'Mercado' ? (
+            <motion.div key="mercado" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+              <DuplicateSearch onOpenChat={openChat} />
+            </motion.div>
+          ) : (
+            <motion.div key="chats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+              <ChatInbox onOpenChat={openChat} unreadByTradeId={unreadTrades} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <TradeChat isOpen={Boolean(chatPartner)} onClose={() => setChatPartner(null)} partner={chatPartner} />
+      <TradeChat
+        isOpen={Boolean(chatPartner)}
+        onClose={() => { setChatPartner(null); setChatContext(null) }}
+        partner={chatPartner}
+        context={chatContext}
+        onTradeResolved={(tradeId) => markTradeRead(tradeId)}
+      />
       <AchievementOverlay achievement={achievement} onDismiss={dismissAchievement} />
 
-      {scannerOpen && (
-        <ScannerView
-          onBulkSave={bulkUpsertStickers}
-          collection={collection}
-          onClose={() => setScannerOpen(false)}
-        />
-      )}
+
     </PageTransition>
   )
 }

@@ -53,6 +53,31 @@ export function useMyCollection() {
 
   const hasSticker = (id) => Boolean(collection[id]?.quantity > 0)
   const needsSticker = (id) => Boolean(collection[id]?.isNeeded)
+  const duplicateCount = (id) => Math.max(0, (collection[id]?.quantity ?? 0) - 1)
+
+  const markDuplicate = useCallback(async (stickerId) => {
+    if (!user) return
+    const current = collection[stickerId]
+    if (!current || current.quantity < 1) return // must own it first
+    const newQty = current.quantity + 1
+    await supabase.from('user_stickers').upsert(
+      { user_id: user.id, sticker_id: stickerId, quantity: newQty, is_needed: current.isNeeded ?? false },
+      { onConflict: 'user_id,sticker_id' }
+    )
+    setCollection((prev) => ({ ...prev, [stickerId]: { ...prev[stickerId], quantity: newQty } }))
+  }, [user, collection])
+
+  const removeDuplicate = useCallback(async (stickerId) => {
+    if (!user) return
+    const current = collection[stickerId]
+    if (!current || current.quantity <= 1) return // nothing to remove
+    const newQty = current.quantity - 1
+    await supabase.from('user_stickers').upsert(
+      { user_id: user.id, sticker_id: stickerId, quantity: newQty, is_needed: current.isNeeded ?? false },
+      { onConflict: 'user_id,sticker_id' }
+    )
+    setCollection((prev) => ({ ...prev, [stickerId]: { ...prev[stickerId], quantity: newQty } }))
+  }, [user, collection])
 
   const bulkUpsertStickers = useCallback(async (stickerIds) => {
     if (!user || !stickerIds.length) return false
@@ -82,7 +107,21 @@ export function useMyCollection() {
     needed: Object.values(collection).filter((s) => s.isNeeded).length,
   }
 
-  return { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, bulkUpsertStickers, stats, refresh: fetchCollection }
+  return { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, duplicateCount, markDuplicate, removeDuplicate, bulkUpsertStickers, stats, refresh: fetchCollection }
+}
+
+export async function findDuplicateOwners(stickerId, currentUserId) {
+  const query = supabase
+    .from('user_stickers')
+    .select('user_id, quantity, profiles(id, username, avatar_url, country)')
+    .eq('sticker_id', stickerId)
+    .gt('quantity', 1)
+  if (currentUserId) query.neq('user_id', currentUserId)
+  const { data, error } = await query
+  if (error || !data) return []
+  return data
+    .filter((r) => r.profiles?.id)
+    .map((r) => ({ ...r.profiles, extras: r.quantity - 1 }))
 }
 
 export async function findTradeMatches(userId) {
@@ -121,10 +160,21 @@ export async function findTradeMatches(userId) {
     .eq('is_needed', true)
     .neq('user_id', userId)
 
-  // Score by overlap
+  // Score + per-user sticker lists
   const scoreMap = {}
-  haveWhatINeed?.forEach(({ user_id }) => { scoreMap[user_id] = (scoreMap[user_id] || 0) + 1 })
-  needWhatIHave?.forEach(({ user_id }) => { scoreMap[user_id] = (scoreMap[user_id] || 0) + 1 })
+  const theyHaveINeedMap = {}
+  const iHaveTheyNeedMap = {}
+
+  haveWhatINeed?.forEach(({ user_id, sticker_id }) => {
+    scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
+    if (!theyHaveINeedMap[user_id]) theyHaveINeedMap[user_id] = []
+    theyHaveINeedMap[user_id].push(sticker_id)
+  })
+  needWhatIHave?.forEach(({ user_id, sticker_id }) => {
+    scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
+    if (!iHaveTheyNeedMap[user_id]) iHaveTheyNeedMap[user_id] = []
+    iHaveTheyNeedMap[user_id].push(sticker_id)
+  })
 
   const topUserIds = Object.entries(scoreMap)
     .sort(([, a], [, b]) => b - a)
@@ -138,5 +188,10 @@ export async function findTradeMatches(userId) {
     .select('id, username, avatar_url, country')
     .in('id', topUserIds)
 
-  return profiles?.map((p) => ({ ...p, matchScore: scoreMap[p.id] || 0 })) ?? []
+  return profiles?.map((p) => ({
+    ...p,
+    matchScore: scoreMap[p.id] || 0,
+    theyHaveINeed: theyHaveINeedMap[p.id] ?? [],
+    iHaveTheyNeed: iHaveTheyNeedMap[p.id] ?? [],
+  })) ?? []
 }

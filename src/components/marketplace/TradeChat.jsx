@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, Send, ArrowRightLeft } from 'lucide-react'
+import { X, Send, ArrowRightLeft, ShoppingBag } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { buildContextPayload } from '../../hooks/useChats'
 
 function ChatBubble({ message, isMine }) {
   return (
@@ -22,7 +23,7 @@ function ChatBubble({ message, isMine }) {
   )
 }
 
-export default function TradeChat({ isOpen, onClose, partner }) {
+export default function TradeChat({ isOpen, onClose, partner, context, onTradeResolved }) {
   const { user, profile } = useAuth()
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -37,15 +38,22 @@ export default function TradeChat({ isOpen, onClose, partner }) {
       let { data: trade } = await supabase
         .from('trade_requests')
         .select('id')
-        .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
-        .or(`from_user.eq.${partner.id},to_user.eq.${partner.id}`)
+        .or(
+          `and(from_user.eq.${user.id},to_user.eq.${partner.id}),` +
+          `and(from_user.eq.${partner.id},to_user.eq.${user.id})`
+        )
         .eq('status', 'pending')
-        .single()
+        .maybeSingle()
 
       if (!trade) {
         const { data } = await supabase
           .from('trade_requests')
-          .insert({ from_user: user.id, to_user: partner.id, offering_stickers: [], wanting_stickers: [] })
+          .insert({
+            from_user: user.id,
+            to_user: partner.id,
+            offering_stickers: [],
+            wanting_stickers: buildContextPayload(context),
+          })
           .select('id')
           .single()
         trade = data
@@ -53,6 +61,7 @@ export default function TradeChat({ isOpen, onClose, partner }) {
 
       if (trade) {
         setTradeId(trade.id)
+        onTradeResolved?.(trade.id)
         const { data: msgs } = await supabase
           .from('messages')
           .select('*')
@@ -69,7 +78,10 @@ export default function TradeChat({ isOpen, onClose, partner }) {
     const channel = supabase
       .channel(`chat-${tradeId}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `trade_id=eq.${tradeId}` }, (payload) => {
-        setMessages((prev) => [...prev, payload.new])
+        setMessages((prev) => {
+          const exists = prev.some((m) => m.id === payload.new.id)
+          return exists ? prev : [...prev, payload.new]
+        })
       })
       .subscribe()
     return () => channel.unsubscribe()
@@ -84,8 +96,20 @@ export default function TradeChat({ isOpen, onClose, partner }) {
     setSending(true)
     const content = input.trim()
     setInput('')
+    // Optimistic update — sender sees message immediately
+    const optimistic = { id: `opt-${Date.now()}`, trade_id: tradeId, sender_id: user.id, content, created_at: new Date().toISOString() }
+    setMessages((prev) => [...prev, optimistic])
     try {
-      await supabase.from('messages').insert({ trade_id: tradeId, sender_id: user.id, content })
+      const { data: saved } = await supabase
+        .from('messages')
+        .insert({ trade_id: tradeId, sender_id: user.id, content })
+        .select()
+        .single()
+      // Replace optimistic with real record (Realtime dedup by id)
+      if (saved) setMessages((prev) => prev.map((m) => m.id === optimistic.id ? saved : m))
+    } catch {
+      // Remove optimistic on error
+      setMessages((prev) => prev.filter((m) => m.id !== optimistic.id))
     } finally {
       setSending(false)
     }
@@ -121,15 +145,29 @@ export default function TradeChat({ isOpen, onClose, partner }) {
 
             {/* Header */}
             <div className="flex items-center gap-3 p-4 border-b border-white/5">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-black font-black">
-                {partner.username?.[0]?.toUpperCase() ?? '?'}
-              </div>
-              <div className="flex-1">
-                <div className="font-bold text-white">{partner.username}</div>
-                <div className="text-xs text-emerald-400 flex items-center gap-1">
-                  <ArrowRightLeft className="w-3 h-3" />
-                  Trade conversation
+              {partner.avatar_url ? (
+                <img src={partner.avatar_url} alt={partner.username}
+                  className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-black font-black flex-shrink-0">
+                  {partner.username?.[0]?.toUpperCase() ?? '?'}
                 </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-white truncate">{partner.username}</div>
+                {context?.type === 'mercado' ? (
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <ShoppingBag className="w-3 h-3 text-violet-400 flex-shrink-0" />
+                    <span className="text-xs text-violet-400 truncate">
+                      Mercado{context.sticker ? ` · ${context.sticker.name}` : ''}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="text-xs text-emerald-400 flex items-center gap-1 mt-0.5">
+                    <ArrowRightLeft className="w-3 h-3" />
+                    Intercambio
+                  </div>
+                )}
               </div>
               <motion.button whileTap={{ scale: 0.9 }} onClick={onClose}
                 className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-slate-400 hover:text-white">

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Globe, Search, X } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
@@ -280,6 +280,15 @@ export default function Auth() {
                   </button>
                 }
               />
+
+              {mode === 'login' && (
+                <div className="flex justify-end -mt-1">
+                  <Link to="/reset-password"
+                    className="text-xs text-slate-500 hover:text-amber-400 transition-colors">
+                    {t.auth.forgotPassword}
+                  </Link>
+                </div>
+              )}
 
               <AnimatePresence>
                 {error && (
