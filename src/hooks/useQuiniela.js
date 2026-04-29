@@ -176,24 +176,22 @@ function generateCode() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
 }
 
-// Returns true when other users' predictions for this match should be hidden.
-// Locked = match is 'scheduled' AND deadline cutoff hasn't passed yet.
-function isMatchLocked(fixture, deadlineMinutes) {
-  if (!fixture || fixture.status !== 'scheduled') return false
-  const cutoff = new Date(fixture.starts_at).getTime() - (deadlineMinutes ?? 10) * 60_000
-  return Date.now() < cutoff
+// Rival predictions are hidden while match hasn't kicked off (status === 'scheduled').
+// Once status changes to 'live' or 'finished', predictions become visible.
+function isMatchLocked(fixture) {
+  return fixture?.status === 'scheduled' || fixture?.status === 'not_started'
 }
 
-// Masks other users' predictions for matches whose deadline hasn't expired.
+// Masks other users' predictions for matches that haven't started yet.
 // Own predictions (currentUserId) are always returned as-is.
 // Hidden predictions keep user_id/match_id so the matrix can render a lock cell.
-export function maskPredictions(predictions, fixtures, currentUserId, deadlineMinutes) {
+export function maskPredictions(predictions, fixtures, currentUserId) {
   const fixtureMap = new Map(fixtures.map((f) => [f.id, f]))
   return predictions.map((p) => {
     if (p.user_id === currentUserId) return p
     const fixture = fixtureMap.get(p.match_id) ?? fixtureMap.get(String(p.match_id))
     if (!fixture) return p
-    if (isMatchLocked(fixture, deadlineMinutes)) {
+    if (isMatchLocked(fixture)) {
       return { user_id: p.user_id, match_id: p.match_id, quiniela_id: p.quiniela_id, hidden: true }
     }
     return p

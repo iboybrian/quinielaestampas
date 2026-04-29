@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Trophy, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { rankMembers } from '../../lib/scoring'
+import { useLang } from '../../contexts/LangContext'
 
 function RankBadge({ rank }) {
   if (rank === 1) return <div className="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-400 font-black text-sm">1</div>
@@ -24,6 +25,7 @@ function Avatar({ username, size = 'md' }) {
 }
 
 export default function Standings({ quinielaId, members, predictions }) {
+  const { t } = useLang()
   const [ranked, setRanked] = useState([])
 
   useEffect(() => {
@@ -53,11 +55,11 @@ export default function Standings({ quinielaId, members, predictions }) {
     <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between px-4 text-xs text-slate-500 font-medium uppercase tracking-wider mb-4">
-        <span>Player</span>
+        <span>{t.quiniela.standingsPlayer}</span>
         <div className="flex gap-6 text-right">
-          <span className="w-10">Exact</span>
-          <span className="w-10">Played</span>
-          <span className="w-12">Points</span>
+          <span className="w-10">{t.quiniela.standingsExact}</span>
+          <span className="w-10">{t.quiniela.standingsPlayed}</span>
+          <span className="w-12">{t.quiniela.standingsPoints}</span>
         </div>
       </div>
 
@@ -80,22 +82,22 @@ export default function Standings({ quinielaId, members, predictions }) {
             <Avatar username={member.username} />
             <div className="flex-1 min-w-0">
               <div className="font-bold text-white truncate">{member.username ?? 'Unknown'}</div>
-              <div className="text-xs text-slate-500">{member.correct} correct predictions</div>
+              <div className="text-xs text-slate-500">{member.correct} {t.quiniela.standingsCorrect}</div>
             </div>
             <div className="flex items-center gap-6 text-right">
               <div className="w-10">
                 <div className="text-amber-400 font-bold">{member.exact}</div>
-                <div className="text-xs text-slate-600">exact</div>
+                <div className="text-xs text-slate-600">{t.quiniela.standingsExactLabel}</div>
               </div>
               <div className="w-10">
                 <div className="text-slate-300 font-bold">{member.played}</div>
-                <div className="text-xs text-slate-600">played</div>
+                <div className="text-xs text-slate-600">{t.quiniela.standingsPlayedLabel}</div>
               </div>
               <div className="w-12">
                 <div className={`text-xl font-black ${i === 0 ? 'text-amber-400' : 'text-white'}`}>
                   {member.totalPoints}
                 </div>
-                <div className="text-xs text-slate-600">pts</div>
+                <div className="text-xs text-slate-600">{t.quiniela.standingsPtsLabel}</div>
               </div>
             </div>
           </motion.div>

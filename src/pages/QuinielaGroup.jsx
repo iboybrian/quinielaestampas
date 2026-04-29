@@ -26,19 +26,14 @@ export default function QuinielaGroup() {
 
   // Mask other users' predictions for matches whose deadline hasn't passed yet.
   // myPredictions stays unmasked for editing/MatchCard. visiblePredictions goes to Matrix/Standings.
-  const deadlineMinutes = quiniela?.prediction_deadline_minutes ?? 10
   const visiblePredictions = useMemo(
-    () => maskPredictions(predictions, fixtures, user?.id, deadlineMinutes),
-    [predictions, fixtures, user?.id, deadlineMinutes]
+    () => maskPredictions(predictions, fixtures, user?.id),
+    [predictions, fixtures, user?.id]
   )
-  const hiddenMatchCount = useMemo(() => {
-    const now = Date.now()
-    return fixtures.filter((f) => {
-      if (f.status !== 'scheduled') return false
-      const cutoff = new Date(f.starts_at).getTime() - deadlineMinutes * 60_000
-      return now < cutoff
-    }).length
-  }, [fixtures, deadlineMinutes])
+  const hiddenMatchCount = useMemo(
+    () => fixtures.filter((f) => f.status === 'scheduled' || f.status === 'not_started').length,
+    [fixtures]
+  )
 
   const [activeTab, setActiveTab] = useState('Standings')
   const [showPredictions, setShowPredictions] = useState(false)
