@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Copy, Check, Loader2, DollarSign, Clock, Users, Info, Phone } from 'lucide-react'
-import { useQuinielaGroup, useFixtures } from '../hooks/useQuiniela'
+import { ArrowLeft, Copy, Check, Loader2, DollarSign, Clock, Users, Info, Phone, EyeOff } from 'lucide-react'
+import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuiniela'
+import { useAuth } from '../contexts/AuthContext'
 import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
 import Standings from '../components/quiniela/Standings'
@@ -19,8 +20,25 @@ export default function QuinielaGroup() {
   const navigate = useNavigate()
   const { t, lang } = useLang()
 
+  const { user } = useAuth()
   const { quiniela, members, predictions, myPredictions, loading, savePrediction } = useQuinielaGroup(id)
   const { fixtures, loading: fixturesLoading } = useFixtures()
+
+  // Mask other users' predictions for matches whose deadline hasn't passed yet.
+  // myPredictions stays unmasked for editing/MatchCard. visiblePredictions goes to Matrix/Standings.
+  const deadlineMinutes = quiniela?.prediction_deadline_minutes ?? 10
+  const visiblePredictions = useMemo(
+    () => maskPredictions(predictions, fixtures, user?.id, deadlineMinutes),
+    [predictions, fixtures, user?.id, deadlineMinutes]
+  )
+  const hiddenMatchCount = useMemo(() => {
+    const now = Date.now()
+    return fixtures.filter((f) => {
+      if (f.status !== 'scheduled') return false
+      const cutoff = new Date(f.starts_at).getTime() - deadlineMinutes * 60_000
+      return now < cutoff
+    }).length
+  }, [fixtures, deadlineMinutes])
 
   const [activeTab, setActiveTab] = useState('Standings')
   const [showPredictions, setShowPredictions] = useState(false)
@@ -149,7 +167,19 @@ export default function QuinielaGroup() {
             transition={{ duration: 0.18 }}
           >
             {activeTab === 'Standings' && (
-              <Standings quinielaId={id} members={members} predictions={predictions} />
+              <>
+                {hiddenMatchCount > 0 && (
+                  <div className="flex items-center gap-2 px-3 py-2.5 mb-4 rounded-xl bg-slate-800/60 border border-white/8 text-xs text-slate-400">
+                    <EyeOff className="w-3.5 h-3.5 flex-shrink-0 text-slate-500" />
+                    <span>
+                      Predicciones de otros participantes ocultas hasta el cierre de{' '}
+                      <span className="text-slate-300 font-semibold">{hiddenMatchCount}</span>{' '}
+                      {hiddenMatchCount === 1 ? 'partido' : 'partidos'}.
+                    </span>
+                  </div>
+                )}
+                <Standings quinielaId={id} members={members} predictions={visiblePredictions} />
+              </>
             )}
 
             {activeTab === 'Matrix' && (
@@ -159,7 +189,19 @@ export default function QuinielaGroup() {
                   Loading fixtures…
                 </div>
               ) : (
-                <ResultsMatrix members={members} predictions={predictions} fixtures={fixtures} />
+                <>
+                  {hiddenMatchCount > 0 && (
+                    <div className="flex items-center gap-2 px-3 py-2.5 mb-4 rounded-xl bg-slate-800/60 border border-white/8 text-xs text-slate-400">
+                      <EyeOff className="w-3.5 h-3.5 flex-shrink-0 text-slate-500" />
+                      <span>
+                        🔒 Predicciones ocultas en{' '}
+                        <span className="text-slate-300 font-semibold">{hiddenMatchCount}</span>{' '}
+                        {hiddenMatchCount === 1 ? 'partido' : 'partidos'} — se revelan al cierre.
+                      </span>
+                    </div>
+                  )}
+                  <ResultsMatrix members={members} predictions={visiblePredictions} fixtures={fixtures} />
+                </>
               )
             )}
 

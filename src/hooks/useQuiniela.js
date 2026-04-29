@@ -175,3 +175,27 @@ function generateCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
 }
+
+// Returns true when other users' predictions for this match should be hidden.
+// Locked = match is 'scheduled' AND deadline cutoff hasn't passed yet.
+function isMatchLocked(fixture, deadlineMinutes) {
+  if (!fixture || fixture.status !== 'scheduled') return false
+  const cutoff = new Date(fixture.starts_at).getTime() - (deadlineMinutes ?? 10) * 60_000
+  return Date.now() < cutoff
+}
+
+// Masks other users' predictions for matches whose deadline hasn't expired.
+// Own predictions (currentUserId) are always returned as-is.
+// Hidden predictions keep user_id/match_id so the matrix can render a lock cell.
+export function maskPredictions(predictions, fixtures, currentUserId, deadlineMinutes) {
+  const fixtureMap = new Map(fixtures.map((f) => [f.id, f]))
+  return predictions.map((p) => {
+    if (p.user_id === currentUserId) return p
+    const fixture = fixtureMap.get(p.match_id) ?? fixtureMap.get(String(p.match_id))
+    if (!fixture) return p
+    if (isMatchLocked(fixture, deadlineMinutes)) {
+      return { user_id: p.user_id, match_id: p.match_id, quiniela_id: p.quiniela_id, hidden: true }
+    }
+    return p
+  })
+}

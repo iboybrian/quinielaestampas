@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { Lock } from 'lucide-react'
 import { calculatePoints } from '../../lib/scoring'
 import Flag from '../ui/Flag'
 
@@ -65,6 +66,17 @@ function PredCell({ match, prediction }) {
       <td className="p-0 border border-white/5 min-w-[72px]">
         <div className="flex items-center justify-center h-[52px] text-slate-700 text-xs">
           ·
+        </div>
+      </td>
+    )
+  }
+
+  if (prediction.hidden) {
+    return (
+      <td className="p-0 border border-white/5 min-w-[72px]">
+        <div className="flex flex-col items-center justify-center gap-1 h-[52px] text-slate-600">
+          <Lock className="w-3 h-3" />
+          <span className="text-[9px] font-medium">• • •</span>
         </div>
       </td>
     )
