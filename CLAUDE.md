@@ -98,11 +98,11 @@ Prediction scoring is implemented **twice** and must stay in sync:
 All sticker definitions are client-side in `src/lib/stickerData.js` (16 teams, ~16 players each + special stickers). Each team has two code fields: `code` (3-letter FIFA, e.g. `'ARG'`) used as the sticker ID prefix, and `isoCode` (2-letter ISO, e.g. `'ar'`) used with the `Flag` component. The database only stores which sticker IDs a user has (`user_stickers.sticker_id TEXT`) — no sticker table in Supabase.
 
 ### Images
-Custom images live in `src/public/assets/images/home/` and **must be imported as ES modules**:
+Custom images live in `public/assets/images/home/` (root-level `public/`, NOT `src/public/`). Reference via URL string — no ES module import needed:
 ```js
-import trophyImg from '../public/assets/images/home/trophy.png'
+const trophyImg = '/assets/images/home/trophy.png'
 ```
-Using `/assets/...` URL paths will 404 because this folder is inside `src/`, not the root `public/`.
+Files in root `public/` are served as-is by Vite at `/` in both dev and prod. Vercel serves them correctly from `dist/`.
 
 ### i18n
 Add new strings to **both** `es` and `en` objects in `src/lib/translations.js`, then access via `const { t } = useLang()`. Filter/tab values used in logic (e.g. `filter === 'Have'`) keep their English string keys — only display labels are translated.

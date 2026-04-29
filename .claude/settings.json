@@ -1,10 +1,15 @@
 {
-  "enabledPlugins": {
-    "caveman@caveman": true
-  },
   "permissions": {
     "allow": [
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(mkdir -p public/assets/images/home)",
+      "Bash(cp src/public/assets/images/home/trophy.png public/assets/images/home/)",
+      "Bash(cp src/public/assets/images/home/stickers.png public/assets/images/home/)",
+      "Bash(cp src/public/assets/images/home/scoreboard_2.png public/assets/images/home/)",
+      "Bash(git rm *)"
     ]
+  },
+  "enabledPlugins": {
+    "caveman@caveman": true
   }
 }

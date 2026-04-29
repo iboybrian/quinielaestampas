@@ -4,10 +4,9 @@ import { Zap, Users, Trophy, Star, Shield, TrendingUp, ArrowRight } from 'lucide
 import PageTransition from '../components/layout/PageTransition'
 import { useLang } from '../contexts/LangContext'
 
-// Custom images (imported as ES modules from src/public/)
-import trophyImg    from '../public/assets/images/home/trophy.png'
-import stickersImg  from '../public/assets/images/home/stickers.png'
-import scoreboardImg from '../public/assets/images/home/scoreboard_2.png'
+const trophyImg     = '/assets/images/home/trophy.png'
+const stickersImg   = '/assets/images/home/stickers.png'
+const scoreboardImg = '/assets/images/home/scoreboard_2.png'
 
 const FEATURE_ICONS = [Zap, Users, Trophy, Star, Shield, TrendingUp]
 const FEATURE_COLORS = [
