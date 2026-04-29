@@ -21,7 +21,9 @@ export function useFixtures() {
           ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
         )
         if (group.length) {
-          const { error: upsertErr } = await supabase.from('matches').upsert(group, { onConflict: 'id' })
+          // ignoreDuplicates=true → INSERT ... ON CONFLICT DO NOTHING
+          // Only INSERT permission needed; UPDATE is admin-only via Supabase dashboard.
+          const { error: upsertErr } = await supabase.from('matches').upsert(group, { onConflict: 'id', ignoreDuplicates: true })
           if (upsertErr) console.error('[useFixtures] matches upsert failed:', upsertErr)
         }
 
