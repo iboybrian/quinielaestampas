@@ -15,10 +15,14 @@ export function useFixtures() {
         const all = await getFixtures()
         if (cancelled) return
 
-        // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied
-        const group = all.filter(isGroupStage)
+        // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied.
+        // Strip fields not in the matches schema (home_penalties, away_penalties from API data).
+        const group = all.filter(isGroupStage).map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
+          ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
+        )
         if (group.length) {
-          await supabase.from('matches').upsert(group, { onConflict: 'id' })
+          const { error: upsertErr } = await supabase.from('matches').upsert(group, { onConflict: 'id' })
+          if (upsertErr) console.error('[useFixtures] matches upsert failed:', upsertErr)
         }
 
         setFixtures(all)
