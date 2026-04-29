@@ -6,7 +6,9 @@
       "Bash(cp src/public/assets/images/home/trophy.png public/assets/images/home/)",
       "Bash(cp src/public/assets/images/home/stickers.png public/assets/images/home/)",
       "Bash(cp src/public/assets/images/home/scoreboard_2.png public/assets/images/home/)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   },
   "enabledPlugins": {
