@@ -29,55 +29,64 @@ export function useChats() {
   const load = useCallback(async () => {
     if (!user) { setChats([]); setLoading(false); return }
 
-    // 1. All trade_requests for user
-    const { data: trades } = await supabase
-      .from('trade_requests')
-      .select('id, from_user, to_user, wanting_stickers, created_at')
-      .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
+    try {
+      // 1. All trade_requests for user
+      const { data: trades, error: tradesErr } = await supabase
+        .from('trade_requests')
+        .select('id, from_user, to_user, wanting_stickers, created_at')
+        .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
 
-    if (!trades?.length) { setChats([]); setLoading(false); return }
+      if (tradesErr) throw tradesErr
+      if (!trades?.length) { setChats([]); setLoading(false); return }
 
-    // 2. Partner profiles in one query
-    const partnerIds = [...new Set(
-      trades.map((t) => t.from_user === user.id ? t.to_user : t.from_user)
-    )]
-    const { data: profilesList } = await supabase
-      .from('profiles')
-      .select('id, username, avatar_url, country')
-      .in('id', partnerIds)
-    const profilesMap = {}
-    profilesList?.forEach((p) => { profilesMap[p.id] = p })
+      // 2. Partner profiles in one query
+      const partnerIds = [...new Set(
+        trades.map((t) => t.from_user === user.id ? t.to_user : t.from_user)
+      )]
+      const { data: profilesList, error: profilesErr } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url, country')
+        .in('id', partnerIds)
+      if (profilesErr) console.error('[useChats] profiles:', profilesErr)
+      const profilesMap = {}
+      profilesList?.forEach((p) => { profilesMap[p.id] = p })
 
-    // 3. Last message per trade in one query (fetch all, group in JS)
-    const tradeIds = trades.map((t) => t.id)
-    const { data: msgs } = await supabase
-      .from('messages')
-      .select('trade_id, content, created_at, sender_id')
-      .in('trade_id', tradeIds)
-      .order('created_at', { ascending: false })
+      // 3. Last message per trade in one query (fetch all, group in JS)
+      const tradeIds = trades.map((t) => t.id)
+      const { data: msgs, error: msgsErr } = await supabase
+        .from('messages')
+        .select('trade_id, content, created_at, sender_id')
+        .in('trade_id', tradeIds)
+        .order('created_at', { ascending: false })
+      if (msgsErr) console.error('[useChats] messages:', msgsErr)
 
-    const lastMsgMap = {}
-    msgs?.forEach((m) => {
-      if (!lastMsgMap[m.trade_id]) lastMsgMap[m.trade_id] = m
-    })
-
-    // 4. Build chat list
-    const list = trades
-      .filter((t) => lastMsgMap[t.id]) // only trades with at least one message
-      .map((t) => {
-        const partnerId = t.from_user === user.id ? t.to_user : t.from_user
-        return {
-          tradeId:  t.id,
-          partner:  profilesMap[partnerId] ?? { id: partnerId, username: 'Collector' },
-          lastMsg:  lastMsgMap[t.id],
-          context:  parseContext(t.wanting_stickers),
-          createdAt: t.created_at,
-        }
+      const lastMsgMap = {}
+      msgs?.forEach((m) => {
+        if (!lastMsgMap[m.trade_id]) lastMsgMap[m.trade_id] = m
       })
-      .sort((a, b) => new Date(b.lastMsg.created_at) - new Date(a.lastMsg.created_at))
 
-    setChats(list)
-    setLoading(false)
+      // 4. Build chat list
+      const list = trades
+        .filter((t) => lastMsgMap[t.id]) // only trades with at least one message
+        .map((t) => {
+          const partnerId = t.from_user === user.id ? t.to_user : t.from_user
+          return {
+            tradeId:  t.id,
+            partner:  profilesMap[partnerId] ?? { id: partnerId, username: 'Collector' },
+            lastMsg:  lastMsgMap[t.id],
+            context:  parseContext(t.wanting_stickers),
+            createdAt: t.created_at,
+          }
+        })
+        .sort((a, b) => new Date(b.lastMsg.created_at) - new Date(a.lastMsg.created_at))
+
+      setChats(list)
+    } catch (e) {
+      console.error('[useChats]', e)
+      setChats([])
+    } finally {
+      setLoading(false)
+    }
   }, [user])
 
   useEffect(() => { load() }, [load])

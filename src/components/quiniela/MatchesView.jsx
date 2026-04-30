@@ -29,7 +29,7 @@ function MatchSummaryCard({ match, onClick }) {
       {isLive && (
         <div className="bg-red-500 px-4 py-1 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-          <span className="text-xs font-bold text-white uppercase tracking-wider">Live</span>
+          <span className="text-xs font-bold text-white uppercase tracking-wider">{t.quiniela.liveBadge}</span>
         </div>
       )}
 
@@ -116,7 +116,7 @@ export default function MatchesView({ fixtures }) {
 
         {groupMatches.length === 0 && (
           <div className="text-center py-12 text-slate-600 text-sm">
-            Loading matches…
+            {t.quiniela.loadingMatches}
           </div>
         )}
       </div>

@@ -46,7 +46,7 @@ export default function Standings({ quinielaId, members, predictions }) {
     return (
       <div className="text-center py-16 text-slate-500">
         <Trophy className="w-10 h-10 mx-auto mb-3 opacity-30" />
-        <p>No members yet. Share the group code to get started!</p>
+        <p>{t.quiniela.standingsNoMembers}</p>
       </div>
     )
   }
@@ -81,7 +81,7 @@ export default function Standings({ quinielaId, members, predictions }) {
             <RankBadge rank={i + 1} />
             <Avatar username={member.username} />
             <div className="flex-1 min-w-0">
-              <div className="font-bold text-white truncate">{member.username ?? 'Unknown'}</div>
+              <div className="font-bold text-white truncate">{member.username ?? t.quiniela.standingsUnknown}</div>
               <div className="text-xs text-slate-500">{member.correct} {t.quiniela.standingsCorrect}</div>
             </div>
             <div className="flex items-center gap-6 text-right">

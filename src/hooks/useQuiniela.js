@@ -71,18 +71,21 @@ export function useQuinielaGroup(quinielaId) {
   const [members, setMembers] = useState([])
   const [predictions, setPredictions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
 
   const fetchData = useCallback(async () => {
     if (!quinielaId) return
     try {
-      const [{ data: q }, { data: m }, { data: p }] = await Promise.all([
+      setLoadError(null)
+      const [{ data: q, error: qErr }, { data: m }, { data: p }] = await Promise.all([
         supabase.from('quinielas').select('*').eq('id', quinielaId).single(),
         supabase.from('quiniela_members')
           .select('user_id, role, has_paid, profiles(id, username, avatar_url)')
           .eq('quiniela_id', quinielaId),
         supabase.from('predictions').select('*').eq('quiniela_id', quinielaId),
       ])
+      if (qErr) throw qErr
       setQuiniela(q)
       const enrichedMembers = m?.map((r) => ({
         ...r.profiles,
@@ -93,7 +96,10 @@ export function useQuinielaGroup(quinielaId) {
       setPredictions(p ?? [])
       const myMember = m?.find((r) => r.user_id === user?.id)
       setIsAdmin(myMember?.role === 'admin')
-    } catch { console.error('Failed to load quiniela group') }
+    } catch (e) {
+      console.error('[useQuinielaGroup]', e)
+      setLoadError(e?.message ?? 'Error loading group')
+    }
     finally { setLoading(false) }
   }, [quinielaId, user])
 
@@ -117,7 +123,7 @@ export function useQuinielaGroup(quinielaId) {
   }, [user, quinielaId, fetchData])
 
   const myPredictions = predictions.filter((p) => p.user_id === user?.id)
-  return { quiniela, members, predictions, myPredictions, loading, isAdmin, savePrediction, refresh: fetchData }
+  return { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction, refresh: fetchData }
 }
 
 export async function createQuiniela(name, userId) {

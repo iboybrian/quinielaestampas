@@ -21,7 +21,7 @@ export default function QuinielaGroup() {
   const { t, lang } = useLang()
 
   const { user } = useAuth()
-  const { quiniela, members, predictions, myPredictions, loading, savePrediction } = useQuinielaGroup(id)
+  const { quiniela, members, predictions, myPredictions, loading, loadError, savePrediction } = useQuinielaGroup(id)
   const { fixtures, loading: fixturesLoading } = useFixtures()
 
   // Mask other users' predictions for matches whose deadline hasn't passed yet.
@@ -73,7 +73,20 @@ export default function QuinielaGroup() {
       <PageTransition>
         <div className="flex items-center justify-center min-h-[60vh] text-slate-500">
           <Loader2 className="w-6 h-6 animate-spin mr-3" />
-          Loading group…
+          {t.quiniela.loadingGroup}
+        </div>
+      </PageTransition>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <PageTransition>
+        <div className="flex items-center justify-center min-h-[60vh] text-slate-500 flex-col gap-3">
+          <p className="text-sm text-red-400">{t.quiniela.errorLoadGroup}</p>
+          <button onClick={() => window.location.reload()} className="text-xs text-slate-500 underline">
+            {lang === 'es' ? 'Recargar' : 'Reload'}
+          </button>
         </div>
       </PageTransition>
     )
@@ -181,7 +194,7 @@ export default function QuinielaGroup() {
               fixturesLoading ? (
                 <div className="flex items-center justify-center py-16 text-slate-500">
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Loading fixtures…
+                  {t.quiniela.loadingFixtures}
                 </div>
               ) : (
                 <>
@@ -208,7 +221,7 @@ export default function QuinielaGroup() {
               fixturesLoading ? (
                 <div className="flex items-center justify-center py-16 text-slate-500">
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Loading fixtures…
+                  {t.quiniela.loadingFixtures}
                 </div>
               ) : (
                 <PredictionsView
@@ -225,7 +238,7 @@ export default function QuinielaGroup() {
               fixturesLoading ? (
                 <div className="flex items-center justify-center py-16 text-slate-500">
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Loading fixtures…
+                  {t.quiniela.loadingFixtures}
                 </div>
               ) : (
                 <MatchesView fixtures={fixtures} />
@@ -235,7 +248,7 @@ export default function QuinielaGroup() {
             {activeTab === 'Bracket' && (
               <div>
                 <p className="text-xs text-slate-600 text-center mb-6">
-                  Live knockout bracket — winners advance, losers fade out.
+                  {t.quiniela.bracketDesc}
                 </p>
                 <BracketView bracket={bracket} />
               </div>
