@@ -1,93 +1,311 @@
+// Sticker IDs follow Panini convention: {FIFA_CODE}{number}
+// e.g. MEX1 = Mexico Emblem, MEX2–MEX12 = players 1-11,
+//      MEX13 = Team Photo, MEX14–MEX20 = players 12-18
+// Source: Stickers_Mundial_2026_por_Grupos.xlsx
+
 export const TEAMS = [
   // ── Group A ──────────────────────────────────────────────────────────────────
-  { code: 'ARG', isoCode: 'ar',     name: 'Argentina',    flag: '🇦🇷', group: 'A', color: '#75AADB', players: ['Lionel Messi', 'Julián Álvarez', 'Rodrigo De Paul', 'Ángel Di María', 'Emiliano Martínez', 'Nicolás Otamendi', 'Alexis Mac Allister', 'Thiago Almada', 'Lautaro Martínez', 'Enzo Fernández', 'Paulo Dybala', 'Germán Pezzella', 'Nahuel Molina', 'Marcos Acuña', 'Leandro Paredes', 'Guido Rodríguez'] },
-  { code: 'POL', isoCode: 'pl',     name: 'Poland',       flag: '🇵🇱', group: 'A', color: '#DC143C', players: ['Robert Lewandowski', 'Piotr Zieliński', 'Wojciech Szczęsny', 'Jakub Moder', 'Jan Bednarek', 'Kamil Glik', 'Arkadiusz Milik', 'Bartosz Bereszyński', 'Matty Cash', 'Karol Linetty', 'Sebastian Szymański', 'Przemysław Frankowski', 'Jakub Kiwior', 'Adam Buksa', 'Kamil Piątek', 'Michał Skóraś'] },
-  { code: 'ECU', isoCode: 'ec',     name: 'Ecuador',      flag: '🇪🇨', group: 'A', color: '#FFD100', players: ['Enner Valencia', 'Moisés Caicedo', 'Piero Hincapié', 'Gonzalo Plata', 'Michael Estrada', 'Jeremy Sarmiento', 'Ángel Mena', 'Diego Palacios', 'Jackson Porozo', 'Pervis Estupiñán', 'Byron Castillo', 'Jhegson Méndez', 'Romario Ibarra', 'Alan Minda', 'Roberto Ordóñez', 'John Yeboah'] },
-  { code: 'QAT', isoCode: 'qa',     name: 'Qatar',        flag: '🇶🇦', group: 'A', color: '#8B0000', players: ['Hassan Al-Haydos', 'Almoez Ali', 'Akram Afif', 'Bassam Al-Rawi', 'Homam Ahmed', 'Abdulaziz Hatem', 'Assim Madibo', 'Boualem Khoukhi', 'Ismaeel Mohammad', 'Ali Asadalla', 'Khalid Muneer', 'Meshaal Barsham', 'Tariq Salman', 'Abdulkarim Hassan', 'Karim Boudiaf', 'Ahmed Al-Rawi'] },
+  {
+    code: 'MEX', isoCode: 'mx', name: 'México',       flag: '🇲🇽', group: 'A', color: '#006847',
+    players: ['Luis Malagón', 'Johan Vásquez', 'Jorge Sánchez', 'César Montes', 'Jesús Gallardo', 'Israel Reyes', 'Diego Laínez', 'Carlos Rodríguez', 'Edson Álvarez', 'Orbelín Pineda', 'Marcel Ruiz', 'Érick Sánchez', 'Hirving Lozano', 'Santiago Giménez', 'Raúl Jiménez', 'Alexis Vega', 'Roberto Alvarado', 'César Huerta'],
+  },
+  {
+    code: 'RSA', isoCode: 'za', name: 'South Africa', flag: '🇿🇦', group: 'A', color: '#007A4D',
+    players: ['Ronwen Williams', 'Sipho Chaine', 'Aubrey Modiba', 'Samukele Kabini', 'Mbekezeli Mbokazi', 'Khulumani Ndamane', 'Siyabonga Ngezana', 'Khuliso Mudau', 'Nkosinathi Sibisi', 'Teboho Mokoena', 'Thalente Mbatha', 'Bathusi Aubaas', 'Yaya Sithole', 'Sipho Mbule', 'Lyle Foster', 'Iqraam Rayners', 'Mohau Nkota', 'Oswin Appollis'],
+  },
+  {
+    code: 'KOR', isoCode: 'kr', name: 'South Korea',  flag: '🇰🇷', group: 'A', color: '#CD2E3A',
+    players: ['Hyeon-woo Jo', 'Seung-gyu Kim', 'Min-jae Kim', 'Yoo-min Cho', 'Young-woo Seol', 'Han-beom Lee', 'Tae-seok Lee', 'Myung-jae Lee', 'Jae-sung Lee', 'In-beom Hwang', 'Kang-in Lee', 'Seung-ho Paik', 'Jens Castrop', 'Dong-kyung Lee', 'Gue-sung Cho', 'Heung-min Son', 'Hee-chan Hwang', 'Hyeon-gyu Oh'],
+  },
+  {
+    code: 'CZE', isoCode: 'cz', name: 'Czechia',      flag: '🇨🇿', group: 'A', color: '#D7141A',
+    players: ['Matěj Kovář', 'Jindřich Staněk', 'Ladislav Krejčí', 'Vladimír Coufal', 'Jaroslav Zelený', 'Tomáš Holeš', 'David Zima', 'Michal Sadílek', 'Lukáš Provod', 'Lukáš Červ', 'Tomáš Souček', 'Pavel Šulc', 'Matěj Vydra', 'Vasil Kušej', 'Tomáš Chorý', 'Václav Černý', 'Adam Hložek', 'Patrik Schick'],
+  },
+
   // ── Group B ──────────────────────────────────────────────────────────────────
-  { code: 'ENG', isoCode: 'gb-eng', name: 'England',      flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'B', color: '#CF091F', players: ['Harry Kane', 'Jude Bellingham', 'Bukayo Saka', 'Jordan Pickford', 'Kyle Walker', 'John Stones', 'Declan Rice', 'Phil Foden', 'Marcus Rashford', 'Raheem Sterling', 'Luke Shaw', 'Reece James', 'Trent Alexander-Arnold', 'Mason Mount', 'Ollie Watkins', 'Cole Palmer'] },
-  { code: 'IRN', isoCode: 'ir',     name: 'Iran',         flag: '🇮🇷', group: 'B', color: '#239F40', players: ['Mehdi Taremi', 'Sardar Azmoun', 'Alireza Jahanbakhsh', 'Ali Gholizadeh', 'Saman Ghoddos', 'Ehsan Hajsafi', 'Majid Hosseini', 'Ramin Rezaeian', 'Saeid Ezatolahi', 'Morteza Pouraliganji', 'Ali Beiranvand', 'Shojae Khalilzadeh', 'Karim Ansarifard', 'Ahmad Nourollahi', 'Milad Mohammadi', 'Omid Noorafkan'] },
-  { code: 'USA', isoCode: 'us',     name: 'USA',          flag: '🇺🇸', group: 'B', color: '#3C3B6E', players: ['Tyler Adams', 'Christian Pulisic', 'Gio Reyna', 'Weston McKennie', 'Matt Turner', 'Sergiño Dest', 'Yunus Musah', 'Ricardo Pepi', 'Folarin Balogun', 'Brendan Aaronson', 'Tim Weah', 'Antonee Robinson', 'Walker Zimmerman', 'Miles Robinson', 'DeAndre Yedlin', 'Malik Tillman'] },
-  { code: 'WAL', isoCode: 'gb-wls', name: 'Wales',        flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', group: 'B', color: '#C8102E', players: ['Gareth Bale', 'Aaron Ramsey', 'Daniel James', 'Kieffer Moore', 'Ben Davies', 'Neco Williams', 'Joe Allen', 'Ethan Ampadu', 'Brennan Johnson', 'Wayne Hennessey', 'Chris Mepham', 'Connor Roberts', 'Matthew Smith', 'Dylan Levitt', 'Mark Harris', 'Tyler Roberts'] },
+  {
+    code: 'CAN', isoCode: 'ca', name: 'Canada',        flag: '🇨🇦', group: 'B', color: '#FF0000',
+    players: ['Dayne St. Clair', 'Alphonso Davies', 'Alistair Johnston', 'Samuel Adekugbe', 'Richie Laryea', 'Derek Cornelius', 'Moïse Bombito', 'Kamal Miller', 'Stephen Eustáquio', 'Ismaël Koné', 'Jonathan Osorio', 'Jacob Shaffelburg', 'Mathieu Choinière', 'Niko Sigur', 'Tajon Buchanan', 'Liam Millar', 'Cyle Larin', 'Jonathan David'],
+  },
+  {
+    code: 'BIH', isoCode: 'ba', name: 'Bosnia y Herz.', flag: '🇧🇦', group: 'B', color: '#002395',
+    players: ['Nikola Vasilj', 'Amer Dedić', 'Sead Kolašinac', 'Tarik Muharemović', 'Nihad Mujakić', 'Nikola Katić', 'Amir Hadžiahmetović', 'Benjamin Tahirović', 'Armin Gigović', 'Ivan Šunjić', 'Ivan Bašić', 'Dženis Burnić', 'Esmir Bajraktarević', 'Amar Memić', 'Ermedin Demirović', 'Edin Džeko', 'Samed Baždar', 'Haris Tabaković'],
+  },
+  {
+    code: 'QAT', isoCode: 'qa', name: 'Qatar',          flag: '🇶🇦', group: 'B', color: '#8B0000',
+    players: ['Meshaal Barsham', 'Sultan Al Brake', 'Lucas Mendes', 'Homam Ahmed', 'Boualem Khoukhi', 'Pedro Miguel', 'Tarek Salman', 'Mohamed Al-Mannai', 'Karim Boudiaf', 'Assim Madibo', 'Ahmed Fatehi', 'Mohammed Waad', 'Abdulaziz Hatem', 'Hassan Al-Haydos', 'Edmilson Junior', 'Akram Afif', 'Ahmed Al Ganehi', 'Almoez Ali'],
+  },
+  {
+    code: 'SUI', isoCode: 'ch', name: 'Switzerland',    flag: '🇨🇭', group: 'B', color: '#FF0000',
+    players: ['Gregor Kobel', 'Yvon Mvogo', 'Manuel Akanji', 'Ricardo Rodríguez', 'Nico Elvedi', 'Aurèle Amenda', 'Silvan Widmer', 'Granit Xhaka', 'Denis Zakaria', 'Remo Freuler', 'Fabian Rieder', 'Ardon Jashari', 'Johan Manzambi', 'Michel Aebischer', 'Breel Embolo', 'Rubén Vargas', 'Dan Ndoye', 'Zeki Amdouni'],
+  },
+
   // ── Group C ──────────────────────────────────────────────────────────────────
-  { code: 'FRA', isoCode: 'fr',     name: 'France',       flag: '🇫🇷', group: 'C', color: '#002395', players: ['Kylian Mbappé', 'Antoine Griezmann', 'Ousmane Dembélé', 'Mike Maignan', 'Jules Koundé', 'Raphaël Varane', 'Adrien Rabiot', 'Aurélien Tchouaméni', 'Eduardo Camavinga', 'Marcus Thuram', 'Randal Kolo Muani', 'Benjamin Pavard', 'Dayot Upamecano', 'Théo Hernández', 'William Saliba', 'Youssouf Fofana'] },
-  { code: 'DEN', isoCode: 'dk',     name: 'Denmark',      flag: '🇩🇰', group: 'C', color: '#C60C30', players: ['Christian Eriksen', 'Pierre-Emile Højbjerg', 'Kasper Schmeichel', 'Simon Kjær', 'Joakim Mæhle', 'Andreas Christensen', 'Mikkel Damsgaard', 'Yussuf Poulsen', 'Thomas Delaney', 'Alexander Bah', 'Victor Nelsson', 'Rasmus Højlund', 'Jonas Wind', 'Jesper Lindstrøm', 'Robert Skov', 'Mathias Jensen'] },
-  { code: 'TUN', isoCode: 'tn',     name: 'Tunisia',      flag: '🇹🇳', group: 'C', color: '#E70013', players: ['Wahbi Khazri', 'Youssef Msakni', 'Hannibal Mejbri', 'Ellyes Skhiri', 'Naïm Sliti', 'Ali Maâloul', 'Montassar Talbi', 'Mohamed Drager', 'Anis Ben Slimane', 'Dylan Bronn', 'Seifeddine Jaziri', 'Mohamed Ali Ben Romdhane', 'Ferjani Sassi', 'Fakhreddine Ben Youssef', 'Hamza Rafia', 'Nizar Issaoui'] },
-  { code: 'CRC', isoCode: 'cr',     name: 'Costa Rica',   flag: '🇨🇷', group: 'C', color: '#002B7F', players: ['Keylor Navas', 'Bryan Ruiz', 'Joel Campbell', 'Kendall Waston', 'Bryan Oviedo', 'Oscar Duarte', 'Christian Gamboa', 'Celso Borges', 'Ronald Matarrita', 'Yeltsin Tejeda', 'Anthony Contreras', 'Warren Madrigal', 'Francisco Calvo', 'Johan Venegas', 'Alonso Martínez', 'Jurgen Damm'] },
+  {
+    code: 'BRA', isoCode: 'br', name: 'Brazil',         flag: '🇧🇷', group: 'C', color: '#009C3B',
+    players: ['Alisson', 'Bento', 'Marquinhos', 'Éder Militão', 'Gabriel Magalhães', 'Danilo', 'Wesley', 'Lucas Paquetá', 'Casemiro', 'Bruno Guimarães', 'Luiz Henrique', 'Vinícius Júnior', 'Rodrygo', 'João Pedro', 'Matheus Cunha', 'Gabriel Martinelli', 'Raphinha', 'Estêvão'],
+  },
+  {
+    code: 'MAR', isoCode: 'ma', name: 'Morocco',        flag: '🇲🇦', group: 'C', color: '#C1272D',
+    players: ['Yassine Bounou', 'Munir El Kajoui', 'Achraf Hakimi', 'Noussair Mazraoui', 'Nayef Aguerd', 'Romain Saïss', 'Jawad El Yamiq', 'Adam Masina', 'Sofyan Amrabat', 'Azzedine Ounahi', 'Eliesse Ben Seghir', 'Bilal El Khannouss', 'Ismael Saibari', 'Youssef En-Nesyri', 'Abde Ezzalzouli', 'Soufiane Rahimi', 'Brahim Díaz', 'Ayoub El Kaabi'],
+  },
+  {
+    code: 'HAI', isoCode: 'ht', name: 'Haití',          flag: '🇭🇹', group: 'C', color: '#00209F',
+    players: ['Johny Placide', 'Carlens Arcus', 'Martin Expérience', 'Jean-Kévin Duverne', 'Ricardo Adé', 'Duke Lacroix', 'Garven Metusala', 'Hannes Delcroix', 'Leverton Pierre', 'Danley Jean Jacques', 'Jean-Ricner Bellegarde', 'Christopher Attys', 'Derrick Etienne Jr.', 'Josué Casimir', 'Rubén Providence', 'Duckens Nazon', 'Louicius Deedson', 'Frantzdy Pierrot'],
+  },
+  {
+    code: 'SCO', isoCode: 'gb-sct', name: 'Scotland',   flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', group: 'C', color: '#003087',
+    players: ['Angus Gunn', 'Jack Hendry', 'Kieran Tierney', 'Aaron Hickey', 'Andrew Robertson', 'Scott McKenna', 'John Souttar', 'Anthony Ralston', 'Grant Hanley', 'Scott McTominay', 'Billy Gilmour', 'Lewis Ferguson', 'Ryan Christie', 'Kenny McLean', 'John McGinn', 'Lyndon Dykes', 'Che Adams', 'Ben Doak'],
+  },
+
   // ── Group D ──────────────────────────────────────────────────────────────────
-  { code: 'GER', isoCode: 'de',     name: 'Germany',      flag: '🇩🇪', group: 'D', color: '#464646', players: ['Manuel Neuer', 'Joshua Kimmich', 'Toni Kroos', 'Florian Wirtz', 'Kai Havertz', 'Ilkay Gündogan', 'Leroy Sané', 'Thomas Müller', 'Niklas Süle', 'Antonio Rüdiger', 'Serge Gnabry', 'Jamal Musiala', 'David Raum', 'Nico Schlotterbeck', 'Chris Führich', 'Jonas Hofmann'] },
-  { code: 'JPN', isoCode: 'jp',     name: 'Japan',        flag: '🇯🇵', group: 'D', color: '#BC002D', players: ['Takumi Minamino', 'Kaoru Mitoma', 'Daichi Kamada', 'Wataru Endō', 'Hiroki Sakai', 'Maya Yoshida', 'Shuichi Gonda', 'Ao Tanaka', 'Junya Itō', 'Takehiro Tomiyasu', 'Ko Itakura', 'Ritsu Dōan', 'Yuki Soma', 'Hayao Kawabe', 'Ayase Ueda', 'Gaku Shibasaki'] },
-  { code: 'ESP', isoCode: 'es',     name: 'Spain',        flag: '🇪🇸', group: 'D', color: '#AA151B', players: ['Unai Simón', 'Dani Carvajal', 'Aymeric Laporte', 'Pau Torres', 'Jordi Alba', 'Rodri', 'Pedri', 'Gavi', 'Ferran Torres', 'Álvaro Morata', 'Marco Asensio', 'Dani Olmo', 'Fabián Ruiz', 'Mikel Merino', 'Lamine Yamal', 'Nico Williams'] },
-  { code: 'BEL', isoCode: 'be',     name: 'Belgium',      flag: '🇧🇪', group: 'D', color: '#000000', players: ['Romelu Lukaku', 'Kevin De Bruyne', 'Thibaut Courtois', 'Jan Vertonghen', 'Toby Alderweireld', 'Yannick Carrasco', 'Leandro Trossard', 'Dries Mertens', 'Youri Tielemans', 'Thomas Meunier', 'Arthur Theate', 'Loïs Openda', 'Charles De Ketelaere', 'Axel Witsel', 'Amadou Onana', 'Johan Bakayoko'] },
+  {
+    code: 'USA', isoCode: 'us', name: 'USA',            flag: '🇺🇸', group: 'D', color: '#3C3B6E',
+    players: ['Matt Freese', 'Chris Richards', 'Tim Ream', 'Mark McKenzie', 'Alex Freeman', 'Antonee Robinson', 'Tyler Adams', 'Tanner Tessmann', 'Weston McKennie', 'Christian Roldan', 'Timothy Weah', 'Diego Luna', 'Malik Tillman', 'Christian Pulisic', 'Brenden Aaronson', 'Ricardo Pepi', 'Haji Wright', 'Folarin Balogun'],
+  },
+  {
+    code: 'PAR', isoCode: 'py', name: 'Paraguay',       flag: '🇵🇾', group: 'D', color: '#D52B1E',
+    players: ['Roberto Fernández', 'Orlando Gill', 'Gustavo Gómez', 'Fabián Balbuena', 'Juan José Cáceres', 'Omar Alderete', 'Junior Alonso', 'Mathías Villasanti', 'Diego Gómez', 'Damián Bobadilla', 'Andrés Cubas', 'Matías Galarza Fonda', 'Julio Enciso', 'Alejandro Romero Gamarra', 'Miguel Almirón', 'Ramón Sosa', 'Ángel Romero', 'Antonio Sanabria'],
+  },
+  {
+    code: 'AUS', isoCode: 'au', name: 'Australia',      flag: '🇦🇺', group: 'D', color: '#00843D',
+    players: ['Mathew Ryan', 'Joe Gauci', 'Harry Souttar', 'Alessandro Circati', 'Jordan Bos', 'Aziz Behich', 'Cameron Burgess', 'Lewis Miller', 'Milos Degenek', 'Jackson Irvine', 'Riley McGree', 'Aiden O\'Neill', 'Connor Metcalfe', 'Patrick Yazbek', 'Craig Goodwin', 'Kusini Yengi', 'Nestory Irankunda', 'Mohamed Touré'],
+  },
+  {
+    code: 'TUR', isoCode: 'tr', name: 'Turkey',         flag: '🇹🇷', group: 'D', color: '#E30A17',
+    players: ['Uğurcan Çakır', 'Mert Müldür', 'Zeki Çelik', 'Abdülkerim Bardakcı', 'Çağlar Söyüncü', 'Merih Demiral', 'Ferdi Kadıoğlu', 'Kaan Ayhan', 'İsmail Yüksek', 'Hakan Çalhanoğlu', 'Orkun Kökçü', 'Arda Güler', 'İrfan Can Kahveci', 'Yunus Akgün', 'Can Uzun', 'Barış Alper Yılmaz', 'Kerem Aktürkoğlu', 'Kenan Yıldız'],
+  },
+
   // ── Group E ──────────────────────────────────────────────────────────────────
-  { code: 'BRA', isoCode: 'br',     name: 'Brazil',       flag: '🇧🇷', group: 'E', color: '#009C3B', players: ['Vinícius Jr.', 'Rodrygo', 'Marquinhos', 'Casemiro', 'Alisson', 'Thiago Silva', 'Neymar Jr.', 'Lucas Paquetá', 'Éder Militão', 'Raphinha', 'Bruno Guimarães', 'Fred', 'Danilo', 'Alex Telles', 'Endrick', 'Gabriel Martinelli'] },
-  { code: 'SRB', isoCode: 'rs',     name: 'Serbia',       flag: '🇷🇸', group: 'E', color: '#C6363C', players: ['Dušan Vlahović', 'Aleksandar Mitrović', 'Sergej Milinković-Savić', 'Dušan Tadić', 'Filip Kostić', 'Nemanja Gudelj', 'Nikola Milenković', 'Vanja Milinković-Savić', 'Strahinja Pavlović', 'Ivan Ilić', 'Andrija Živković', 'Stefan Mitrović', 'Marko Grujić', 'Saša Lukić', 'Luka Ilić', 'Milan Gajić'] },
-  { code: 'SUI', isoCode: 'ch',     name: 'Switzerland',  flag: '🇨🇭', group: 'E', color: '#FF0000', players: ['Granit Xhaka', 'Xherdan Shaqiri', 'Yann Sommer', 'Manuel Akanji', 'Silvan Widmer', 'Remo Freuler', 'Breel Embolo', 'Fabian Rieder', 'Noah Okafor', 'Kwadwo Duah', 'Nico Elvedi', 'Ricardo Rodríguez', 'Renato Steffen', 'Zeki Amdouni', 'Dan Ndoye', 'Edimilson Fernandes'] },
-  { code: 'CMR', isoCode: 'cm',     name: 'Cameroon',     flag: '🇨🇲', group: 'E', color: '#007A5E', players: ['Vincent Aboubakar', 'André Onana', 'Eric Maxim Choupo-Moting', 'Karl Toko Ekambi', 'Jean-Charles Castelletto', 'Harold Moukoudi', 'Olivier Ntcham', 'André-Frank Zambo Anguissa', 'Samuel Gouet', 'Bryan Mbeumo', 'Collins Fai', 'Joyskim Dawa', 'Nicolas Nkoulou', 'Tolo Nouhou', 'Stéphane Bahoken', 'Martin Hongla'] },
+  {
+    code: 'GER', isoCode: 'de', name: 'Germany',        flag: '🇩🇪', group: 'E', color: '#464646',
+    players: ['Marc-André ter Stegen', 'Jonathan Tah', 'David Raum', 'Nico Schlotterbeck', 'Antonio Rüdiger', 'Waldemar Anton', 'Ridle Baku', 'Maximilian Mittelstädt', 'Joshua Kimmich', 'Florian Wirtz', 'Felix Nmecha', 'Leon Goretzka', 'Jamal Musiala', 'Serge Gnabry', 'Kai Havertz', 'Leroy Sané', 'Karim Adeyemi', 'Nick Woltemade'],
+  },
+  {
+    code: 'CUW', isoCode: 'cw', name: 'Curaçao',        flag: '🇨🇼', group: 'E', color: '#002B7F',
+    players: ['Eloy Room', 'Armando Obispo', 'Sherel Floranus', 'Jurien Gaari', 'Joshua Brenet', 'Roshon van Eijma', 'Shurandy Sambo', 'Livano Comenencia', 'Godfried Roemeratoe', 'Juninho Bacuna', 'Leandro Bacuna', 'Tahith Chong', 'Kenji Gorré', 'Jearl Margaritha', 'Jürgen Locadia', 'Jeremy Antonisse', 'Gervane Kastaneer', 'Sontje Hansen'],
+  },
+  {
+    code: 'CIV', isoCode: 'ci', name: "Côte d'Ivoire",  flag: '🇨🇮', group: 'E', color: '#F77F00',
+    players: ['Yahia Fofana', 'Ghislain Konan', 'Wilfried Singo', 'Odilon Kossounou', 'Evan Ndicka', 'Willy Boly', 'Emmanuel Agbadou', 'Ousmane Diomande', 'Franck Kessié', 'Seko Fofana', 'Ibrahim Sangaré', 'Jean-Philippe Gbamin', 'Amad Diallo', 'Sébastien Haller', 'Simon Adingra', 'Yan Diomandé', 'Evann Guessand', 'Oumar Diakité'],
+  },
+  {
+    code: 'ECU', isoCode: 'ec', name: 'Ecuador',         flag: '🇪🇨', group: 'E', color: '#FFD100',
+    players: ['Hernán Galíndez', 'Gonzalo Valle', 'Piero Hincapié', 'Pervis Estupiñán', 'Willian Pacho', 'Ángelo Preciado', 'Joel Ordóñez', 'Moisés Caicedo', 'Alan Franco', 'Kendry Páez', 'Pedro Vite', 'John Yeboah', 'Leonardo Campana', 'Gonzalo Plata', 'Nilson Angulo', 'Alan Minda', 'Kevin Rodríguez', 'Enner Valencia'],
+  },
+
   // ── Group F ──────────────────────────────────────────────────────────────────
-  { code: 'POR', isoCode: 'pt',     name: 'Portugal',     flag: '🇵🇹', group: 'F', color: '#006600', players: ['Cristiano Ronaldo', 'Bruno Fernandes', 'Bernardo Silva', 'Rúben Dias', 'João Cancelo', 'Diogo Jota', 'Rafael Leão', 'Rúben Neves', 'Vitinha', 'João Félix', 'Pedro Neto', 'Gonçalo Inácio', 'Nuno Mendes', 'Diogo Dalot', 'William Carvalho', 'André Silva'] },
-  { code: 'GHA', isoCode: 'gh',     name: 'Ghana',        flag: '🇬🇭', group: 'F', color: '#006B3F', players: ['Thomas Partey', 'André Ayew', 'Jordan Ayew', 'Mohammed Kudus', 'Alexander Djiku', 'Daniel Amartey', 'Baba Rahman', 'Tariq Lamptey', 'Daniel Afriyie Barnieh', 'Iñaki Williams', 'Joseph Aidoo', 'Jonathan Mensah', 'Abdul Salis Samed', 'Lawrence Ati-Zigi', 'Fatawu Issahaku', 'Antoine Semenyo'] },
-  { code: 'URU', isoCode: 'uy',     name: 'Uruguay',      flag: '🇺🇾', group: 'F', color: '#5EB6E4', players: ['Luis Suárez', 'Edinson Cavani', 'Federico Valverde', 'Darwin Núñez', 'Ronald Araújo', 'José María Giménez', 'Rodrigo Bentancur', 'Nahitan Nández', 'Facundo Pellistri', 'Matías Vecino', 'Maxi Gómez', 'Gastón Pereiro', 'Sebastián Coates', 'Álvaro Dorda', 'Matías Olivera', 'Manuel Ugarte'] },
-  { code: 'KOR', isoCode: 'kr',     name: 'South Korea',  flag: '🇰🇷', group: 'F', color: '#CD2E3A', players: ['Son Heung-min', 'Kim Min-jae', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung', 'Jung Woo-young', 'Kim Young-gwon', 'Kim Jin-su', 'Kim Seung-gyu', 'Lee Jae-sung', 'Kwon Chang-hoon', 'Na Sang-ho', 'Jeong Woo-yeong', 'Hwang In-beom', 'Oh Hyeon-gyu', 'Kim Tae-hwan'] },
+  {
+    code: 'NED', isoCode: 'nl', name: 'Netherlands',    flag: '🇳🇱', group: 'F', color: '#FF6600',
+    players: ['Bart Verbruggen', 'Virgil van Dijk', 'Micky van de Ven', 'Jurrien Timber', 'Denzel Dumfries', 'Nathan Aké', 'Jeremie Frimpong', 'Jan Paul van Hecke', 'Tijjani Reijnders', 'Ryan Gravenberch', 'Teun Koopmeiners', 'Frenkie de Jong', 'Xavi Simons', 'Justin Kluivert', 'Memphis Depay', 'Donyell Malen', 'Wout Weghorst', 'Cody Gakpo'],
+  },
+  {
+    code: 'JPN', isoCode: 'jp', name: 'Japan',           flag: '🇯🇵', group: 'F', color: '#BC002D',
+    players: ['Zion Suzuki', 'Henry Heroki Mochizuki', 'Ayumu Seko', 'Junnosuke Suzuki', 'Shogo Taniguchi', 'Tsuyoshi Watanabe', 'Kaishu Sano', 'Yuki Soma', 'Ao Tanaka', 'Daichi Kamada', 'Takefusa Kubo', 'Ritsu Dōan', 'Keito Nakamura', 'Takumi Minamino', 'Shuto Machino', 'Junya Ito', 'Koki Ogawa', 'Ayase Ueda'],
+  },
+  {
+    code: 'SWE', isoCode: 'se', name: 'Sweden',          flag: '🇸🇪', group: 'F', color: '#006AA7',
+    players: ['Victor Johansson', 'Isak Hien', 'Gabriel Gudmundsson', 'Emil Holm', 'Victor Nilsson Lindelöf', 'Gustaf Lagerbielke', 'Lucas Bergvall', 'Hugo Larsson', 'Jesper Karlström', 'Yasin Ayari', 'Mattias Svanberg', 'Daniel Svensson', 'Ken Sema', 'Roony Bardghji', 'Dejan Kulusevski', 'Anthony Elanga', 'Alexander Isak', 'Viktor Gyökeres'],
+  },
+  {
+    code: 'TUN', isoCode: 'tn', name: 'Tunisia',         flag: '🇹🇳', group: 'F', color: '#E70013',
+    players: ['Béchir Ben Saïd', 'Aymen Dahmen', 'Van Valery', 'Montassar Talbi', 'Yassine Meriah', 'Ali Abdi', 'Dylan Bronn', 'Ellyes Skhiri', 'Aïssa Laïdouni', 'Ferjani Sassi', 'Mohamed Ali Ben Romdhane', 'Hannibal Mejbri', 'Elias Achouri', 'Elias Saad', 'Hazem Mastouri', 'Ismaël Gharbi', 'Sayfallah Ltaief', 'Naïm Sliti'],
+  },
+
   // ── Group G ──────────────────────────────────────────────────────────────────
-  { code: 'NED', isoCode: 'nl',     name: 'Netherlands',  flag: '🇳🇱', group: 'G', color: '#FF6600', players: ['Virgil van Dijk', 'Memphis Depay', 'Frenkie de Jong', 'Cody Gakpo', 'Stefan de Vrij', 'Denzel Dumfries', 'Xavi Simons', 'Davy Klaassen', 'Wout Weghorst', 'Teun Koopmeiners', 'Steven Bergwijn', 'Jeremie Frimpong', 'Jurrien Timber', 'Micky van de Ven', 'Ryan Gravenberch', 'Donyell Malen'] },
-  { code: 'SEN', isoCode: 'sn',     name: 'Senegal',      flag: '🇸🇳', group: 'G', color: '#00853F', players: ['Edouard Mendy', 'Kalidou Koulibaly', 'Sadio Mané', 'Idrissa Gana Gueye', 'Cheikhou Kouyaté', 'Ismaïla Sarr', 'Abdou Diallo', 'Pape Matar Sarr', 'Nampalys Mendy', 'Famara Diédhiou', 'Boulaye Dia', 'Nicolas Jackson', 'Formose Mendy', 'Dion Lopy', 'Lamine Camara', 'Habib Diallo'] },
-  { code: 'MEX', isoCode: 'mx',     name: 'Mexico',       flag: '🇲🇽', group: 'G', color: '#006847', players: ['Guillermo Ochoa', 'Hirving Lozano', 'Raúl Jiménez', 'Carlos Vela', 'Andrés Guardado', 'Héctor Herrera', 'Edson Álvarez', 'Jorge Sánchez', 'César Montes', 'Alexis Vega', 'Roberto Alvarado', 'Orbelin Pineda', 'Henry Martín', 'Jesús Gallardo', 'Gerardo Arteaga', 'Santiago Giménez'] },
-  { code: 'KSA', isoCode: 'sa',     name: 'Saudi Arabia', flag: '🇸🇦', group: 'G', color: '#006C35', players: ['Salem Al-Dawsari', 'Mohammed Al-Owais', 'Yasser Al-Shahrani', 'Abdulelah Al-Malki', 'Sami Al-Najei', 'Firas Al-Buraikan', 'Ali Al-Bulaihi', 'Sultan Al-Ghanam', 'Hattan Bahebri', 'Mohamed Kanno', 'Saleh Al-Shehri', 'Nasser Al-Dawsari', 'Abdullah Al-Khaibari', 'Mohammed Al-Breik', 'Khalid Al-Ghannam', 'Riyadh Sharahili'] },
+  {
+    code: 'BEL', isoCode: 'be', name: 'Belgium',         flag: '🇧🇪', group: 'G', color: '#000000',
+    players: ['Thibaut Courtois', 'Arthur Theate', 'Timothy Castagne', 'Zeno Debast', 'Brandon Mechele', 'Maxim De Cuyper', 'Thomas Meunier', 'Youri Tielemans', 'Amadou Onana', 'Nicolas Raskin', 'Alexis Saelemaekers', 'Hans Vanaken', 'Kevin De Bruyne', 'Jérémy Doku', 'Charles De Ketelaere', 'Leandro Trossard', 'Loïs Openda', 'Romelu Lukaku'],
+  },
+  {
+    code: 'EGY', isoCode: 'eg', name: 'Egypt',            flag: '🇪🇬', group: 'G', color: '#C8102E',
+    players: ['Mohamed El Shenawy', 'Mohamed Hany', 'Mohamed Hamdy', 'Yasser Ibrahim', 'Khaled Sobhi', 'Ramy Rabia', 'Hossam Abdelmaguid', 'Ahmed Fattouh', 'Marwan Attia', 'Zizo', 'Hamdy Fathy', 'Mohamed Magdy', 'Emam Ashour', 'Osama Faisal', 'Mohamed Salah', 'Mostafa Mohamed', 'Trézéguet', 'Omar Marmoush'],
+  },
+  {
+    code: 'IRN', isoCode: 'ir', name: 'Iran',              flag: '🇮🇷', group: 'G', color: '#239F40',
+    players: ['Alireza Beiranvand', 'Morteza Pouraliganji', 'Ehsan Hajsafi', 'Milad Mohammadi', 'Shojae Khalilzadeh', 'Ramin Rezaeian', 'Hossein Kanaani', 'Sadegh Moharrami', 'Saleh Hardani', 'Saeed Ezatolahi', 'Saman Ghoddos', 'Omid Noorafkan', 'Roozbeh Cheshmi', 'Mohammad Mohebi', 'Sardar Azmoun', 'Mehdi Taremi', 'Alireza Jahanbakhsh', 'Ali Gholizadeh'],
+  },
+  {
+    code: 'NZL', isoCode: 'nz', name: 'New Zealand',      flag: '🇳🇿', group: 'G', color: '#000000',
+    players: ['Max Crocombe', 'Alex Paulsen', 'Michael Boxall', 'Liberato Cacace', 'Tim Payne', 'Tyler Bindon', 'Francis de Vries', 'Finn Surman', 'Joe Bell', 'Sarpreet Singh', 'Ryan Thomas', 'Matthew Garbett', 'Marko Stamenić', 'Ben Old', 'Chris Wood', 'Elijah Just', 'Callum McCowatt', 'Kosta Barbarouses'],
+  },
+
   // ── Group H ──────────────────────────────────────────────────────────────────
-  { code: 'MAR', isoCode: 'ma',     name: 'Morocco',      flag: '🇲🇦', group: 'H', color: '#C1272D', players: ['Yassine Bounou', 'Achraf Hakimi', 'Romain Saïss', 'Sofyan Amrabat', 'Hakim Ziyech', 'Youssef En-Nesyri', 'Noussair Mazraoui', 'Nayef Aguerd', 'Azzedine Ounahi', 'Selim Amallah', 'Zakaria Aboukhlal', 'Abdelhamid Sabiri', 'Badr Benoun', 'Jawad El Yamiq', 'Ilias Chair', 'Sofiane Boufal'] },
-  { code: 'CRO', isoCode: 'hr',     name: 'Croatia',      flag: '🇭🇷', group: 'H', color: '#E52B22', players: ['Luka Modrić', 'Ivan Perišić', 'Marcelo Brozović', 'Dejan Lovren', 'Joško Gvardiol', 'Mateo Kovačić', 'Ante Rebić', 'Bruno Petković', 'Mario Pašalić', 'Borna Sosa', 'Domagoj Vida', 'Nikola Vlašić', 'Martin Erlić', 'Josip Juranović', 'Andrej Kramarić', 'Lovro Majer'] },
-  { code: 'CAN', isoCode: 'ca',     name: 'Canada',       flag: '🇨🇦', group: 'H', color: '#FF0000', players: ['Alphonso Davies', 'Jonathan David', 'Cyle Larin', 'Tajon Buchanan', 'Stephen Eustáquio', 'Atiba Hutchinson', 'Milan Borjan', 'Sam Adekugbe', 'Richie Laryea', 'Ismaël Koné', 'Jonathan Osorio', 'Lucas Cavallini', 'Marcus Godinho', 'Kamal Miller', 'Alistair Johnston', 'Liam Millar'] },
-  { code: 'AUS', isoCode: 'au',     name: 'Australia',    flag: '🇦🇺', group: 'H', color: '#00843D', players: ['Mat Ryan', 'Harry Souttar', 'Mitchell Duke', 'Aaron Mooy', 'Mathew Leckie', 'Martin Boyle', 'Tom Rogic', 'Jackson Irvine', 'Ajdin Hrustic', 'Jason Cummings', 'Awer Mabil', 'Riley McGree', 'Miloš Degenek', 'Fran Karačić', 'Marco Tilio', 'Cameron Burgess'] },
+  {
+    code: 'ESP', isoCode: 'es', name: 'Spain',            flag: '🇪🇸', group: 'H', color: '#AA151B',
+    players: ['Unai Simón', 'Robin Le Normand', 'Aymeric Laporte', 'Dean Huijsen', 'Pedro Porro', 'Dani Carvajal', 'Marc Cucurella', 'Martín Zubimendi', 'Rodri', 'Pedri', 'Fabián Ruiz', 'Mikel Merino', 'Lamine Yamal', 'Dani Olmo', 'Nico Williams', 'Ferran Torres', 'Álvaro Morata', 'Mikel Oyarzabal'],
+  },
+  {
+    code: 'CPV', isoCode: 'cv', name: 'Cabo Verde',       flag: '🇨🇻', group: 'H', color: '#003893',
+    players: ['Vozinha', 'Logan Costa', 'Pico', 'Diney', 'Steven Moreira', 'Wagner Pina', 'João Paulo', 'Yannick Semedo', 'Kevin Pina', 'Patrick Andrade', 'Jamiro Monteiro', 'Deroy Duarte', 'Garry Rodrigues', 'Jovane Cabral', 'Ryan Mendes', 'Dailon Livramento', 'Willy Semedo', 'Bebé'],
+  },
+  {
+    code: 'KSA', isoCode: 'sa', name: 'Saudi Arabia',     flag: '🇸🇦', group: 'H', color: '#006C35',
+    players: ['Nawaf Alaqidi', 'Abdulrahman Al-Sanbi', 'Saud Abdulhamid', 'Nawaf Boushal', 'Jihad Thakri', 'Moteb Al-Harbi', 'Hassan Al-Tambakti', 'Musab Al-Juwayr', 'Ziyad Al-Johani', 'Abdullah Al-Khaibari', 'Nasser Al-Dawsari', 'Saleh Abu Al-Shamat', 'Marwan Al-Sahafi', 'Salem Al-Dawsari', 'Abdulrahman Al-Aboud', 'Firas Al-Buraikan', 'Saleh Al-Shehri', 'Abdullah Al-Hamdan'],
+  },
+  {
+    code: 'URU', isoCode: 'uy', name: 'Uruguay',           flag: '🇺🇾', group: 'H', color: '#5EB6E4',
+    players: ['Sergio Rochet', 'Santiago Mele', 'Ronald Araújo', 'José María Giménez', 'Sebastián Cáceres', 'Mathías Olivera', 'Guillermo Varela', 'Nahitan Nández', 'Federico Valverde', 'Giorgian De Arrascaeta', 'Rodrigo Bentancur', 'Manuel Ugarte', 'Nicolás de la Cruz', 'Maxi Araújo', 'Darwin Núñez', 'Federico Viñas', 'Rodrigo Aguirre', 'Facundo Pellistri'],
+  },
+
   // ── Group I ──────────────────────────────────────────────────────────────────
-  { code: 'ITA', isoCode: 'it',     name: 'Italy',        flag: '🇮🇹', group: 'I', color: '#003F87', players: ['Gianluigi Donnarumma', 'Alessandro Bastoni', 'Giovanni Di Lorenzo', 'Nicolò Barella', 'Davide Frattesi', 'Lorenzo Pellegrini', 'Federico Chiesa', 'Ciro Immobile', 'Giacomo Raspadori', 'Sandro Tonali', 'Mateo Retegui', 'Wilfried Gnonto', 'Destiny Udogie', 'Samuele Ricci', 'Giorgio Scalvini', 'Moise Kean'] },
-  { code: 'COL', isoCode: 'co',     name: 'Colombia',     flag: '🇨🇴', group: 'I', color: '#FCD116', players: ['James Rodríguez', 'Luis Díaz', 'Juan Cuadrado', 'Davinson Sánchez', 'Yerry Mina', 'Wilmar Barrios', 'Mateus Uribe', 'Miguel Borja', 'Roger Martínez', 'Rafael Santos Borré', 'Cucho Hernández', 'Jhon Durán', 'Richard Ríos', 'Stefan Medina', 'Camilo Vargas', 'Carlos Cuesta'] },
-  { code: 'NGA', isoCode: 'ng',     name: 'Nigeria',      flag: '🇳🇬', group: 'I', color: '#008751', players: ['Victor Osimhen', 'Alex Iwobi', 'Wilfred Ndidi', 'Ola Aina', 'William Troost-Ekong', 'Semi Ajayi', 'Taiwo Awoniyi', 'Frank Onyeka', 'Ahmed Musa', 'Calvin Bassey', 'Moses Simon', 'Bright Osayi-Samuel', 'Joe Aribo', 'Terem Moffi', 'Ademola Lookman', 'Kelechi Iheanacho'] },
-  { code: 'NZL', isoCode: 'nz',     name: 'New Zealand',  flag: '🇳🇿', group: 'I', color: '#000000', players: ['Chris Wood', 'Winston Reid', 'Ryan Thomas', 'Liberato Cacace', 'Nando Pijnaker', 'Matthew Garbett', 'Bill Tuiloma', 'Joe Bell', 'Tim Payne', 'Marco Rojas', 'Tommy Smith', 'Clayton Lewis', 'Michael Boxall', 'Logan Rogerson', 'Alex Rufer', 'Mickel Miller'] },
+  {
+    code: 'FRA', isoCode: 'fr', name: 'France',           flag: '🇫🇷', group: 'I', color: '#002395',
+    players: ['Mike Maignan', 'Theo Hernández', 'William Saliba', 'Jules Koundé', 'Ibrahima Konaté', 'Dayot Upamecano', 'Lucas Digne', 'Aurélien Tchouaméni', 'Eduardo Camavinga', 'Manu Koné', 'Adrien Rabiot', 'Michael Olise', 'Ousmane Dembélé', 'Bradley Barcola', 'Désiré Doué', 'Kingsley Coman', 'Hugo Ekitike', 'Kylian Mbappé'],
+  },
+  {
+    code: 'SEN', isoCode: 'sn', name: 'Senegal',          flag: '🇸🇳', group: 'I', color: '#00853F',
+    players: ['Édouard Mendy', 'Yehvann Diouf', 'Moussa Niakhaté', 'Abdoulaye Seck', 'Ismaïl Jakobs', 'El Hadji Malick Diouf', 'Kalidou Koulibaly', 'Idrissa Gana Gueye', 'Pape Matar Sarr', 'Pape Gueye', 'Habib Diarra', 'Lamine Camara', 'Sadio Mané', 'Ismaïla Sarr', 'Boulaye Dia', 'Iliman Ndiaye', 'Nicolas Jackson', 'Krépin Diatta'],
+  },
+  {
+    code: 'IRQ', isoCode: 'iq', name: 'Iraq',              flag: '🇮🇶', group: 'I', color: '#007A36',
+    players: ['Jalal Hassan', 'Rebin Sulaka', 'Hussein Ali', 'Akam Hashim', 'Merchas Doski', 'Zaid Tahseen', 'Manaf Younis', 'Zidane Iqbal', 'Amir Al-Ammari', 'Ibrahim Bayesh', 'Ali Jasim', 'Youssef Amyn', 'Aimar Sher', 'Marko Farji', 'Osama Rashid', 'Ali Al-Hamadi', 'Aymen Hussein', 'Mohanad Ali'],
+  },
+  {
+    code: 'NOR', isoCode: 'no', name: 'Norway',            flag: '🇳🇴', group: 'I', color: '#EF2B2D',
+    players: ['Ørjan Nyland', 'Julian Ryerson', 'Leo Østigård', 'Kristoffer Vassbakk Ajer', 'Marcus Holmgren Pedersen', 'David Møller Wolfe', 'Torbjørn Heggem', 'Morten Thorsby', 'Martin Ødegaard', 'Sander Berge', 'Andreas Schjelderup', 'Patrick Berg', 'Erling Haaland', 'Alexander Sørloth', 'Aron Dønnum', 'Jørgen Strand Larsen', 'Antonio Nusa', 'Oscar Bobb'],
+  },
+
   // ── Group J ──────────────────────────────────────────────────────────────────
-  { code: 'TUR', isoCode: 'tr',     name: 'Turkey',       flag: '🇹🇷', group: 'J', color: '#E30A17', players: ['Hakan Çalhanoğlu', 'Arda Güler', 'Cengiz Ünder', 'Zeki Çelik', 'Çağlar Söyüncü', 'Merih Demiral', 'Mert Müldür', 'Kenan Yıldız', 'Barış Alper Yılmaz', 'Abdülkerim Bardakcı', 'Ferdi Kadıoğlu', 'Orkun Kökçü', 'Umut Meraş', 'Cenk Tosun', 'Altay Bayındır', 'Kaan Ayhan'] },
-  { code: 'CIV', isoCode: 'ci',     name: "Côte d'Ivoire", flag: '🇨🇮', group: 'J', color: '#F77F00', players: ['Sébastien Haller', 'Nicolas Pépé', 'Franck Kessié', 'Wilfried Zaha', 'Simon Adingra', 'Serge Aurier', 'Eric Bailly', 'Ghislain Konan', 'Ibrahim Sangaré', 'Jean-Michaël Seri', 'Amad Diallo', 'Christian Kouamé', 'Willy Boly', 'Steeve Yago', 'Oumar Diakité', 'Jonathan Kodjia'] },
-  { code: 'EGY', isoCode: 'eg',     name: 'Egypt',        flag: '🇪🇬', group: 'J', color: '#C8102E', players: ['Mohamed Salah', 'Mohamed Elneny', 'Ahmed Hegazi', 'Mostafa Mohamed', 'Omar Marmoush', 'Ramy Rabia', 'Ahmed Sayed Zizo', 'Marwan Hamdy', 'Hussein El-Shahat', 'Amr El-Sulaya', 'Omar Gaber', 'Ayman Ashraf', 'Hamdi Fathy', 'Mahmoud Alaa', 'Karim Fouad', 'Taher Mohamed Taher'] },
-  { code: 'PAN', isoCode: 'pa',     name: 'Panama',       flag: '🇵🇦', group: 'J', color: '#DA121A', players: ['Rolando Blackburn', 'Adolfo Machado', 'Anibal Godoy', 'Alberto Quintero', 'Ismael Díaz', 'Cecilio Waterman', 'Armando Cooper', 'Fidel Escobar', 'Michael Murillo', 'Éric Davis', 'Abdiel Arroyo', 'José Rodríguez', 'Ricardo Ábrego', 'Tomás Martínez', 'Aníbal Godoy Jr.', 'Joel Ortiz'] },
+  {
+    code: 'ARG', isoCode: 'ar', name: 'Argentina',        flag: '🇦🇷', group: 'J', color: '#75AADB',
+    players: ['Emiliano Martínez', 'Nahuel Molina', 'Cristian Romero', 'Nicolás Otamendi', 'Nicolás Tagliafico', 'Leonardo Balerdi', 'Enzo Fernández', 'Alexis Mac Allister', 'Rodrigo De Paul', 'Exequiel Palacios', 'Leandro Paredes', 'Nico Paz', 'Franco Mastantuono', 'Nico González', 'Lionel Messi', 'Lautaro Martínez', 'Julián Álvarez', 'Giuliano Simeone'],
+  },
+  {
+    code: 'ALG', isoCode: 'dz', name: 'Algeria',           flag: '🇩🇿', group: 'J', color: '#006233',
+    players: ['Alexis Guendouz', 'Ramy Bensebaini', 'Youcef Atal', 'Rayan Aït-Nouri', 'Mohamed Amine Tougai', 'Aïssa Mandi', 'Ismael Bennacer', 'Houssem Aouar', 'Hicham Boudaoui', 'Ramiz Zerrouki', 'Nabil Bentaleb', 'Farés Chaibi', 'Riyad Mahrez', 'Saïd Benrahma', 'Anis Hadj Moussa', 'Amine Gouiri', 'Baghdad Bounedjah', 'Mohammed Amoura'],
+  },
+  {
+    code: 'AUT', isoCode: 'at', name: 'Austria',           flag: '🇦🇹', group: 'J', color: '#ED2939',
+    players: ['Alexander Schlager', 'Patrick Pentz', 'David Alaba', 'Kevin Danso', 'Philipp Lienhart', 'Stefan Posch', 'Philipp Mwene', 'Alexander Prass', 'Xaver Schlager', 'Marcel Sabitzer', 'Konrad Laimer', 'Florian Grillitsch', 'Nicolas Seiwald', 'Romano Schmid', 'Patrick Wimmer', 'Christoph Baumgartner', 'Michael Gregoritsch', 'Marko Arnautović'],
+  },
+  {
+    code: 'JOR', isoCode: 'jo', name: 'Jordan',            flag: '🇯🇴', group: 'J', color: '#007A3D',
+    players: ['Yazeed Abulaila', 'Ihsan Haddad', 'Mohammad Abu Hashish', 'Yazan Al-Arab', 'Abdallah Nasib', 'Saleem Obaid', 'Mohammad Abualnadi', 'Ibrahim Saadeh', 'Nizar Al-Rashdan', 'Noor Al-Rawabdeh', 'Mohannad Abu Taha', 'Amer Jamous', 'Mousa Al-Taamari', 'Yazan Al-Naimat', 'Mahmoud Al-Mardi', 'Ali Olwan', 'Mohammad Abu Zrayq', 'Ibrahim Sabra'],
+  },
+
   // ── Group K ──────────────────────────────────────────────────────────────────
-  { code: 'AUT', isoCode: 'at',     name: 'Austria',      flag: '🇦🇹', group: 'K', color: '#ED2939', players: ['David Alaba', 'Marko Arnautovic', 'Marcel Sabitzer', 'Stefan Posch', 'Konrad Laimer', 'Christoph Baumgartner', 'Kevin Danso', 'Nicolas Seiwald', 'Patrick Wimmer', 'Michael Gregoritsch', 'Sasa Kalajdzic', 'Romano Schmid', 'Patrick Pentz', 'Maximilian Wöber', 'Florian Grillitsch', 'Stefan Ilsanker'] },
-  { code: 'RSA', isoCode: 'za',     name: 'South Africa', flag: '🇿🇦', group: 'K', color: '#007A4D', players: ['Percy Tau', 'Lyle Foster', 'Ronwen Williams', 'Thulani Serero', 'Themba Zwane', 'Keagan Dolly', 'Bongani Zungu', 'Siyanda Xulu', 'Njabulo Ngcobo', 'Kermit Erasmus', 'Evidence Makgopa', 'Nkosinathi Sibisi', 'Yusuf Maart', 'Goodman Mosele', 'Terrence Mashego', 'Teboho Mokoena'] },
-  { code: 'HON', isoCode: 'hn',     name: 'Honduras',     flag: '🇭🇳', group: 'K', color: '#0073CF', players: ['Romell Quioto', 'Anthony Lozano', 'Alberth Elis', 'Maynor Figueroa', 'Juan Pablo Montes', 'Jerry Bengtson', 'Edwin Rodríguez', 'Édder Delgado', 'Denil Maldonado', 'Javier Portillo', 'Carlos Discua', 'Luis López', 'Diego Rodríguez', 'Rony Martínez', 'Iván López', 'Wesly Decas'] },
-  { code: 'IRQ', isoCode: 'iq',     name: 'Iraq',         flag: '🇮🇶', group: 'K', color: '#007A36', players: ['Ali Adnan', 'Amjad Attwan', 'Mohanad Ali', 'Aymen Hussein', 'Ahmed Ibrahim', 'Safaa Hadi', 'Saad Abdul Amir', 'Alaa Abbas', 'Bashar Resan', 'Mazin Abdulzahra', 'Ameen Al-Daho', 'Aziz Karim', 'Ali Jabbar', 'Humam Tariq', 'Zaid Tahseen', 'Alaa Abdulzehra'] },
+  {
+    code: 'POR', isoCode: 'pt', name: 'Portugal',          flag: '🇵🇹', group: 'K', color: '#006600',
+    players: ['Diogo Costa', 'José Sá', 'Rúben Dias', 'João Cancelo', 'Diogo Dalot', 'Nuno Mendes', 'Gonçalo Inácio', 'Bernardo Silva', 'Bruno Fernandes', 'Rúben Neves', 'Vitinha', 'João Neves', 'Cristiano Ronaldo', 'Francisco Trincão', 'João Félix', 'Gonçalo Ramos', 'Pedro Neto', 'Rafael Leão'],
+  },
+  {
+    code: 'UZB', isoCode: 'uz', name: 'Uzbekistán',        flag: '🇺🇿', group: 'K', color: '#1EB53A',
+    players: ['Otkir Yusupov', 'Farrukh Sayfiev', 'Sherzod Nasrullaev', 'Umar Eshmurodov', 'Husniddin Aliqulov', 'Rustamjon Ashurmatov', 'Khojiakbar Alijonov', 'Abdukodir Khusanov', 'Odiljon Hamrobekov', 'Otabek Shukurov', 'Jamshid Iskanderov', 'Azizbek Turgunboev', 'Khojimat Erkinov', 'Eldor Shomurodov', 'Oston Urunov', 'Jaloliddin Masharipov', 'Igor Sergeev', 'Abbosbek Fayzullaev'],
+  },
+  {
+    code: 'COL', isoCode: 'co', name: 'Colombia',          flag: '🇨🇴', group: 'K', color: '#FCD116',
+    players: ['Camilo Vargas', 'David Ospina', 'Dávinson Sánchez', 'Yerry Mina', 'Daniel Muñoz', 'Johan Mojica', 'Jhon Lucumí', 'Santiago Arias', 'Jefferson Lerma', 'Kevin Castaño', 'Richard Ríos', 'James Rodríguez', 'Juan Fernando Quintero', 'Jorge Carrascal', 'Jhon Arias', 'Jhon Córdoba', 'Luis Suárez', 'Luis Díaz'],
+  },
+  {
+    code: 'COD', isoCode: 'cd', name: 'R.D. Congo',        flag: '🇨🇩', group: 'K', color: '#007FFF',
+    players: ['Lionel Mpasi', 'Aaron Wan-Bissaka', 'Axel Tuanzebe', 'Arthur Masuaku', 'Chancel Mbemba', 'Joris Kayembe', 'Charles Pickel', "Ngal'ayel Mukau", 'Edo Kayembe', 'Samuel Moutoussamy', 'Noah Sadiki', 'Théo Bongonda', 'Meschak Elia', 'Yoane Wissa', 'Brian Cipenga', 'Fiston Mayele', 'Cédric Bakambu', 'Nathanaël Mbuku'],
+  },
+
   // ── Group L ──────────────────────────────────────────────────────────────────
-  { code: 'SCO', isoCode: 'gb-sct', name: 'Scotland',     flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', group: 'L', color: '#003087', players: ['Andy Robertson', 'Kieran Tierney', 'Scott McTominay', 'John McGinn', 'Callum McGregor', 'Stuart Armstrong', 'Ryan Christie', 'Kenny McLean', 'Ryan Porteous', 'Grant Hanley', 'Craig Gordon', 'Lyndon Dykes', 'Lawrence Shankland', 'Ryan Jack', 'Billy Gilmour', 'Lewis Ferguson'] },
-  { code: 'VEN', isoCode: 've',     name: 'Venezuela',    flag: '🇻🇪', group: 'L', color: '#CF142B', players: ['Yeferson Soteldo', 'Yangel Herrera', 'Salomón Rondón', 'Darwin Machís', 'Tomás Rincón', 'Wuilker Fariñez', 'Jhon Murillo', 'Jefferson Savarino', 'José Martínez', 'Adrián Martínez', 'Sergio Córdova', 'Fernando Aristeguieta', 'Diego Rossi', 'Jhon Chancellor', 'Juanpi Añor', 'Cristian Cásseres Jr.'] },
-  { code: 'JOR', isoCode: 'jo',     name: 'Jordan',       flag: '🇯🇴', group: 'L', color: '#007A3D', players: ['Yazan Al-Naimat', 'Musa Al-Taamari', 'Ahmad Hayel', 'Baha Faisal', 'Abdallah Nasib', 'Hamza Al-Dardour', 'Noor Ali Khashman', 'Ja\'far Al-Sawalmeh', 'Anas Bani Yaseen', 'Mahmoud Al-Mardi', 'Ehsan Haddad', 'Mofleh Al-Jarmi', 'Yazan Arab', 'Samer Awad', 'Salem Al-Ajarmeh', 'Montaser Talal'] },
-  { code: 'ALG', isoCode: 'dz',     name: 'Algeria',      flag: '🇩🇿', group: 'L', color: '#006233', players: ['Riyad Mahrez', 'Islam Slimani', 'Youcef Atal', 'Sofiane Feghouli', 'Houssem Aouar', 'Said Benrahma', 'Ismael Bennacer', 'Andy Delort', 'Djamel Benlamri', 'Aissa Mandi', 'Haris Belkebla', 'Adam Ounas', 'Mohamed Amine Tougai', 'Ramiz Zerrouki', 'Baghdad Bounedjah', 'Amir Sayoud'] },
+  {
+    code: 'ENG', isoCode: 'gb-eng', name: 'England',       flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'L', color: '#CF091F',
+    players: ['Jordan Pickford', 'John Stones', 'Marc Guéhi', 'Ezri Konsa', 'Trent Alexander-Arnold', 'Reece James', 'Dan Burn', 'Jordan Henderson', 'Declan Rice', 'Jude Bellingham', 'Cole Palmer', 'Morgan Rogers', 'Anthony Gordon', 'Phil Foden', 'Bukayo Saka', 'Harry Kane', 'Marcus Rashford', 'Ollie Watkins'],
+  },
+  {
+    code: 'CRO', isoCode: 'hr', name: 'Croatia',            flag: '🇭🇷', group: 'L', color: '#E52B22',
+    players: ['Dominik Livaković', 'Duško Ćaleta-Car', 'Joško Gvardiol', 'Josip Stanišić', 'Luka Vušković', 'Josip Šutalo', 'Kristijan Jakić', 'Luka Modrić', 'Mateo Kovačić', 'Martin Baturina', 'Lovro Majer', 'Mario Pašalić', 'Petar Sučić', 'Ivan Perišić', 'Marco Pašalić', 'Ante Budimir', 'Andrej Kramarić', 'Franjo Ivanović'],
+  },
+  {
+    code: 'GHA', isoCode: 'gh', name: 'Ghana',              flag: '🇬🇭', group: 'L', color: '#006B3F',
+    players: ['Lawrence Ati-Zigi', 'Tariq Lamptey', 'Mohammed Salisu', 'Alidu Seidu', 'Alexander Djiku', 'Gideon Mensah', 'Caleb Yirenkyi', 'Abdul Fatawu Issahaku', 'Thomas Partey', 'Salis Abdul Samed', 'Kamaldeen Sulemana', 'Mohammed Kudus', 'Iñaki Williams', 'Jordan Ayew', 'André Ayew', 'Joseph Paintsil', 'Osman Bukari', 'Antoine Semenyo'],
+  },
+  {
+    code: 'PAN', isoCode: 'pa', name: 'Panamá',             flag: '🇵🇦', group: 'L', color: '#DA121A',
+    players: ['Orlando Mosquera', 'Luis Mejía', 'Fidel Escobar', 'Andrés Andrade', 'Michael Amir Murillo', 'Eric Davis', 'José Córdoba', 'César Blackman', 'Cristian Martínez', 'Aníbal Godoy', 'Adalberto Carrasquilla', 'Édgar Bárcenas', 'Carlos Harvey', 'Ismael Díaz', 'José Fajardo', 'Cecilio Waterman', 'José Luis Rodríguez', 'Alberto Quintero'],
+  },
 ]
 
+// FWC special stickers — Panini IDs from Specials sheet
 export const SPECIAL_STICKERS = [
-  { id: 'SPEC-001', name: 'World Cup Trophy', rarity: 'legendary', emoji: '🏆' },
-  { id: 'SPEC-002', name: 'WC 2026 Official Logo', rarity: 'rare', emoji: '🌍' },
-  { id: 'SPEC-003', name: 'Official Match Ball', rarity: 'rare', emoji: '⚽' },
-  { id: 'SPEC-004', name: 'MetLife Stadium', rarity: 'rare', emoji: '🏟️' },
-  { id: 'SPEC-005', name: 'SoFi Stadium', rarity: 'rare', emoji: '🏟️' },
-  { id: 'SPEC-006', name: 'Estadio Azteca', rarity: 'legendary', emoji: '🏟️' },
-  { id: 'SPEC-007', name: 'Golden Boot', rarity: 'legendary', emoji: '👟' },
-  { id: 'SPEC-008', name: 'Golden Glove', rarity: 'legendary', emoji: '🧤' },
-  { id: 'SPEC-009', name: 'Top Scorer', rarity: 'legendary', emoji: '⭐' },
-  { id: 'SPEC-010', name: 'Host Nations Trio', rarity: 'legendary', emoji: '🤝' },
+  { id: '0',     name: 'Panini Logo',                                          rarity: 'rare',      emoji: '📖' },
+  { id: 'FWC1',  name: 'Official Emblem 1',                                    rarity: 'rare',      emoji: '🌍' },
+  { id: 'FWC2',  name: 'Official Emblem 2',                                    rarity: 'rare',      emoji: '🌍' },
+  { id: 'FWC3',  name: 'Official Mascots',                                     rarity: 'rare',      emoji: '🎭' },
+  { id: 'FWC4',  name: 'Official Slogan',                                      rarity: 'rare',      emoji: '📢' },
+  { id: 'FWC5',  name: 'Official Ball',                                        rarity: 'rare',      emoji: '⚽' },
+  { id: 'FWC6',  name: 'Host Country Emblem — Canada',                         rarity: 'rare',      emoji: '🍁' },
+  { id: 'FWC7',  name: 'Host Country Emblem — Mexico',                         rarity: 'rare',      emoji: '🦅' },
+  { id: 'FWC8',  name: 'Host Country Emblem — USA',                            rarity: 'rare',      emoji: '🦅' },
+  { id: 'FWC9',  name: 'Team Photo (Italy 1934) — FIFA World Cup Italy 1934',  rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC10', name: 'Team Photo (Uruguay 1950) — FIFA World Cup Brazil 1950', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC11', name: 'Team Photo (W. Germany 1954) — FIFA World Cup Switz. 1954', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC12', name: 'Team Photo (Brazil 1962) — FIFA World Cup Chile 1962', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC13', name: 'Team Photo (W. Germany 1974) — FIFA World Cup 1974',   rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC14', name: 'Team Photo (Argentina 1986) — FIFA World Cup Mexico 1986', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC15', name: 'Team Photo (Brazil 1994) — FIFA World Cup USA 1994',   rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC16', name: 'Team Photo (Brazil 2002) — FIFA World Cup Korea/Japan 2002', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC17', name: 'Team Photo (Italy 2006) — FIFA World Cup Germany 2006', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC18', name: 'Team Photo (Germany 2014) — FIFA World Cup Brazil 2014', rarity: 'legendary', emoji: '🏆' },
+  { id: 'FWC19', name: 'Team Photo (Argentina 2022) — FIFA World Cup Qatar 2022', rarity: 'legendary', emoji: '🏆' },
+  // Coca-Cola's Specials
+  { id: 'CC1',  name: 'Lamine Yamal',      rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC2',  name: 'Joshua Kimmich',    rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC3',  name: 'Eduardo Camavinga', rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC4',  name: 'Joško Gvardiol',    rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC5',  name: 'Federico Valverde', rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC6',  name: 'Virgil van Dijk',   rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC7',  name: 'Alphonso Davies',   rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC8',  name: 'Raúl Jiménez',      rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC9',  name: 'William Saliba',    rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC10', name: 'Lautaro Martínez',  rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC11', name: 'Harry Kane',        rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC12', name: 'Antonee Robinson',  rarity: 'legendary', emoji: '⭐' },
 ]
 
+// Generates 20 stickers per team matching Panini numbering:
+//   ${code}1        → Emblem
+//   ${code}2–12     → players 1–11
+//   ${code}13       → Team Photo
+//   ${code}14–20    → players 12–18
 export function generateTeamStickers(team) {
   const stickers = []
-  stickers.push({ id: `${team.code}-BADGE`, teamCode: team.code, type: 'badge', rarity: 'rare', name: `${team.name} — Badge`, number: 0 })
-  stickers.push({ id: `${team.code}-SQUAD`, teamCode: team.code, type: 'squad', rarity: 'rare', name: `${team.name} — Squad`, number: 0 })
-  team.players.forEach((playerName, i) => {
+
+  stickers.push({
+    id: `${team.code}1`,
+    teamCode: team.code,
+    type: 'badge',
+    rarity: 'rare',
+    name: `${team.name} — Emblem`,
+    number: 1,
+  })
+
+  team.players.slice(0, 11).forEach((playerName, i) => {
     stickers.push({
-      id: `${team.code}-P${String(i + 1).padStart(2, '0')}`,
+      id: `${team.code}${i + 2}`,
       teamCode: team.code,
       type: 'player',
       rarity: i < 2 ? 'legendary' : i < 5 ? 'rare' : 'common',
       name: playerName,
-      number: i + 1,
+      number: i + 2,
     })
   })
+
+  stickers.push({
+    id: `${team.code}13`,
+    teamCode: team.code,
+    type: 'squad',
+    rarity: 'rare',
+    name: `${team.name} — Team Photo`,
+    number: 13,
+  })
+
+  team.players.slice(11).forEach((playerName, i) => {
+    stickers.push({
+      id: `${team.code}${i + 14}`,
+      teamCode: team.code,
+      type: 'player',
+      rarity: 'common',
+      name: playerName,
+      number: i + 14,
+    })
+  })
+
   return stickers
 }
 
@@ -97,7 +315,7 @@ export const ALL_STICKERS = [
 ]
 
 export const RARITY_STYLES = {
-  common: { border: 'border-slate-700', glow: '', bg: 'bg-slate-800/60', label: 'Common', labelColor: 'text-slate-400' },
-  rare: { border: 'border-blue-500/60', glow: 'shadow-blue-500/20 shadow-lg', bg: 'bg-blue-950/40', label: 'Rare', labelColor: 'text-blue-400' },
-  legendary: { border: 'border-amber-400/80', glow: 'shadow-amber-400/30 shadow-xl animate-pulse-gold', bg: 'bg-amber-950/40', label: 'Legendary', labelColor: 'text-amber-400' },
+  common:    { border: 'border-slate-700',      glow: '',                                    bg: 'bg-slate-800/60',  label: 'Common',    labelColor: 'text-slate-400' },
+  rare:      { border: 'border-blue-500/60',    glow: 'shadow-blue-500/20 shadow-lg',        bg: 'bg-blue-950/40',   label: 'Rare',      labelColor: 'text-blue-400' },
+  legendary: { border: 'border-amber-400/80',   glow: 'shadow-amber-400/30 shadow-xl animate-pulse-gold', bg: 'bg-amber-950/40', label: 'Legendary', labelColor: 'text-amber-400' },
 }

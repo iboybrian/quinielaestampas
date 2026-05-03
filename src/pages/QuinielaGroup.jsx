@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Copy, Check, Loader2, DollarSign, Clock, Users, Info, Phone, EyeOff } from 'lucide-react'
@@ -6,7 +6,9 @@ import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuin
 import { useAuth } from '../contexts/AuthContext'
 import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
+import { rankMembers } from '../lib/scoring'
 import Standings from '../components/quiniela/Standings'
+import RankChangeNotification from '../components/animations/RankChangeNotification'
 import GroupsView from '../components/quiniela/GroupsView'
 import PredictionsView from '../components/quiniela/PredictionsView'
 import MatchesView from '../components/quiniela/MatchesView'
@@ -39,6 +41,57 @@ export default function QuinielaGroup() {
   const [showPredictions, setShowPredictions] = useState(false)
   const [predModal, setPredModal] = useState({ open: false, match: null })
   const [copied, setCopied] = useState(false)
+
+  // Rank-change notification — detected once per mount, shown on first Standings visit
+  const [pendingRankChange, setPendingRankChange] = useState(null)
+  const [activeRankChange, setActiveRankChange] = useState(null)
+  const rankCheckedRef = useRef(false)
+
+  useEffect(() => {
+    if (rankCheckedRef.current || !user || members.length === 0) return
+    rankCheckedRef.current = true
+
+    const memberStats = members.map((m) => {
+      const preds = visiblePredictions.filter((p) => p.user_id === m.id)
+      return {
+        ...m,
+        totalPoints: preds.reduce((s, p) => s + (p.points_earned || 0), 0),
+        exact:   preds.filter((p) => p.points_earned === 5).length,
+        correct: preds.filter((p) => p.points_earned >= 2).length,
+        played:  preds.filter((p) => p.points_earned !== null).length,
+      }
+    })
+    const ranked = rankMembers(memberStats)
+    const myIndex = ranked.findIndex((m) => m.id === user.id)
+    if (myIndex === -1) return
+    const myCurrentRank = myIndex + 1
+
+    const storageKey = `rankSeen_${id}_${user.id}`
+    const stored = localStorage.getItem(storageKey)
+    const prevRank = stored ? parseInt(stored, 10) : null
+
+    // Always persist current rank so the NEXT visit can detect the next change
+    localStorage.setItem(storageKey, String(myCurrentRank))
+
+    if (prevRank !== null && prevRank !== myCurrentRank) {
+      setPendingRankChange({
+        direction: myCurrentRank < prevRank ? 'up' : 'down',
+        positions: Math.abs(prevRank - myCurrentRank),
+        newRank: myCurrentRank,
+        prevRank,
+      })
+    }
+  }, [members, visiblePredictions, user, id])
+
+  // Fire the overlay when user lands on (or switches to) Standings tab
+  useEffect(() => {
+    if (activeTab === 'Standings' && pendingRankChange) {
+      setActiveRankChange(pendingRankChange)
+      setPendingRankChange(null)
+    }
+  }, [activeTab, pendingRankChange])
+
+  const handleRankChangeDismiss = useCallback(() => setActiveRankChange(null), [])
 
   // Bracket tab appears only when knockout fixtures exist
   const hasKnockouts = fixtures.some(isKnockoutStage)
@@ -264,6 +317,13 @@ export default function QuinielaGroup() {
         isOpen={predModal.open}
         onClose={closePredict}
         onSave={handleSave}
+      />
+
+      {/* Rank-change notification overlay */}
+      <RankChangeNotification
+        change={activeRankChange}
+        quinielaName={quiniela?.name}
+        onDismiss={handleRankChangeDismiss}
       />
     </PageTransition>
   )

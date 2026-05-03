@@ -202,6 +202,13 @@ export const translations = {
       predictions: 'Predicciones',
       profile: 'Perfil',
     },
+    rankChange: {
+      titleUp: '¡Subiste!',
+      titleDown: '¡Bajaste!',
+      rankUp: '¡Felicidades! Luego de esta jornada has subido {x} posiciones en la quiniela {quinielaName}. Tu nuevo puesto es #{newRank}.',
+      rankDown: 'Uuuy, luego de esta jornada has bajado {x} posiciones en la quiniela {quinielaName}. Tu nuevo puesto es #{newRank}.',
+      dismiss: 'Toca para continuar',
+    },
     privacy: {
       title: 'Política de Privacidad',
       lastUpdated: 'Última actualización: 14 de abril de 2026',
@@ -477,6 +484,13 @@ export const translations = {
       myAlbum: 'My Album',
       predictions: 'Predictions',
       profile: 'Profile',
+    },
+    rankChange: {
+      titleUp: 'You Moved Up!',
+      titleDown: 'You Dropped!',
+      rankUp: 'Congrats! After this matchday you moved up {x} positions in {quinielaName}. Your new rank is #{newRank}.',
+      rankDown: 'Oh no! After this matchday you dropped {x} positions in {quinielaName}. Your new rank is #{newRank}.',
+      dismiss: 'Tap anywhere to continue',
     },
     privacy: {
       title: 'Privacy Policy',

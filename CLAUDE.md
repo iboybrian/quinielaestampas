@@ -44,7 +44,7 @@ BrowserRouter → AuthProvider → LangProvider → App
 Hooks in `src/hooks/` abstract all Supabase queries:
 - `useFixtures()` — fetches fixtures (API or mock), then **upserts group-stage rows into `matches` table**. Mandatory: `predictions.match_id` FK on `matches.id` — predictions fail with constraint error if fixtures not synced first.
 - `useMyQuinielas()` — user's quiniela groups via `quiniela_members` join.
-- `useQuinielaGroup(id)` — group detail + members + predictions, **realtime subscription** on `predictions` filtered by `quiniela_id`.
+- `useQuinielaGroup(id)` — group detail + members + predictions, **realtime subscription** on `predictions` filtered by `quiniela_id`. Returns `loadError` (string | null) — surface to UI on fetch failure.
 - `useMyCollection()` — sticker `have/need/duplicate` state from `user_stickers`. Exports `bulkUpsertStickers(ids[])` for batch ops. Also exports standalone async fns: `findDuplicateOwners(stickerId, currentUserId)` and `findTradeMatches(userId)` — module-level exports, not hook returns.
 - `useChats()` — inbox of trade conversations (trades with ≥1 message), realtime refresh on `messages` INSERT. Returns `{ chats, loading, refresh }`.
 - `useTradeNotifications()` — in-memory unread count per trade via realtime `messages` subscription. Returns `{ unreadTrades, tradePartners, totalUnread, markTradeRead }`. Resets on page reload (not persisted).

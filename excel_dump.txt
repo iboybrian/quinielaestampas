@@ -1,0 +1,1243 @@
+Sheets: ['Specials', "Coca-Colas's Specials", 'A1 México', 'A2 Sudáfrica', 'A3 Corea del Sur', 'A4 Chequia', 'B1 Canadá', 'B2 Bosnia y Herzegovina', 'B3 Catar', 'B4 Suiza', 'C1 Brasil', 'C2 Marruecos', 'C3 Haití', 'C4 Escocia', 'D1 Estados Unidos', 'D2 Paraguay', 'D3 Australia', 'D4 Turquía', 'E1 Alemania', 'E2 Curazao', 'E3 Costa de Marfil', 'E4 Ecuador', 'F1 Países Bajos', 'F2 Japón', 'F3 Suecia', 'F4 Túnez', 'G1 Bélgica', 'G2 Egipto', 'G3 Irán', 'G4 Nueva Zelanda', 'H1 España', 'H2 Cabo Verde', 'H3 Arabia Saudita', 'H4 Uruguay', 'I1 Francia', 'I2 Senegal', 'I3 Irak', 'I4 Noruega', 'J1 Argentina', 'J2 Argelia', 'J3 Austria', 'J4 Jordania', 'K1 Portugal', 'K2 Uzbekistán', 'K3 Colombia', 'K4 R.D. Congo', 'L1 Inglaterra', 'L2 Croacia', 'L3 Ghana', 'L4 Panamá']
+
+================================================================================
+SHEET: Specials
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 0, 'Description': 'Panini Logo'}
+{'ID': 'FWC 1', 'Description': 'Official Emblem 1'}
+{'ID': 'FWC 2', 'Description': 'Official Emblem 2'}
+{'ID': 'FWC 3', 'Description': 'Official Mascots'}
+{'ID': 'FWC 4', 'Description': 'Official Slogan'}
+{'ID': 'FWC 5', 'Description': 'Official Ball'}
+{'ID': 'FWC 6', 'Description': 'Host Country Emblem (Canada)'}
+{'ID': 'FWC 7', 'Description': 'Host Country Emblem (Mexico)'}
+{'ID': 'FWC 8', 'Description': 'Host Country Emblem (USA)'}
+{'ID': 'FWC 9', 'Description': 'Team Photo (Italy 1934) - FIFA World Cup Italy 1934'}
+{'ID': 'FWC 10', 'Description': 'Team Photo (Uruguay 1950) - FIFA World Cup Brazil 1950'}
+{'ID': 'FWC 11', 'Description': 'Team Photo (West Germany 1954) - FIFA World Cup Switzerland 1954'}
+{'ID': 'FWC 12', 'Description': 'Team Photo (Brazil 1962) - FIFA World Cup Chile 1962'}
+{'ID': 'FWC 13', 'Description': 'Team Photo (West Germany 1974) - FIFA World Cup 1974'}
+{'ID': 'FWC 14', 'Description': 'Team Photo (Argentina 1986) - FIFA World Cup Mexico 1986'}
+{'ID': 'FWC 15', 'Description': 'Team Photo (Brazil 1994) - FIFA World Cup USA 1994'}
+{'ID': 'FWC 16', 'Description': 'Team Photo (Brazil 2002) - FIFA World Cup Korea/Japan 2002'}
+{'ID': 'FWC 17', 'Description': 'Team Photo (Italy 2006) - FIFA World Cup Germany 2006'}
+{'ID': 'FWC 18', 'Description': 'Team Photo (Germany 2014) - FIFA World Cup Brazil 2014'}
+{'ID': 'FWC 19', 'Description': 'Team Photo (Argentina 2022) - FIFA World Cup Qatar 2022'}
+
+================================================================================
+SHEET: Coca-Colas's Specials
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CC1', 'Description': 'Lamine Yamal'}
+{'ID': 'CC2', 'Description': 'Joshua Kimmich'}
+{'ID': 'CC3', 'Description': 'Eduardo Camavinga'}
+{'ID': 'CC4', 'Description': 'Joško Gvardiol'}
+{'ID': 'CC5', 'Description': 'Federico Valverde'}
+{'ID': 'CC6', 'Description': 'Virgil van Dijk'}
+{'ID': 'CC7', 'Description': 'Alphonso Davies'}
+{'ID': 'CC8', 'Description': 'Raúl Jiménez'}
+{'ID': 'CC9', 'Description': 'William Saliba'}
+{'ID': 'CC10', 'Description': 'Lautaro Martínez'}
+{'ID': 'CC11', 'Description': 'Harry Kane'}
+{'ID': 'CC12', 'Description': 'Antonee Robinson'}
+
+================================================================================
+SHEET: A1 México
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'MEX1', 'Description': 'Emblem'}
+{'ID': 'MEX2', 'Description': 'Luis Malagón'}
+{'ID': 'MEX3', 'Description': 'Johan Vásquez'}
+{'ID': 'MEX4', 'Description': 'Jorge Sánchez'}
+{'ID': 'MEX5', 'Description': 'César Montes'}
+{'ID': 'MEX6', 'Description': 'Jesús Gallardo'}
+{'ID': 'MEX7', 'Description': 'Israel Reyes'}
+{'ID': 'MEX8', 'Description': 'Diego Laínez'}
+{'ID': 'MEX9', 'Description': 'Carlos Rodríguez'}
+{'ID': 'MEX10', 'Description': 'Edson Álvarez'}
+{'ID': 'MEX11', 'Description': 'Orbelín Pineda'}
+{'ID': 'MEX12', 'Description': 'Marcel Ruiz'}
+{'ID': 'MEX13', 'Description': 'Team Photo'}
+{'ID': 'MEX14', 'Description': 'Érick Sánchez'}
+{'ID': 'MEX15', 'Description': 'Hirving Lozano'}
+{'ID': 'MEX16', 'Description': 'Santiago Giménez'}
+{'ID': 'MEX17', 'Description': 'Raúl Jiménez'}
+{'ID': 'MEX18', 'Description': 'Alexis Vega'}
+{'ID': 'MEX19', 'Description': 'Roberto Alvarado'}
+{'ID': 'MEX20', 'Description': 'César Huerta'}
+
+================================================================================
+SHEET: A2 Sudáfrica
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'RSA1', 'Description': 'Emblem'}
+{'ID': 'RSA2', 'Description': 'Ronwen Williams'}
+{'ID': 'RSA3', 'Description': 'Sipho Chaine'}
+{'ID': 'RSA4', 'Description': 'Aubrey Modiba'}
+{'ID': 'RSA5', 'Description': 'Samukele Kabini'}
+{'ID': 'RSA6', 'Description': 'Mbekezeli Mbokazi'}
+{'ID': 'RSA7', 'Description': 'Khulumani Ndamane'}
+{'ID': 'RSA8', 'Description': 'Siyabonga Ngezana'}
+{'ID': 'RSA9', 'Description': 'Khuliso Mudau'}
+{'ID': 'RSA10', 'Description': 'Nkosinathi Sibisi'}
+{'ID': 'RSA11', 'Description': 'Teboho Mokoena'}
+{'ID': 'RSA12', 'Description': 'Thalente Mbatha'}
+{'ID': 'RSA13', 'Description': 'Team Photo'}
+{'ID': 'RSA14', 'Description': 'Bathusi Aubaas'}
+{'ID': 'RSA15', 'Description': 'Yaya Sithole'}
+{'ID': 'RSA16', 'Description': 'Sipho Mbule'}
+{'ID': 'RSA17', 'Description': 'Lyle Foster'}
+{'ID': 'RSA18', 'Description': 'Iqraam Rayners'}
+{'ID': 'RSA19', 'Description': 'Mohau Nkota'}
+{'ID': 'RSA20', 'Description': 'Oswin Appollis'}
+
+================================================================================
+SHEET: A3 Corea del Sur
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'KOR1', 'Description': 'Emblem'}
+{'ID': 'KOR2', 'Description': 'Hyeon-woo Jo'}
+{'ID': 'KOR3', 'Description': 'Seung-gyu Kim'}
+{'ID': 'KOR4', 'Description': 'Min-jae Kim'}
+{'ID': 'KOR5', 'Description': 'Yoo-min Cho'}
+{'ID': 'KOR6', 'Description': 'Young-woo Seol'}
+{'ID': 'KOR7', 'Description': 'Han-beom Lee'}
+{'ID': 'KOR8', 'Description': 'Tae-seok Lee'}
+{'ID': 'KOR9', 'Description': 'Myung-jae Lee'}
+{'ID': 'KOR10', 'Description': 'Jae-sung Lee'}
+{'ID': 'KOR11', 'Description': 'In-beom Hwang'}
+{'ID': 'KOR12', 'Description': 'Kang-in Lee'}
+{'ID': 'KOR13', 'Description': 'Team Photo'}
+{'ID': 'KOR14', 'Description': 'Seung-ho Paik'}
+{'ID': 'KOR15', 'Description': 'Jens Castrop'}
+{'ID': 'KOR16', 'Description': 'Dong-kyung Lee'}
+{'ID': 'KOR17', 'Description': 'Gue-sung Cho'}
+{'ID': 'KOR18', 'Description': 'Heung-min Son'}
+{'ID': 'KOR19', 'Description': 'Hee-chan Hwang'}
+{'ID': 'KOR20', 'Description': 'Hyeon-gyu Oh'}
+
+================================================================================
+SHEET: A4 Chequia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CZE1', 'Description': 'Emblem'}
+{'ID': 'CZE2', 'Description': 'Matěj Kovář'}
+{'ID': 'CZE3', 'Description': 'Jindřich Staněk'}
+{'ID': 'CZE4', 'Description': 'Ladislav Krejčí'}
+{'ID': 'CZE5', 'Description': 'Vladimír Coufal'}
+{'ID': 'CZE6', 'Description': 'Jaroslav Zelený'}
+{'ID': 'CZE7', 'Description': 'Tomáš Holeš'}
+{'ID': 'CZE8', 'Description': 'David Zima'}
+{'ID': 'CZE9', 'Description': 'Michal Sadílek'}
+{'ID': 'CZE10', 'Description': 'Lukáš Provod'}
+{'ID': 'CZE11', 'Description': 'Lukáš Červ'}
+{'ID': 'CZE12', 'Description': 'Tomáš Souček'}
+{'ID': 'CZE13', 'Description': 'Team Photo'}
+{'ID': 'CZE14', 'Description': 'Pavel Šulc'}
+{'ID': 'CZE15', 'Description': 'Matěj Vydra'}
+{'ID': 'CZE16', 'Description': 'Vasil Kušej'}
+{'ID': 'CZE17', 'Description': 'Tomáš Chorý'}
+{'ID': 'CZE18', 'Description': 'Václav Černý'}
+{'ID': 'CZE19', 'Description': 'Adam Hložek'}
+{'ID': 'CZE20', 'Description': 'Patrik Schick'}
+
+================================================================================
+SHEET: B1 Canadá
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CAN1', 'Description': 'Emblem'}
+{'ID': 'CAN2', 'Description': 'Dayne St. Clair'}
+{'ID': 'CAN3', 'Description': 'Alphonso Davies'}
+{'ID': 'CAN4', 'Description': 'Alistair Johnston'}
+{'ID': 'CAN5', 'Description': 'Samuel Adekugbe'}
+{'ID': 'CAN6', 'Description': 'Richie Laryea'}
+{'ID': 'CAN7', 'Description': 'Derek Cornelius'}
+{'ID': 'CAN8', 'Description': 'Moïse Bombito'}
+{'ID': 'CAN9', 'Description': 'Kamal Miller'}
+{'ID': 'CAN10', 'Description': 'Stephen Eustáquio'}
+{'ID': 'CAN11', 'Description': 'Ismaël Koné'}
+{'ID': 'CAN12', 'Description': 'Jonathan Osorio'}
+{'ID': 'CAN13', 'Description': 'Team Photo'}
+{'ID': 'CAN14', 'Description': 'Jacob Shaffelburg'}
+{'ID': 'CAN15', 'Description': 'Mathieu Choinière'}
+{'ID': 'CAN16', 'Description': 'Niko Sigur'}
+{'ID': 'CAN17', 'Description': 'Tajon Buchanan'}
+{'ID': 'CAN18', 'Description': 'Liam Millar'}
+{'ID': 'CAN19', 'Description': 'Cyle Larin'}
+{'ID': 'CAN20', 'Description': 'Jonathan David'}
+
+================================================================================
+SHEET: B2 Bosnia y Herzegovina
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'BIH1', 'Description': 'Emblem'}
+{'ID': 'BIH2', 'Description': 'Nikola Vasilj'}
+{'ID': 'BIH3', 'Description': 'Amer Dedić'}
+{'ID': 'BIH4', 'Description': 'Sead Kolašinac'}
+{'ID': 'BIH5', 'Description': 'Tarik Muharemović'}
+{'ID': 'BIH6', 'Description': 'Nihad Mujakić'}
+{'ID': 'BIH7', 'Description': 'Nikola Katić'}
+{'ID': 'BIH8', 'Description': 'Amir Hadžiahmetović'}
+{'ID': 'BIH9', 'Description': 'Benjamin Tahirović'}
+{'ID': 'BIH10', 'Description': 'Armin Gigović'}
+{'ID': 'BIH11', 'Description': 'Ivan Šunjić'}
+{'ID': 'BIH12', 'Description': 'Ivan Bašić'}
+{'ID': 'BIH13', 'Description': 'Team Photo'}
+{'ID': 'BIH14', 'Description': 'Dženis Burnić'}
+{'ID': 'BIH15', 'Description': 'Esmir Bajraktarević'}
+{'ID': 'BIH16', 'Description': 'Amar Memić'}
+{'ID': 'BIH17', 'Description': 'Ermedin Demirović'}
+{'ID': 'BIH18', 'Description': 'Edin Džeko'}
+{'ID': 'BIH19', 'Description': 'Samed Baždar'}
+{'ID': 'BIH20', 'Description': 'Haris Tabaković'}
+
+================================================================================
+SHEET: B3 Catar
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'QAT1', 'Description': 'Emblem'}
+{'ID': 'QAT2', 'Description': 'Meshaal Barsham'}
+{'ID': 'QAT3', 'Description': 'Sultan Al Brake'}
+{'ID': 'QAT4', 'Description': 'Lucas Mendes'}
+{'ID': 'QAT5', 'Description': 'Homam Ahmed'}
+{'ID': 'QAT6', 'Description': 'Boualem Khoukhi'}
+{'ID': 'QAT7', 'Description': 'Pedro Miguel'}
+{'ID': 'QAT8', 'Description': 'Tarek Salman'}
+{'ID': 'QAT9', 'Description': 'Mohamed Al-Mannai'}
+{'ID': 'QAT10', 'Description': 'Karim Boudiaf'}
+{'ID': 'QAT11', 'Description': 'Assim Madibo'}
+{'ID': 'QAT12', 'Description': 'Ahmed Fatehi'}
+{'ID': 'QAT13', 'Description': 'Team Photo'}
+{'ID': 'QAT14', 'Description': 'Mohammed Waad'}
+{'ID': 'QAT15', 'Description': 'Abdulaziz Hatem'}
+{'ID': 'QAT16', 'Description': 'Hassan Al-Haydos'}
+{'ID': 'QAT17', 'Description': 'Edmilson Junior'}
+{'ID': 'QAT18', 'Description': 'Akram Afif'}
+{'ID': 'QAT19', 'Description': 'Ahmed Al Ganehi'}
+{'ID': 'QAT20', 'Description': 'Almoez Ali'}
+
+================================================================================
+SHEET: B4 Suiza
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'SUI1', 'Description': 'Emblem'}
+{'ID': 'SUI2', 'Description': 'Gregor Kobel'}
+{'ID': 'SUI3', 'Description': 'Yvon Mvogo'}
+{'ID': 'SUI4', 'Description': 'Manuel Akanji'}
+{'ID': 'SUI5', 'Description': 'Ricardo Rodríguez'}
+{'ID': 'SUI6', 'Description': 'Nico Elvedi'}
+{'ID': 'SUI7', 'Description': 'Aurèle Amenda'}
+{'ID': 'SUI8', 'Description': 'Silvan Widmer'}
+{'ID': 'SUI9', 'Description': 'Granit Xhaka'}
+{'ID': 'SUI10', 'Description': 'Denis Zakaria'}
+{'ID': 'SUI11', 'Description': 'Remo Freuler'}
+{'ID': 'SUI12', 'Description': 'Fabian Rieder'}
+{'ID': 'SUI13', 'Description': 'Team Photo'}
+{'ID': 'SUI14', 'Description': 'Ardon Jashari'}
+{'ID': 'SUI15', 'Description': 'Johan Manzambi'}
+{'ID': 'SUI16', 'Description': 'Michel Aebischer'}
+{'ID': 'SUI17', 'Description': 'Breel Embolo'}
+{'ID': 'SUI18', 'Description': 'Rubén Vargas'}
+{'ID': 'SUI19', 'Description': 'Dan Ndoye'}
+{'ID': 'SUI20', 'Description': 'Zeki Amdouni'}
+
+================================================================================
+SHEET: C1 Brasil
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'BRA1', 'Description': 'Emblem'}
+{'ID': 'BRA2', 'Description': 'Alisson'}
+{'ID': 'BRA3', 'Description': 'Bento'}
+{'ID': 'BRA4', 'Description': 'Marquinhos'}
+{'ID': 'BRA5', 'Description': 'Éder Militão'}
+{'ID': 'BRA6', 'Description': 'Gabriel Magalhães'}
+{'ID': 'BRA7', 'Description': 'Danilo'}
+{'ID': 'BRA8', 'Description': 'Wesley'}
+{'ID': 'BRA9', 'Description': 'Lucas Paquetá'}
+{'ID': 'BRA10', 'Description': 'Casemiro'}
+{'ID': 'BRA11', 'Description': 'Bruno Guimarães'}
+{'ID': 'BRA12', 'Description': 'Luiz Henrique'}
+{'ID': 'BRA13', 'Description': 'Team Photo'}
+{'ID': 'BRA14', 'Description': 'Vinícius Júnior'}
+{'ID': 'BRA15', 'Description': 'Rodrygo'}
+{'ID': 'BRA16', 'Description': 'João Pedro'}
+{'ID': 'BRA17', 'Description': 'Matheus Cunha'}
+{'ID': 'BRA18', 'Description': 'Gabriel Martinelli'}
+{'ID': 'BRA19', 'Description': 'Raphinha'}
+{'ID': 'BRA20', 'Description': 'Estêvão'}
+
+================================================================================
+SHEET: C2 Marruecos
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'MAR1', 'Description': 'Emblem'}
+{'ID': 'MAR2', 'Description': 'Yassine Bounou'}
+{'ID': 'MAR3', 'Description': 'Munir El Kajoui'}
+{'ID': 'MAR4', 'Description': 'Achraf Hakimi'}
+{'ID': 'MAR5', 'Description': 'Noussair Mazraoui'}
+{'ID': 'MAR6', 'Description': 'Nayef Aguerd'}
+{'ID': 'MAR7', 'Description': 'Romain Saïss'}
+{'ID': 'MAR8', 'Description': 'Jawad El Yamiq'}
+{'ID': 'MAR9', 'Description': 'Adam Masina'}
+{'ID': 'MAR10', 'Description': 'Sofyan Amrabat'}
+{'ID': 'MAR11', 'Description': 'Azzedine Ounahi'}
+{'ID': 'MAR12', 'Description': 'Eliesse Ben Seghir'}
+{'ID': 'MAR13', 'Description': 'Team Photo'}
+{'ID': 'MAR14', 'Description': 'Bilal El Khannouss'}
+{'ID': 'MAR15', 'Description': 'Ismael Saibari'}
+{'ID': 'MAR16', 'Description': 'Youssef En-Nesyri'}
+{'ID': 'MAR17', 'Description': 'Abde Ezzalzouli'}
+{'ID': 'MAR18', 'Description': 'Soufiane Rahimi'}
+{'ID': 'MAR19', 'Description': 'Brahim Díaz'}
+{'ID': 'MAR20', 'Description': 'Ayoub El Kaabi'}
+
+================================================================================
+SHEET: C3 Haití
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'HAI1', 'Description': 'Emblem'}
+{'ID': 'HAI2', 'Description': 'Johny Placide'}
+{'ID': 'HAI3', 'Description': 'Carlens Arcus'}
+{'ID': 'HAI4', 'Description': 'Martin Expérience'}
+{'ID': 'HAI5', 'Description': 'Jean-Kévin Duverne'}
+{'ID': 'HAI6', 'Description': 'Ricardo Adé'}
+{'ID': 'HAI7', 'Description': 'Duke Lacroix'}
+{'ID': 'HAI8', 'Description': 'Garven Metusala'}
+{'ID': 'HAI9', 'Description': 'Hannes Delcroix'}
+{'ID': 'HAI10', 'Description': 'Leverton Pierre'}
+{'ID': 'HAI11', 'Description': 'Danley Jean Jacques'}
+{'ID': 'HAI12', 'Description': 'Jean-Ricner Bellegarde'}
+{'ID': 'HAI13', 'Description': 'Team Photo'}
+{'ID': 'HAI14', 'Description': 'Christopher Attys'}
+{'ID': 'HAI15', 'Description': 'Derrick Etienne Jr.'}
+{'ID': 'HAI16', 'Description': 'Josué Casimir'}
+{'ID': 'HAI17', 'Description': 'Rubén Providence'}
+{'ID': 'HAI18', 'Description': 'Duckens Nazon'}
+{'ID': 'HAI19', 'Description': 'Louicius Deedson'}
+{'ID': 'HAI20', 'Description': 'Frantzdy Pierrot'}
+
+================================================================================
+SHEET: C4 Escocia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'SCO1', 'Description': 'Emblem'}
+{'ID': 'SCO2', 'Description': 'Angus Gunn'}
+{'ID': 'SCO3', 'Description': 'Jack Hendry'}
+{'ID': 'SCO4', 'Description': 'Kieran Tierney'}
+{'ID': 'SCO5', 'Description': 'Aaron Hickey'}
+{'ID': 'SCO6', 'Description': 'Andrew Robertson'}
+{'ID': 'SCO7', 'Description': 'Scott McKenna'}
+{'ID': 'SCO8', 'Description': 'John Souttar'}
+{'ID': 'SCO9', 'Description': 'Anthony Ralston'}
+{'ID': 'SCO10', 'Description': 'Grant Hanley'}
+{'ID': 'SCO11', 'Description': 'Scott McTominay'}
+{'ID': 'SCO12', 'Description': 'Billy Gilmour'}
+{'ID': 'SCO13', 'Description': 'Team Photo'}
+{'ID': 'SCO14', 'Description': 'Lewis Ferguson'}
+{'ID': 'SCO15', 'Description': 'Ryan Christie'}
+{'ID': 'SCO16', 'Description': 'Kenny McLean'}
+{'ID': 'SCO17', 'Description': 'John McGinn'}
+{'ID': 'SCO18', 'Description': 'Lyndon Dykes'}
+{'ID': 'SCO19', 'Description': 'Che Adams'}
+{'ID': 'SCO20', 'Description': 'Ben Doak'}
+
+================================================================================
+SHEET: D1 Estados Unidos
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'USA1', 'Description': 'Emblem'}
+{'ID': 'USA2', 'Description': 'Matt Freese'}
+{'ID': 'USA3', 'Description': 'Chris Richards'}
+{'ID': 'USA4', 'Description': 'Tim Ream'}
+{'ID': 'USA5', 'Description': 'Mark McKenzie'}
+{'ID': 'USA6', 'Description': 'Alex Freeman'}
+{'ID': 'USA7', 'Description': 'Antonee Robinson'}
+{'ID': 'USA8', 'Description': 'Tyler Adams'}
+{'ID': 'USA9', 'Description': 'Tanner Tessmann'}
+{'ID': 'USA10', 'Description': 'Weston McKennie'}
+{'ID': 'USA11', 'Description': 'Christian Roldan'}
+{'ID': 'USA12', 'Description': 'Timothy Weah'}
+{'ID': 'USA13', 'Description': 'Team Photo'}
+{'ID': 'USA14', 'Description': 'Diego Luna'}
+{'ID': 'USA15', 'Description': 'Malik Tillman'}
+{'ID': 'USA16', 'Description': 'Christian Pulisic'}
+{'ID': 'USA17', 'Description': 'Brenden Aaronson'}
+{'ID': 'USA18', 'Description': 'Ricardo Pepi'}
+{'ID': 'USA19', 'Description': 'Haji Wright'}
+{'ID': 'USA20', 'Description': 'Folarin Balogun'}
+
+================================================================================
+SHEET: D2 Paraguay
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'PAR1', 'Description': 'Emblem'}
+{'ID': 'PAR2', 'Description': 'Roberto Fernández'}
+{'ID': 'PAR3', 'Description': 'Orlando Gill'}
+{'ID': 'PAR4', 'Description': 'Gustavo Gómez'}
+{'ID': 'PAR5', 'Description': 'Fabián Balbuena'}
+{'ID': 'PAR6', 'Description': 'Juan José Cáceres'}
+{'ID': 'PAR7', 'Description': 'Omar Alderete'}
+{'ID': 'PAR8', 'Description': 'Junior Alonso'}
+{'ID': 'PAR9', 'Description': 'Mathías Villasanti'}
+{'ID': 'PAR10', 'Description': 'Diego Gómez'}
+{'ID': 'PAR11', 'Description': 'Damián Bobadilla'}
+{'ID': 'PAR12', 'Description': 'Andrés Cubas'}
+{'ID': 'PAR13', 'Description': 'Team Photo'}
+{'ID': 'PAR14', 'Description': 'Matías Galarza Fonda'}
+{'ID': 'PAR15', 'Description': 'Julio Enciso'}
+{'ID': 'PAR16', 'Description': 'Alejandro Romero Gamarra'}
+{'ID': 'PAR17', 'Description': 'Miguel Almirón'}
+{'ID': 'PAR18', 'Description': 'Ramón Sosa'}
+{'ID': 'PAR19', 'Description': 'Ángel Romero'}
+{'ID': 'PAR20', 'Description': 'Antonio Sanabria'}
+
+================================================================================
+SHEET: D3 Australia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'AUS1', 'Description': 'Emblem'}
+{'ID': 'AUS2', 'Description': 'Mathew Ryan'}
+{'ID': 'AUS3', 'Description': 'Joe Gauci'}
+{'ID': 'AUS4', 'Description': 'Harry Souttar'}
+{'ID': 'AUS5', 'Description': 'Alessandro Circati'}
+{'ID': 'AUS6', 'Description': 'Jordan Bos'}
+{'ID': 'AUS7', 'Description': 'Aziz Behich'}
+{'ID': 'AUS8', 'Description': 'Cameron Burgess'}
+{'ID': 'AUS9', 'Description': 'Lewis Miller'}
+{'ID': 'AUS10', 'Description': 'Milos Degenek'}
+{'ID': 'AUS11', 'Description': 'Jackson Irvine'}
+{'ID': 'AUS12', 'Description': 'Riley McGree'}
+{'ID': 'AUS13', 'Description': 'Team Photo'}
+{'ID': 'AUS14', 'Description': "Aiden O'Neill"}
+{'ID': 'AUS15', 'Description': 'Connor Metcalfe'}
+{'ID': 'AUS16', 'Description': 'Patrick Yazbek'}
+{'ID': 'AUS17', 'Description': 'Craig Goodwin'}
+{'ID': 'AUS18', 'Description': 'Kusini Yengi'}
+{'ID': 'AUS19', 'Description': 'Nestory Irankunda'}
+{'ID': 'AUS20', 'Description': 'Mohamed Touré'}
+
+================================================================================
+SHEET: D4 Turquía
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'TUR1', 'Description': 'Emblem'}
+{'ID': 'TUR2', 'Description': 'Uğurcan Çakır'}
+{'ID': 'TUR3', 'Description': 'Mert Müldür'}
+{'ID': 'TUR4', 'Description': 'Zeki Çelik'}
+{'ID': 'TUR5', 'Description': 'Abdülkerim Bardakcı'}
+{'ID': 'TUR6', 'Description': 'Çağlar Söyüncü'}
+{'ID': 'TUR7', 'Description': 'Merih Demiral'}
+{'ID': 'TUR8', 'Description': 'Ferdi Kadıoğlu'}
+{'ID': 'TUR9', 'Description': 'Kaan Ayhan'}
+{'ID': 'TUR10', 'Description': 'İsmail Yüksek'}
+{'ID': 'TUR11', 'Description': 'Hakan Çalhanoğlu'}
+{'ID': 'TUR12', 'Description': 'Orkun Kökçü'}
+{'ID': 'TUR13', 'Description': 'Team Photo'}
+{'ID': 'TUR14', 'Description': 'Arda Güler'}
+{'ID': 'TUR15', 'Description': 'İrfan Can Kahveci'}
+{'ID': 'TUR16', 'Description': 'Yunus Akgün'}
+{'ID': 'TUR17', 'Description': 'Can Uzun'}
+{'ID': 'TUR18', 'Description': 'Barış Alper Yılmaz'}
+{'ID': 'TUR19', 'Description': 'Kerem Aktürkoğlu'}
+{'ID': 'TUR20', 'Description': 'Kenan Yıldız'}
+
+================================================================================
+SHEET: E1 Alemania
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'GER1', 'Description': 'Emblem'}
+{'ID': 'GER2', 'Description': 'Marc-André ter Stegen'}
+{'ID': 'GER3', 'Description': 'Jonathan Tah'}
+{'ID': 'GER4', 'Description': 'David Raum'}
+{'ID': 'GER5', 'Description': 'Nico Schlotterbeck'}
+{'ID': 'GER6', 'Description': 'Antonio Rüdiger'}
+{'ID': 'GER7', 'Description': 'Waldemar Anton'}
+{'ID': 'GER8', 'Description': 'Ridle Baku'}
+{'ID': 'GER9', 'Description': 'Maximilian Mittelstädt'}
+{'ID': 'GER10', 'Description': 'Joshua Kimmich'}
+{'ID': 'GER11', 'Description': 'Florian Wirtz'}
+{'ID': 'GER12', 'Description': 'Felix Nmecha'}
+{'ID': 'GER13', 'Description': 'Team Photo'}
+{'ID': 'GER14', 'Description': 'Leon Goretzka'}
+{'ID': 'GER15', 'Description': 'Jamal Musiala'}
+{'ID': 'GER16', 'Description': 'Serge Gnabry'}
+{'ID': 'GER17', 'Description': 'Kai Havertz'}
+{'ID': 'GER18', 'Description': 'Leroy Sané'}
+{'ID': 'GER19', 'Description': 'Karim Adeyemi'}
+{'ID': 'GER20', 'Description': 'Nick Woltemade'}
+
+================================================================================
+SHEET: E2 Curazao
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CUW1', 'Description': 'Emblem'}
+{'ID': 'CUW2', 'Description': 'Eloy Room'}
+{'ID': 'CUW3', 'Description': 'Armando Obispo'}
+{'ID': 'CUW4', 'Description': 'Sherel Floranus'}
+{'ID': 'CUW5', 'Description': 'Jurien Gaari'}
+{'ID': 'CUW6', 'Description': 'Joshua Brenet'}
+{'ID': 'CUW7', 'Description': 'Roshon van Eijma'}
+{'ID': 'CUW8', 'Description': 'Shurandy Sambo'}
+{'ID': 'CUW9', 'Description': 'Livano Comenencia'}
+{'ID': 'CUW10', 'Description': 'Godfried Roemeratoe'}
+{'ID': 'CUW11', 'Description': 'Juninho Bacuna'}
+{'ID': 'CUW12', 'Description': 'Leandro Bacuna'}
+{'ID': 'CUW13', 'Description': 'Team Photo'}
+{'ID': 'CUW14', 'Description': 'Tahith Chong'}
+{'ID': 'CUW15', 'Description': 'Kenji Gorré'}
+{'ID': 'CUW16', 'Description': 'Jearl Margaritha'}
+{'ID': 'CUW17', 'Description': 'Jürgen Locadia'}
+{'ID': 'CUW18', 'Description': 'Jeremy Antonisse'}
+{'ID': 'CUW19', 'Description': 'Gervane Kastaneer'}
+{'ID': 'CUW20', 'Description': 'Sontje Hansen'}
+
+================================================================================
+SHEET: E3 Costa de Marfil
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CIV1', 'Description': 'Emblem'}
+{'ID': 'CIV2', 'Description': 'Yahia Fofana'}
+{'ID': 'CIV3', 'Description': 'Ghislain Konan'}
+{'ID': 'CIV4', 'Description': 'Wilfried Singo'}
+{'ID': 'CIV5', 'Description': 'Odilon Kossounou'}
+{'ID': 'CIV6', 'Description': 'Evan Ndicka'}
+{'ID': 'CIV7', 'Description': 'Willy Boly'}
+{'ID': 'CIV8', 'Description': 'Emmanuel Agbadou'}
+{'ID': 'CIV9', 'Description': 'Ousmane Diomande'}
+{'ID': 'CIV10', 'Description': 'Franck Kessié'}
+{'ID': 'CIV11', 'Description': 'Seko Fofana'}
+{'ID': 'CIV12', 'Description': 'Ibrahim Sangaré'}
+{'ID': 'CIV13', 'Description': 'Team Photo'}
+{'ID': 'CIV14', 'Description': 'Jean-Philippe Gbamin'}
+{'ID': 'CIV15', 'Description': 'Amad Diallo'}
+{'ID': 'CIV16', 'Description': 'Sébastien Haller'}
+{'ID': 'CIV17', 'Description': 'Simon Adingra'}
+{'ID': 'CIV18', 'Description': 'Yan Diomandé'}
+{'ID': 'CIV19', 'Description': 'Evann Guessand'}
+{'ID': 'CIV20', 'Description': 'Oumar Diakité'}
+
+================================================================================
+SHEET: E4 Ecuador
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'ECU1', 'Description': 'Emblem'}
+{'ID': 'ECU2', 'Description': 'Hernán Galíndez'}
+{'ID': 'ECU3', 'Description': 'Gonzalo Valle'}
+{'ID': 'ECU4', 'Description': 'Piero Hincapié'}
+{'ID': 'ECU5', 'Description': 'Pervis Estupiñán'}
+{'ID': 'ECU6', 'Description': 'Willian Pacho'}
+{'ID': 'ECU7', 'Description': 'Ángelo Preciado'}
+{'ID': 'ECU8', 'Description': 'Joel Ordóñez'}
+{'ID': 'ECU9', 'Description': 'Moisés Caicedo'}
+{'ID': 'ECU10', 'Description': 'Alan Franco'}
+{'ID': 'ECU11', 'Description': 'Kendry Páez'}
+{'ID': 'ECU12', 'Description': 'Pedro Vite'}
+{'ID': 'ECU13', 'Description': 'Team Photo'}
+{'ID': 'ECU14', 'Description': 'John Yeboah'}
+{'ID': 'ECU15', 'Description': 'Leonardo Campana'}
+{'ID': 'ECU16', 'Description': 'Gonzalo Plata'}
+{'ID': 'ECU17', 'Description': 'Nilson Angulo'}
+{'ID': 'ECU18', 'Description': 'Alan Minda'}
+{'ID': 'ECU19', 'Description': 'Kevin Rodríguez'}
+{'ID': 'ECU20', 'Description': 'Enner Valencia'}
+
+================================================================================
+SHEET: F1 Países Bajos
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'NED1', 'Description': 'Emblem'}
+{'ID': 'NED2', 'Description': 'Bart Verbruggen'}
+{'ID': 'NED3', 'Description': 'Virgil van Dijk'}
+{'ID': 'NED4', 'Description': 'Micky van de Ven'}
+{'ID': 'NED5', 'Description': 'Jurrien Timber'}
+{'ID': 'NED6', 'Description': 'Denzel Dumfries'}
+{'ID': 'NED7', 'Description': 'Nathan Aké'}
+{'ID': 'NED8', 'Description': 'Jeremie Frimpong'}
+{'ID': 'NED9', 'Description': 'Jan Paul van Hecke'}
+{'ID': 'NED10', 'Description': 'Tijjani Reijnders'}
+{'ID': 'NED11', 'Description': 'Ryan Gravenberch'}
+{'ID': 'NED12', 'Description': 'Teun Koopmeiners'}
+{'ID': 'NED13', 'Description': 'Team Photo'}
+{'ID': 'NED14', 'Description': 'Frenkie de Jong'}
+{'ID': 'NED15', 'Description': 'Xavi Simons'}
+{'ID': 'NED16', 'Description': 'Justin Kluivert'}
+{'ID': 'NED17', 'Description': 'Memphis Depay'}
+{'ID': 'NED18', 'Description': 'Donyell Malen'}
+{'ID': 'NED19', 'Description': 'Wout Weghorst'}
+{'ID': 'NED20', 'Description': 'Cody Gakpo'}
+
+================================================================================
+SHEET: F2 Japón
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'JPN1', 'Description': 'Emblem'}
+{'ID': 'JPN2', 'Description': 'Zion Suzuki'}
+{'ID': 'JPN3', 'Description': 'Henry Heroki Mochizuki'}
+{'ID': 'JPN4', 'Description': 'Ayumu Seko'}
+{'ID': 'JPN5', 'Description': 'Junnosuke Suzuki'}
+{'ID': 'JPN6', 'Description': 'Shogo Taniguchi'}
+{'ID': 'JPN7', 'Description': 'Tsuyoshi Watanabe'}
+{'ID': 'JPN8', 'Description': 'Kaishu Sano'}
+{'ID': 'JPN9', 'Description': 'Yuki Soma'}
+{'ID': 'JPN10', 'Description': 'Ao Tanaka'}
+{'ID': 'JPN11', 'Description': 'Daichi Kamada'}
+{'ID': 'JPN12', 'Description': 'Takefusa Kubo'}
+{'ID': 'JPN13', 'Description': 'Team Photo'}
+{'ID': 'JPN14', 'Description': 'Ritsu Dōan'}
+{'ID': 'JPN15', 'Description': 'Keito Nakamura'}
+{'ID': 'JPN16', 'Description': 'Takumi Minamino'}
+{'ID': 'JPN17', 'Description': 'Shuto Machino'}
+{'ID': 'JPN18', 'Description': 'Junya Ito'}
+{'ID': 'JPN19', 'Description': 'Koki Ogawa'}
+{'ID': 'JPN20', 'Description': 'Ayase Ueda'}
+
+================================================================================
+SHEET: F3 Suecia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'SWE1', 'Description': 'Emblem'}
+{'ID': 'SWE2', 'Description': 'Victor Johansson'}
+{'ID': 'SWE3', 'Description': 'Isak Hien'}
+{'ID': 'SWE4', 'Description': 'Gabriel Gudmundsson'}
+{'ID': 'SWE5', 'Description': 'Emil Holm'}
+{'ID': 'SWE6', 'Description': 'Victor Nilsson Lindelöf'}
+{'ID': 'SWE7', 'Description': 'Gustaf Lagerbielke'}
+{'ID': 'SWE8', 'Description': 'Lucas Bergvall'}
+{'ID': 'SWE9', 'Description': 'Hugo Larsson'}
+{'ID': 'SWE10', 'Description': 'Jesper Karlström'}
+{'ID': 'SWE11', 'Description': 'Yasin Ayari'}
+{'ID': 'SWE12', 'Description': 'Mattias Svanberg'}
+{'ID': 'SWE13', 'Description': 'Team Photo'}
+{'ID': 'SWE14', 'Description': 'Daniel Svensson'}
+{'ID': 'SWE15', 'Description': 'Ken Sema'}
+{'ID': 'SWE16', 'Description': 'Roony Bardghji'}
+{'ID': 'SWE17', 'Description': 'Dejan Kulusevski'}
+{'ID': 'SWE18', 'Description': 'Anthony Elanga'}
+{'ID': 'SWE19', 'Description': 'Alexander Isak'}
+{'ID': 'SWE20', 'Description': 'Viktor Gyökeres'}
+
+================================================================================
+SHEET: F4 Túnez
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'TUN1', 'Description': 'Emblem'}
+{'ID': 'TUN2', 'Description': 'Béchir Ben Saïd'}
+{'ID': 'TUN3', 'Description': 'Aymen Dahmen'}
+{'ID': 'TUN4', 'Description': 'Van Valery'}
+{'ID': 'TUN5', 'Description': 'Montassar Talbi'}
+{'ID': 'TUN6', 'Description': 'Yassine Meriah'}
+{'ID': 'TUN7', 'Description': 'Ali Abdi'}
+{'ID': 'TUN8', 'Description': 'Dylan Bronn'}
+{'ID': 'TUN9', 'Description': 'Ellyes Skhiri'}
+{'ID': 'TUN10', 'Description': 'Aïssa Laïdouni'}
+{'ID': 'TUN11', 'Description': 'Ferjani Sassi'}
+{'ID': 'TUN12', 'Description': 'Mohamed Ali Ben Romdhane'}
+{'ID': 'TUN13', 'Description': 'Team Photo'}
+{'ID': 'TUN14', 'Description': 'Hannibal Mejbri'}
+{'ID': 'TUN15', 'Description': 'Elias Achouri'}
+{'ID': 'TUN16', 'Description': 'Elias Saad'}
+{'ID': 'TUN17', 'Description': 'Hazem Mastouri'}
+{'ID': 'TUN18', 'Description': 'Ismaël Gharbi'}
+{'ID': 'TUN19', 'Description': 'Sayfallah Ltaief'}
+{'ID': 'TUN20', 'Description': 'Naïm Sliti'}
+
+================================================================================
+SHEET: G1 Bélgica
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'BEL1', 'Description': 'Emblem'}
+{'ID': 'BEL2', 'Description': 'Thibaut Courtois'}
+{'ID': 'BEL3', 'Description': 'Arthur Theate'}
+{'ID': 'BEL4', 'Description': 'Timothy Castagne'}
+{'ID': 'BEL5', 'Description': 'Zeno Debast'}
+{'ID': 'BEL6', 'Description': 'Brandon Mechele'}
+{'ID': 'BEL7', 'Description': 'Maxim De Cuyper'}
+{'ID': 'BEL8', 'Description': 'Thomas Meunier'}
+{'ID': 'BEL9', 'Description': 'Youri Tielemans'}
+{'ID': 'BEL10', 'Description': 'Amadou Onana'}
+{'ID': 'BEL11', 'Description': 'Nicolas Raskin'}
+{'ID': 'BEL12', 'Description': 'Alexis Saelemaekers'}
+{'ID': 'BEL13', 'Description': 'Team Photo'}
+{'ID': 'BEL14', 'Description': 'Hans Vanaken'}
+{'ID': 'BEL15', 'Description': 'Kevin De Bruyne'}
+{'ID': 'BEL16', 'Description': 'Jérémy Doku'}
+{'ID': 'BEL17', 'Description': 'Charles De Ketelaere'}
+{'ID': 'BEL18', 'Description': 'Leandro Trossard'}
+{'ID': 'BEL19', 'Description': 'Loïs Openda'}
+{'ID': 'BEL20', 'Description': 'Romelu Lukaku'}
+
+================================================================================
+SHEET: G2 Egipto
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'EGY1', 'Description': 'Emblem'}
+{'ID': 'EGY2', 'Description': 'Mohamed El Shenawy'}
+{'ID': 'EGY3', 'Description': 'Mohamed Hany'}
+{'ID': 'EGY4', 'Description': 'Mohamed Hamdy'}
+{'ID': 'EGY5', 'Description': 'Yasser Ibrahim'}
+{'ID': 'EGY6', 'Description': 'Khaled Sobhi'}
+{'ID': 'EGY7', 'Description': 'Ramy Rabia'}
+{'ID': 'EGY8', 'Description': 'Hossam Abdelmaguid'}
+{'ID': 'EGY9', 'Description': 'Ahmed Fattouh'}
+{'ID': 'EGY10', 'Description': 'Marwan Attia'}
+{'ID': 'EGY11', 'Description': 'Zizo'}
+{'ID': 'EGY12', 'Description': 'Hamdy Fathy'}
+{'ID': 'EGY13', 'Description': 'Team Photo'}
+{'ID': 'EGY14', 'Description': 'Mohamed Magdy'}
+{'ID': 'EGY15', 'Description': 'Emam Ashour'}
+{'ID': 'EGY16', 'Description': 'Osama Faisal'}
+{'ID': 'EGY17', 'Description': 'Mohamed Salah'}
+{'ID': 'EGY18', 'Description': 'Mostafa Mohamed'}
+{'ID': 'EGY19', 'Description': 'Trézéguet'}
+{'ID': 'EGY20', 'Description': 'Omar Marmoush'}
+
+================================================================================
+SHEET: G3 Irán
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'IRN1', 'Description': 'Emblem'}
+{'ID': 'IRN2', 'Description': 'Alireza Beiranvand'}
+{'ID': 'IRN3', 'Description': 'Morteza Pouraliganji'}
+{'ID': 'IRN4', 'Description': 'Ehsan Hajsafi'}
+{'ID': 'IRN5', 'Description': 'Milad Mohammadi'}
+{'ID': 'IRN6', 'Description': 'Shojae Khalilzadeh'}
+{'ID': 'IRN7', 'Description': 'Ramin Rezaeian'}
+{'ID': 'IRN8', 'Description': 'Hossein Kanaani'}
+{'ID': 'IRN9', 'Description': 'Sadegh Moharrami'}
+{'ID': 'IRN10', 'Description': 'Saleh Hardani'}
+{'ID': 'IRN11', 'Description': 'Saeed Ezatolahi'}
+{'ID': 'IRN12', 'Description': 'Saman Ghoddos'}
+{'ID': 'IRN13', 'Description': 'Team Photo'}
+{'ID': 'IRN14', 'Description': 'Omid Noorafkan'}
+{'ID': 'IRN15', 'Description': 'Roozbeh Cheshmi'}
+{'ID': 'IRN16', 'Description': 'Mohammad Mohebi'}
+{'ID': 'IRN17', 'Description': 'Sardar Azmoun'}
+{'ID': 'IRN18', 'Description': 'Mehdi Taremi'}
+{'ID': 'IRN19', 'Description': 'Alireza Jahanbakhsh'}
+{'ID': 'IRN20', 'Description': 'Ali Gholizadeh'}
+
+================================================================================
+SHEET: G4 Nueva Zelanda
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'NZL1', 'Description': 'Emblem'}
+{'ID': 'NZL2', 'Description': 'Max Crocombe'}
+{'ID': 'NZL3', 'Description': 'Alex Paulsen'}
+{'ID': 'NZL4', 'Description': 'Michael Boxall'}
+{'ID': 'NZL5', 'Description': 'Liberato Cacace'}
+{'ID': 'NZL6', 'Description': 'Tim Payne'}
+{'ID': 'NZL7', 'Description': 'Tyler Bindon'}
+{'ID': 'NZL8', 'Description': 'Francis de Vries'}
+{'ID': 'NZL9', 'Description': 'Finn Surman'}
+{'ID': 'NZL10', 'Description': 'Joe Bell'}
+{'ID': 'NZL11', 'Description': 'Sarpreet Singh'}
+{'ID': 'NZL12', 'Description': 'Ryan Thomas'}
+{'ID': 'NZL13', 'Description': 'Team Photo'}
+{'ID': 'NZL14', 'Description': 'Matthew Garbett'}
+{'ID': 'NZL15', 'Description': 'Marko Stamenić'}
+{'ID': 'NZL16', 'Description': 'Ben Old'}
+{'ID': 'NZL17', 'Description': 'Chris Wood'}
+{'ID': 'NZL18', 'Description': 'Elijah Just'}
+{'ID': 'NZL19', 'Description': 'Callum McCowatt'}
+{'ID': 'NZL20', 'Description': 'Kosta Barbarouses'}
+
+================================================================================
+SHEET: H1 España
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'ESP1', 'Description': 'Emblem'}
+{'ID': 'ESP2', 'Description': 'Unai Simón'}
+{'ID': 'ESP3', 'Description': 'Robin Le Normand'}
+{'ID': 'ESP4', 'Description': 'Aymeric Laporte'}
+{'ID': 'ESP5', 'Description': 'Dean Huijsen'}
+{'ID': 'ESP6', 'Description': 'Pedro Porro'}
+{'ID': 'ESP7', 'Description': 'Dani Carvajal'}
+{'ID': 'ESP8', 'Description': 'Marc Cucurella'}
+{'ID': 'ESP9', 'Description': 'Martín Zubimendi'}
+{'ID': 'ESP10', 'Description': 'Rodri'}
+{'ID': 'ESP11', 'Description': 'Pedri'}
+{'ID': 'ESP12', 'Description': 'Fabián Ruiz'}
+{'ID': 'ESP13', 'Description': 'Team Photo'}
+{'ID': 'ESP14', 'Description': 'Mikel Merino'}
+{'ID': 'ESP15', 'Description': 'Lamine Yamal'}
+{'ID': 'ESP16', 'Description': 'Dani Olmo'}
+{'ID': 'ESP17', 'Description': 'Nico Williams'}
+{'ID': 'ESP18', 'Description': 'Ferran Torres'}
+{'ID': 'ESP19', 'Description': 'Álvaro Morata'}
+{'ID': 'ESP20', 'Description': 'Mikel Oyarzabal'}
+
+================================================================================
+SHEET: H2 Cabo Verde
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CPV1', 'Description': 'Emblem'}
+{'ID': 'CPV2', 'Description': 'Vozinha'}
+{'ID': 'CPV3', 'Description': 'Logan Costa'}
+{'ID': 'CPV4', 'Description': 'Pico'}
+{'ID': 'CPV5', 'Description': 'Diney'}
+{'ID': 'CPV6', 'Description': 'Steven Moreira'}
+{'ID': 'CPV7', 'Description': 'Wagner Pina'}
+{'ID': 'CPV8', 'Description': 'João Paulo'}
+{'ID': 'CPV9', 'Description': 'Yannick Semedo'}
+{'ID': 'CPV10', 'Description': 'Kevin Pina'}
+{'ID': 'CPV11', 'Description': 'Patrick Andrade'}
+{'ID': 'CPV12', 'Description': 'Jamiro Monteiro'}
+{'ID': 'CPV13', 'Description': 'Team Photo'}
+{'ID': 'CPV14', 'Description': 'Deroy Duarte'}
+{'ID': 'CPV15', 'Description': 'Garry Rodrigues'}
+{'ID': 'CPV16', 'Description': 'Jovane Cabral'}
+{'ID': 'CPV17', 'Description': 'Ryan Mendes'}
+{'ID': 'CPV18', 'Description': 'Dailon Livramento'}
+{'ID': 'CPV19', 'Description': 'Willy Semedo'}
+{'ID': 'CPV20', 'Description': 'Bebé'}
+
+================================================================================
+SHEET: H3 Arabia Saudita
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'KSA1', 'Description': 'Emblem'}
+{'ID': 'KSA2', 'Description': 'Nawaf Alaqidi'}
+{'ID': 'KSA3', 'Description': 'Abdulrahman Al-Sanbi'}
+{'ID': 'KSA4', 'Description': 'Saud Abdulhamid'}
+{'ID': 'KSA5', 'Description': 'Nawaf Boushal'}
+{'ID': 'KSA6', 'Description': 'Jihad Thakri'}
+{'ID': 'KSA7', 'Description': 'Moteb Al-Harbi'}
+{'ID': 'KSA8', 'Description': 'Hassan Al-Tambakti'}
+{'ID': 'KSA9', 'Description': 'Musab Al-Juwayr'}
+{'ID': 'KSA10', 'Description': 'Ziyad Al-Johani'}
+{'ID': 'KSA11', 'Description': 'Abdullah Al-Khaibari'}
+{'ID': 'KSA12', 'Description': 'Nasser Al-Dawsari'}
+{'ID': 'KSA13', 'Description': 'Team Photo'}
+{'ID': 'KSA14', 'Description': 'Saleh Abu Al-Shamat'}
+{'ID': 'KSA15', 'Description': 'Marwan Al-Sahafi'}
+{'ID': 'KSA16', 'Description': 'Salem Al-Dawsari'}
+{'ID': 'KSA17', 'Description': 'Abdulrahman Al-Aboud'}
+{'ID': 'KSA18', 'Description': 'Firas Al-Buraikan'}
+{'ID': 'KSA19', 'Description': 'Saleh Al-Shehri'}
+{'ID': 'KSA20', 'Description': 'Abdullah Al-Hamdan'}
+
+================================================================================
+SHEET: H4 Uruguay
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'URU1', 'Description': 'Emblem'}
+{'ID': 'URU2', 'Description': 'Sergio Rochet'}
+{'ID': 'URU3', 'Description': 'Santiago Mele'}
+{'ID': 'URU4', 'Description': 'Ronald Araújo'}
+{'ID': 'URU5', 'Description': 'José María Giménez'}
+{'ID': 'URU6', 'Description': 'Sebastián Cáceres'}
+{'ID': 'URU7', 'Description': 'Mathías Olivera'}
+{'ID': 'URU8', 'Description': 'Guillermo Varela'}
+{'ID': 'URU9', 'Description': 'Nahitan Nández'}
+{'ID': 'URU10', 'Description': 'Federico Valverde'}
+{'ID': 'URU11', 'Description': 'Giorgian De Arrascaeta'}
+{'ID': 'URU12', 'Description': 'Rodrigo Bentancur'}
+{'ID': 'URU13', 'Description': 'Team Photo'}
+{'ID': 'URU14', 'Description': 'Manuel Ugarte'}
+{'ID': 'URU15', 'Description': 'Nicolás de la Cruz'}
+{'ID': 'URU16', 'Description': 'Maxi Araújo'}
+{'ID': 'URU17', 'Description': 'Darwin Núñez'}
+{'ID': 'URU18', 'Description': 'Federico Viñas'}
+{'ID': 'URU19', 'Description': 'Rodrigo Aguirre'}
+{'ID': 'URU20', 'Description': 'Facundo Pellistri'}
+
+================================================================================
+SHEET: I1 Francia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'FRA1', 'Description': 'Emblem'}
+{'ID': 'FRA2', 'Description': 'Mike Maignan'}
+{'ID': 'FRA3', 'Description': 'Theo Hernández'}
+{'ID': 'FRA4', 'Description': 'William Saliba'}
+{'ID': 'FRA5', 'Description': 'Jules Koundé'}
+{'ID': 'FRA6', 'Description': 'Ibrahima Konaté'}
+{'ID': 'FRA7', 'Description': 'Dayot Upamecano'}
+{'ID': 'FRA8', 'Description': 'Lucas Digne'}
+{'ID': 'FRA9', 'Description': 'Aurélien Tchouaméni'}
+{'ID': 'FRA10', 'Description': 'Eduardo Camavinga'}
+{'ID': 'FRA11', 'Description': 'Manu Koné'}
+{'ID': 'FRA12', 'Description': 'Adrien Rabiot'}
+{'ID': 'FRA13', 'Description': 'Team Photo'}
+{'ID': 'FRA14', 'Description': 'Michael Olise'}
+{'ID': 'FRA15', 'Description': 'Ousmane Dembélé'}
+{'ID': 'FRA16', 'Description': 'Bradley Barcola'}
+{'ID': 'FRA17', 'Description': 'Désiré Doué'}
+{'ID': 'FRA18', 'Description': 'Kingsley Coman'}
+{'ID': 'FRA19', 'Description': 'Hugo Ekitike'}
+{'ID': 'FRA20', 'Description': 'Kylian Mbappé'}
+
+================================================================================
+SHEET: I2 Senegal
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'SEN1', 'Description': 'Emblem'}
+{'ID': 'SEN2', 'Description': 'Édouard Mendy'}
+{'ID': 'SEN3', 'Description': 'Yehvann Diouf'}
+{'ID': 'SEN4', 'Description': 'Moussa Niakhaté'}
+{'ID': 'SEN5', 'Description': 'Abdoulaye Seck'}
+{'ID': 'SEN6', 'Description': 'Ismaïl Jakobs'}
+{'ID': 'SEN7', 'Description': 'El Hadji Malick Diouf'}
+{'ID': 'SEN8', 'Description': 'Kalidou Koulibaly'}
+{'ID': 'SEN9', 'Description': 'Idrissa Gana Gueye'}
+{'ID': 'SEN10', 'Description': 'Pape Matar Sarr'}
+{'ID': 'SEN11', 'Description': 'Pape Gueye'}
+{'ID': 'SEN12', 'Description': 'Habib Diarra'}
+{'ID': 'SEN13', 'Description': 'Team Photo'}
+{'ID': 'SEN14', 'Description': 'Lamine Camara'}
+{'ID': 'SEN15', 'Description': 'Sadio Mané'}
+{'ID': 'SEN16', 'Description': 'Ismaïla Sarr'}
+{'ID': 'SEN17', 'Description': 'Boulaye Dia'}
+{'ID': 'SEN18', 'Description': 'Iliman Ndiaye'}
+{'ID': 'SEN19', 'Description': 'Nicolas Jackson'}
+{'ID': 'SEN20', 'Description': 'Krépin Diatta'}
+
+================================================================================
+SHEET: I3 Irak
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'IRQ1', 'Description': 'Emblem'}
+{'ID': 'IRQ2', 'Description': 'Jalal Hassan'}
+{'ID': 'IRQ3', 'Description': 'Rebin Sulaka'}
+{'ID': 'IRQ4', 'Description': 'Hussein Ali'}
+{'ID': 'IRQ5', 'Description': 'Akam Hashim'}
+{'ID': 'IRQ6', 'Description': 'Merchas Doski'}
+{'ID': 'IRQ7', 'Description': 'Zaid Tahseen'}
+{'ID': 'IRQ8', 'Description': 'Manaf Younis'}
+{'ID': 'IRQ9', 'Description': 'Zidane Iqbal'}
+{'ID': 'IRQ10', 'Description': 'Amir Al-Ammari'}
+{'ID': 'IRQ11', 'Description': 'Ibrahim Bayesh'}
+{'ID': 'IRQ12', 'Description': 'Ali Jasim'}
+{'ID': 'IRQ13', 'Description': 'Team Photo'}
+{'ID': 'IRQ14', 'Description': 'Youssef Amyn'}
+{'ID': 'IRQ15', 'Description': 'Aimar Sher'}
+{'ID': 'IRQ16', 'Description': 'Marko Farji'}
+{'ID': 'IRQ17', 'Description': 'Osama Rashid'}
+{'ID': 'IRQ18', 'Description': 'Ali Al-Hamadi'}
+{'ID': 'IRQ19', 'Description': 'Aymen Hussein'}
+{'ID': 'IRQ20', 'Description': 'Mohanad Ali'}
+
+================================================================================
+SHEET: I4 Noruega
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'NOR1', 'Description': 'Emblem'}
+{'ID': 'NOR2', 'Description': 'Ørjan Nyland'}
+{'ID': 'NOR3', 'Description': 'Julian Ryerson'}
+{'ID': 'NOR4', 'Description': 'Leo Østigård'}
+{'ID': 'NOR5', 'Description': 'Kristoffer Vassbakk Ajer'}
+{'ID': 'NOR6', 'Description': 'Marcus Holmgren Pedersen'}
+{'ID': 'NOR7', 'Description': 'David Møller Wolfe'}
+{'ID': 'NOR8', 'Description': 'Torbjørn Heggem'}
+{'ID': 'NOR9', 'Description': 'Morten Thorsby'}
+{'ID': 'NOR10', 'Description': 'Martin Ødegaard'}
+{'ID': 'NOR11', 'Description': 'Sander Berge'}
+{'ID': 'NOR12', 'Description': 'Andreas Schjelderup'}
+{'ID': 'NOR13', 'Description': 'Team Photo'}
+{'ID': 'NOR14', 'Description': 'Patrick Berg'}
+{'ID': 'NOR15', 'Description': 'Erling Haaland'}
+{'ID': 'NOR16', 'Description': 'Alexander Sørloth'}
+{'ID': 'NOR17', 'Description': 'Aron Dønnum'}
+{'ID': 'NOR18', 'Description': 'Jørgen Strand Larsen'}
+{'ID': 'NOR19', 'Description': 'Antonio Nusa'}
+{'ID': 'NOR20', 'Description': 'Oscar Bobb'}
+
+================================================================================
+SHEET: J1 Argentina
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'ARG1', 'Description': 'Emblem'}
+{'ID': 'ARG2', 'Description': 'Emiliano Martínez'}
+{'ID': 'ARG3', 'Description': 'Nahuel Molina'}
+{'ID': 'ARG4', 'Description': 'Cristian Romero'}
+{'ID': 'ARG5', 'Description': 'Nicolás Otamendi'}
+{'ID': 'ARG6', 'Description': 'Nicolás Tagliafico'}
+{'ID': 'ARG7', 'Description': 'Leonardo Balerdi'}
+{'ID': 'ARG8', 'Description': 'Enzo Fernández'}
+{'ID': 'ARG9', 'Description': 'Alexis Mac Allister'}
+{'ID': 'ARG10', 'Description': 'Rodrigo De Paul'}
+{'ID': 'ARG11', 'Description': 'Exequiel Palacios'}
+{'ID': 'ARG12', 'Description': 'Leandro Paredes'}
+{'ID': 'ARG13', 'Description': 'Team Photo'}
+{'ID': 'ARG14', 'Description': 'Nico Paz'}
+{'ID': 'ARG15', 'Description': 'Franco Mastantuono'}
+{'ID': 'ARG16', 'Description': 'Nico González'}
+{'ID': 'ARG17', 'Description': 'Lionel Messi'}
+{'ID': 'ARG18', 'Description': 'Lautaro Martínez'}
+{'ID': 'ARG19', 'Description': 'Julián Álvarez'}
+{'ID': 'ARG20', 'Description': 'Giuliano Simeone'}
+
+================================================================================
+SHEET: J2 Argelia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'ALG1', 'Description': 'Emblem'}
+{'ID': 'ALG2', 'Description': 'Alexis Guendouz'}
+{'ID': 'ALG3', 'Description': 'Ramy Bensebaini'}
+{'ID': 'ALG4', 'Description': 'Youcef Atal'}
+{'ID': 'ALG5', 'Description': 'Rayan Aït-Nouri'}
+{'ID': 'ALG6', 'Description': 'Mohamed Amine Tougai'}
+{'ID': 'ALG7', 'Description': 'Aïssa Mandi'}
+{'ID': 'ALG8', 'Description': 'Ismael Bennacer'}
+{'ID': 'ALG9', 'Description': 'Houssem Aouar'}
+{'ID': 'ALG10', 'Description': 'Hicham Boudaoui'}
+{'ID': 'ALG11', 'Description': 'Ramiz Zerrouki'}
+{'ID': 'ALG12', 'Description': 'Nabil Bentaleb'}
+{'ID': 'ALG13', 'Description': 'Team Photo'}
+{'ID': 'ALG14', 'Description': 'Farés Chaibi'}
+{'ID': 'ALG15', 'Description': 'Riyad Mahrez'}
+{'ID': 'ALG16', 'Description': 'Saïd Benrahma'}
+{'ID': 'ALG17', 'Description': 'Anis Hadj Moussa'}
+{'ID': 'ALG18', 'Description': 'Amine Gouiri'}
+{'ID': 'ALG19', 'Description': 'Baghdad Bounedjah'}
+{'ID': 'ALG20', 'Description': 'Mohammed Amoura'}
+
+================================================================================
+SHEET: J3 Austria
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'AUT1', 'Description': 'Emblem'}
+{'ID': 'AUT2', 'Description': 'Alexander Schlager'}
+{'ID': 'AUT3', 'Description': 'Patrick Pentz'}
+{'ID': 'AUT4', 'Description': 'David Alaba'}
+{'ID': 'AUT5', 'Description': 'Kevin Danso'}
+{'ID': 'AUT6', 'Description': 'Philipp Lienhart'}
+{'ID': 'AUT7', 'Description': 'Stefan Posch'}
+{'ID': 'AUT8', 'Description': 'Philipp Mwene'}
+{'ID': 'AUT9', 'Description': 'Alexander Prass'}
+{'ID': 'AUT10', 'Description': 'Xaver Schlager'}
+{'ID': 'AUT11', 'Description': 'Marcel Sabitzer'}
+{'ID': 'AUT12', 'Description': 'Konrad Laimer'}
+{'ID': 'AUT13', 'Description': 'Team Photo'}
+{'ID': 'AUT14', 'Description': 'Florian Grillitsch'}
+{'ID': 'AUT15', 'Description': 'Nicolas Seiwald'}
+{'ID': 'AUT16', 'Description': 'Romano Schmid'}
+{'ID': 'AUT17', 'Description': 'Patrick Wimmer'}
+{'ID': 'AUT18', 'Description': 'Christoph Baumgartner'}
+{'ID': 'AUT19', 'Description': 'Michael Gregoritsch'}
+{'ID': 'AUT20', 'Description': 'Marko Arnautović'}
+
+================================================================================
+SHEET: J4 Jordania
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'JOR1', 'Description': 'Emblem'}
+{'ID': 'JOR2', 'Description': 'Yazeed Abulaila'}
+{'ID': 'JOR3', 'Description': 'Ihsan Haddad'}
+{'ID': 'JOR4', 'Description': 'Mohammad Abu Hashish'}
+{'ID': 'JOR5', 'Description': 'Yazan Al-Arab'}
+{'ID': 'JOR6', 'Description': 'Abdallah Nasib'}
+{'ID': 'JOR7', 'Description': 'Saleem Obaid'}
+{'ID': 'JOR8', 'Description': 'Mohammad Abualnadi'}
+{'ID': 'JOR9', 'Description': 'Ibrahim Saadeh'}
+{'ID': 'JOR10', 'Description': 'Nizar Al-Rashdan'}
+{'ID': 'JOR11', 'Description': 'Noor Al-Rawabdeh'}
+{'ID': 'JOR12', 'Description': 'Mohannad Abu Taha'}
+{'ID': 'JOR13', 'Description': 'Team Photo'}
+{'ID': 'JOR14', 'Description': 'Amer Jamous'}
+{'ID': 'JOR15', 'Description': 'Mousa Al-Taamari'}
+{'ID': 'JOR16', 'Description': 'Yazan Al-Naimat'}
+{'ID': 'JOR17', 'Description': 'Mahmoud Al-Mardi'}
+{'ID': 'JOR18', 'Description': 'Ali Olwan'}
+{'ID': 'JOR19', 'Description': 'Mohammad Abu Zrayq'}
+{'ID': 'JOR20', 'Description': 'Ibrahim Sabra'}
+
+================================================================================
+SHEET: K1 Portugal
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'POR1', 'Description': 'Emblem'}
+{'ID': 'POR2', 'Description': 'Diogo Costa'}
+{'ID': 'POR3', 'Description': 'José Sá'}
+{'ID': 'POR4', 'Description': 'Rúben Dias'}
+{'ID': 'POR5', 'Description': 'João Cancelo'}
+{'ID': 'POR6', 'Description': 'Diogo Dalot'}
+{'ID': 'POR7', 'Description': 'Nuno Mendes'}
+{'ID': 'POR8', 'Description': 'Gonçalo Inácio'}
+{'ID': 'POR9', 'Description': 'Bernardo Silva'}
+{'ID': 'POR10', 'Description': 'Bruno Fernandes'}
+{'ID': 'POR11', 'Description': 'Rúben Neves'}
+{'ID': 'POR12', 'Description': 'Vitinha'}
+{'ID': 'POR13', 'Description': 'Team Photo'}
+{'ID': 'POR14', 'Description': 'João Neves'}
+{'ID': 'POR15', 'Description': 'Cristiano Ronaldo'}
+{'ID': 'POR16', 'Description': 'Francisco Trincão'}
+{'ID': 'POR17', 'Description': 'João Félix'}
+{'ID': 'POR18', 'Description': 'Gonçalo Ramos'}
+{'ID': 'POR19', 'Description': 'Pedro Neto'}
+{'ID': 'POR20', 'Description': 'Rafael Leão'}
+
+================================================================================
+SHEET: K2 Uzbekistán
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'UZB1', 'Description': 'Emblem'}
+{'ID': 'UZB2', 'Description': 'Otkir Yusupov'}
+{'ID': 'UZB3', 'Description': 'Farrukh Sayfiev'}
+{'ID': 'UZB4', 'Description': 'Sherzod Nasrullaev'}
+{'ID': 'UZB5', 'Description': 'Umar Eshmurodov'}
+{'ID': 'UZB6', 'Description': 'Husniddin Aliqulov'}
+{'ID': 'UZB7', 'Description': 'Rustamjon Ashurmatov'}
+{'ID': 'UZB8', 'Description': 'Khojiakbar Alijonov'}
+{'ID': 'UZB9', 'Description': 'Abdukodir Khusanov'}
+{'ID': 'UZB10', 'Description': 'Odiljon Hamrobekov'}
+{'ID': 'UZB11', 'Description': 'Otabek Shukurov'}
+{'ID': 'UZB12', 'Description': 'Jamshid Iskanderov'}
+{'ID': 'UZB13', 'Description': 'Team Photo'}
+{'ID': 'UZB14', 'Description': 'Azizbek Turgunboev'}
+{'ID': 'UZB15', 'Description': 'Khojimat Erkinov'}
+{'ID': 'UZB16', 'Description': 'Eldor Shomurodov'}
+{'ID': 'UZB17', 'Description': 'Oston Urunov'}
+{'ID': 'UZB18', 'Description': 'Jaloliddin Masharipov'}
+{'ID': 'UZB19', 'Description': 'Igor Sergeev'}
+{'ID': 'UZB20', 'Description': 'Abbosbek Fayzullaev'}
+
+================================================================================
+SHEET: K3 Colombia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'COL1', 'Description': 'Emblem'}
+{'ID': 'COL2', 'Description': 'Camilo Vargas'}
+{'ID': 'COL3', 'Description': 'David Ospina'}
+{'ID': 'COL4', 'Description': 'Dávinson Sánchez'}
+{'ID': 'COL5', 'Description': 'Yerry Mina'}
+{'ID': 'COL6', 'Description': 'Daniel Muñoz'}
+{'ID': 'COL7', 'Description': 'Johan Mojica'}
+{'ID': 'COL8', 'Description': 'Jhon Lucumí'}
+{'ID': 'COL9', 'Description': 'Santiago Arias'}
+{'ID': 'COL10', 'Description': 'Jefferson Lerma'}
+{'ID': 'COL11', 'Description': 'Kevin Castaño'}
+{'ID': 'COL12', 'Description': 'Richard Ríos'}
+{'ID': 'COL13', 'Description': 'Team Photo'}
+{'ID': 'COL14', 'Description': 'James Rodríguez'}
+{'ID': 'COL15', 'Description': 'Juan Fernando Quintero'}
+{'ID': 'COL16', 'Description': 'Jorge Carrascal'}
+{'ID': 'COL17', 'Description': 'Jhon Arias'}
+{'ID': 'COL18', 'Description': 'Jhon Córdoba'}
+{'ID': 'COL19', 'Description': 'Luis Suárez'}
+{'ID': 'COL20', 'Description': 'Luis Díaz'}
+
+================================================================================
+SHEET: K4 R.D. Congo
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'COD1', 'Description': 'Emblem'}
+{'ID': 'COD2', 'Description': 'Lionel Mpasi'}
+{'ID': 'COD3', 'Description': 'Aaron Wan-Bissaka'}
+{'ID': 'COD4', 'Description': 'Axel Tuanzebe'}
+{'ID': 'COD5', 'Description': 'Arthur Masuaku'}
+{'ID': 'COD6', 'Description': 'Chancel Mbemba'}
+{'ID': 'COD7', 'Description': 'Joris Kayembe'}
+{'ID': 'COD8', 'Description': 'Charles Pickel'}
+{'ID': 'COD9', 'Description': "Ngal'ayel Mukau"}
+{'ID': 'COD10', 'Description': 'Edo Kayembe'}
+{'ID': 'COD11', 'Description': 'Samuel Moutoussamy'}
+{'ID': 'COD12', 'Description': 'Noah Sadiki'}
+{'ID': 'COD13', 'Description': 'Team Photo'}
+{'ID': 'COD14', 'Description': 'Théo Bongonda'}
+{'ID': 'COD15', 'Description': 'Meschak Elia'}
+{'ID': 'COD16', 'Description': 'Yoane Wissa'}
+{'ID': 'COD17', 'Description': 'Brian Cipenga'}
+{'ID': 'COD18', 'Description': 'Fiston Mayele'}
+{'ID': 'COD19', 'Description': 'Cédric Bakambu'}
+{'ID': 'COD20', 'Description': 'Nathanaël Mbuku'}
+
+================================================================================
+SHEET: L1 Inglaterra
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'ENG1', 'Description': 'Emblem'}
+{'ID': 'ENG2', 'Description': 'Jordan Pickford'}
+{'ID': 'ENG3', 'Description': 'John Stones'}
+{'ID': 'ENG4', 'Description': 'Marc Guéhi'}
+{'ID': 'ENG5', 'Description': 'Ezri Konsa'}
+{'ID': 'ENG6', 'Description': 'Trent Alexander-Arnold'}
+{'ID': 'ENG7', 'Description': 'Reece James'}
+{'ID': 'ENG8', 'Description': 'Dan Burn'}
+{'ID': 'ENG9', 'Description': 'Jordan Henderson'}
+{'ID': 'ENG10', 'Description': 'Declan Rice'}
+{'ID': 'ENG11', 'Description': 'Jude Bellingham'}
+{'ID': 'ENG12', 'Description': 'Cole Palmer'}
+{'ID': 'ENG13', 'Description': 'Team Photo'}
+{'ID': 'ENG14', 'Description': 'Morgan Rogers'}
+{'ID': 'ENG15', 'Description': 'Anthony Gordon'}
+{'ID': 'ENG16', 'Description': 'Phil Foden'}
+{'ID': 'ENG17', 'Description': 'Bukayo Saka'}
+{'ID': 'ENG18', 'Description': 'Harry Kane'}
+{'ID': 'ENG19', 'Description': 'Marcus Rashford'}
+{'ID': 'ENG20', 'Description': 'Ollie Watkins'}
+
+================================================================================
+SHEET: L2 Croacia
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'CRO1', 'Description': 'Emblem'}
+{'ID': 'CRO2', 'Description': 'Dominik Livaković'}
+{'ID': 'CRO3', 'Description': 'Duško Ćaleta-Car'}
+{'ID': 'CRO4', 'Description': 'Joško Gvardiol'}
+{'ID': 'CRO5', 'Description': 'Josip Stanišić'}
+{'ID': 'CRO6', 'Description': 'Luka Vušković'}
+{'ID': 'CRO7', 'Description': 'Josip Šutalo'}
+{'ID': 'CRO8', 'Description': 'Kristijan Jakić'}
+{'ID': 'CRO9', 'Description': 'Luka Modrić'}
+{'ID': 'CRO10', 'Description': 'Mateo Kovačić'}
+{'ID': 'CRO11', 'Description': 'Martin Baturina'}
+{'ID': 'CRO12', 'Description': 'Lovro Majer'}
+{'ID': 'CRO13', 'Description': 'Team Photo'}
+{'ID': 'CRO14', 'Description': 'Mario Pašalić'}
+{'ID': 'CRO15', 'Description': 'Petar Sučić'}
+{'ID': 'CRO16', 'Description': 'Ivan Perišić'}
+{'ID': 'CRO17', 'Description': 'Marco Pašalić'}
+{'ID': 'CRO18', 'Description': 'Ante Budimir'}
+{'ID': 'CRO19', 'Description': 'Andrej Kramarić'}
+{'ID': 'CRO20', 'Description': 'Franjo Ivanović'}
+
+================================================================================
+SHEET: L3 Ghana
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'GHA1', 'Description': 'Emblem'}
+{'ID': 'GHA2', 'Description': 'Lawrence Ati-Zigi'}
+{'ID': 'GHA3', 'Description': 'Tariq Lamptey'}
+{'ID': 'GHA4', 'Description': 'Mohammed Salisu'}
+{'ID': 'GHA5', 'Description': 'Alidu Seidu'}
+{'ID': 'GHA6', 'Description': 'Alexander Djiku'}
+{'ID': 'GHA7', 'Description': 'Gideon Mensah'}
+{'ID': 'GHA8', 'Description': 'Caleb Yirenkyi'}
+{'ID': 'GHA9', 'Description': 'Abdul Fatawu Issahaku'}
+{'ID': 'GHA10', 'Description': 'Thomas Partey'}
+{'ID': 'GHA11', 'Description': 'Salis Abdul Samed'}
+{'ID': 'GHA12', 'Description': 'Kamaldeen Sulemana'}
+{'ID': 'GHA13', 'Description': 'Team Photo'}
+{'ID': 'GHA14', 'Description': 'Mohammed Kudus'}
+{'ID': 'GHA15', 'Description': 'Iñaki Williams'}
+{'ID': 'GHA16', 'Description': 'Jordan Ayew'}
+{'ID': 'GHA17', 'Description': 'André Ayew'}
+{'ID': 'GHA18', 'Description': 'Joseph Paintsil'}
+{'ID': 'GHA19', 'Description': 'Osman Bukari'}
+{'ID': 'GHA20', 'Description': 'Antoine Semenyo'}
+
+================================================================================
+SHEET: L4 Panamá
+================================================================================
+Headers: ['ID', 'Description']
+{'ID': 'PAN1', 'Description': 'Emblem'}
+{'ID': 'PAN2', 'Description': 'Orlando Mosquera'}
+{'ID': 'PAN3', 'Description': 'Luis Mejía'}
+{'ID': 'PAN4', 'Description': 'Fidel Escobar'}
+{'ID': 'PAN5', 'Description': 'Andrés Andrade'}
+{'ID': 'PAN6', 'Description': 'Michael Amir Murillo'}
+{'ID': 'PAN7', 'Description': 'Eric Davis'}
+{'ID': 'PAN8', 'Description': 'José Córdoba'}
+{'ID': 'PAN9', 'Description': 'César Blackman'}
+{'ID': 'PAN10', 'Description': 'Cristian Martínez'}
+{'ID': 'PAN11', 'Description': 'Aníbal Godoy'}
+{'ID': 'PAN12', 'Description': 'Adalberto Carrasquilla'}
+{'ID': 'PAN13', 'Description': 'Team Photo'}
+{'ID': 'PAN14', 'Description': 'Édgar Bárcenas'}
+{'ID': 'PAN15', 'Description': 'Carlos Harvey'}
+{'ID': 'PAN16', 'Description': 'Ismael Díaz'}
+{'ID': 'PAN17', 'Description': 'José Fajardo'}
+{'ID': 'PAN18', 'Description': 'Cecilio Waterman'}
+{'ID': 'PAN19', 'Description': 'José Luis Rodríguez'}
+{'ID': 'PAN20', 'Description': 'Alberto Quintero'}
