@@ -5,6 +5,8 @@ import { useAuth } from '../../contexts/AuthContext'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useLang } from '../../contexts/LangContext'
+import { countryNameToCode } from '../../lib/countries'
+import Flag from '../ui/Flag'
 
 function ContextBadge({ type, sticker }) {
   if (!type) return null
@@ -62,8 +64,11 @@ function ChatRow({ chat, onOpen, unread, currentUserId }) {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-0.5">
-          <span className={`font-bold truncate ${hasUnread ? 'text-white' : 'text-slate-200'}`}>
-            {chat.partner.username ?? 'Collector'}
+          <span className={`flex items-center gap-1.5 font-bold truncate ${hasUnread ? 'text-white' : 'text-slate-200'}`}>
+            <span className="truncate">{chat.partner.username ?? 'Collector'}</span>
+            {chat.partner.country && countryNameToCode(chat.partner.country) && (
+              <Flag code={countryNameToCode(chat.partner.country)} size="xs" />
+            )}
           </span>
           <span className="text-[10px] text-slate-600 flex-shrink-0">{timeAgo}</span>
         </div>

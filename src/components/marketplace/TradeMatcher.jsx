@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Users, ArrowRightLeft, MessageCircle, Loader2 } from 'lucide-react'
 import { findTradeMatches } from '../../hooks/useStickers'
 import { useAuth } from '../../contexts/AuthContext'
+import { useCountryFilter } from '../../hooks/useCountryFilter'
 import { ALL_STICKERS } from '../../lib/stickerData'
+import { countryNameToCode } from '../../lib/countries'
+import Flag from '../ui/Flag'
 
 const MAX_STICKER_CHIPS = 3
 
@@ -56,9 +59,14 @@ function TraderCard({ trader, onChat, unread }) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="font-bold text-white truncate">{trader.username ?? 'Collector'}</div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-white truncate">{trader.username ?? 'Collector'}</span>
+            {trader.country && countryNameToCode(trader.country) && (
+              <Flag code={countryNameToCode(trader.country)} size="xs" />
+            )}
+          </div>
           {trader.country && (
-            <div className="text-xs text-slate-500 mt-0.5">{trader.country}</div>
+            <div className="text-xs text-slate-400 mt-0.5">{trader.country}</div>
           )}
           {hasUnread && (
             <div className="text-xs text-amber-400 mt-0.5 truncate">💬 {unread.lastMsg}</div>
@@ -117,6 +125,7 @@ export default function TradeMatcher({ onOpenChat, unreadByUserId = {} }) {
   const { user } = useAuth()
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
+  const { onlyMyCountry, toggle, myCountry, apply } = useCountryFilter()
 
   useEffect(() => {
     if (!user) { setLoading(false); return }
@@ -125,6 +134,8 @@ export default function TradeMatcher({ onOpenChat, unreadByUserId = {} }) {
       .catch(() => setMatches([]))
       .finally(() => setLoading(false))
   }, [user])
+
+  const visibleMatches = useMemo(() => apply(matches), [matches, apply])
 
   if (!user) {
     return (
@@ -156,19 +167,40 @@ export default function TradeMatcher({ onOpenChat, unreadByUserId = {} }) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 flex-wrap">
         <ArrowRightLeft className="w-4 h-4 text-emerald-400" />
         <h3 className="font-bold text-white">Socios de Intercambio</h3>
-        <span className="text-xs bg-emerald-400/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full">{matches.length}</span>
+        <span className="text-xs bg-emerald-400/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full">{visibleMatches.length}</span>
+        {myCountry && (
+          <button
+            type="button"
+            onClick={toggle}
+            className={`ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors ${
+              onlyMyCountry
+                ? 'bg-amber-500/15 border-amber-400/30 text-amber-300'
+                : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+            }`}
+            title={onlyMyCountry ? 'Mostrar todos los países' : 'Solo mi país'}
+          >
+            {countryNameToCode(myCountry) && <Flag code={countryNameToCode(myCountry)} size="xs" />}
+            <span>{onlyMyCountry ? 'Solo mi país' : 'Todos'}</span>
+          </button>
+        )}
       </div>
-      {matches.map((trader) => (
-        <TraderCard
-          key={trader.id}
-          trader={trader}
-          onChat={onOpenChat}
-          unread={unreadByUserId[trader.id]}
-        />
-      ))}
+      {visibleMatches.length === 0 ? (
+        <div className="text-center py-12 text-slate-500 text-sm">
+          Sin socios en tu país. Desactiva el filtro para ver todos.
+        </div>
+      ) : (
+        visibleMatches.map((trader) => (
+          <TraderCard
+            key={trader.id}
+            trader={trader}
+            onChat={onOpenChat}
+            unread={unreadByUserId[trader.id]}
+          />
+        ))
+      )}
     </div>
   )
 }

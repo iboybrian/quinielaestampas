@@ -158,7 +158,11 @@ export default function QuinielaHub() {
           transition={{ duration: 0.25, ease: 'easeOut' }}
           className="mb-8"
         >
-          <div className="text-4xl mb-2">🎯</div>
+          <img
+            src="/assets/images/home/scoreboard_2.png"
+            alt="Quinielas"
+            className="w-14 h-14 object-contain mb-3"
+          />
           <h1 className="text-3xl font-black text-white">{t.quiniela.title}</h1>
           <p className="text-slate-400 mt-1">{t.quiniela.subtitle}</p>
         </motion.div>

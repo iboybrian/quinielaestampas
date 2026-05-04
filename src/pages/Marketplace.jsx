@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare } from 'lucide-react'
+import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare, Search, X } from 'lucide-react'
 import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
 import { useTradeNotifications } from '../hooks/useTradeNotifications'
 import { useLang } from '../contexts/LangContext'
+import Flag from '../components/ui/Flag'
 import StickerCard from '../components/marketplace/StickerCard'
 import TradeMatcher from '../components/marketplace/TradeMatcher'
 import TradeChat from '../components/marketplace/TradeChat'
@@ -27,8 +28,8 @@ function TeamTab({ team, isActive, ownedCount, totalCount, onClick }) {
           : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-transparent'
       }`}
     >
-      <div className="flex items-center gap-1.5">
-        <span>{team.flag}</span>
+      <div className="flex items-center gap-2">
+        <Flag code={team.isoCode} size="sm" />
         <span>{team.code}</span>
       </div>
       <div className={`h-1 rounded-full mt-1.5 ${isActive ? 'bg-amber-400/30' : 'bg-white/10'}`}>
@@ -41,6 +42,108 @@ function TeamTab({ team, isActive, ownedCount, totalCount, onClick }) {
         {ownedCount}/{totalCount}
       </div>
     </motion.button>
+  )
+}
+
+// Searchable combobox — filters teams by country name. Dropdown opens on focus.
+function TeamSearch({ getTeamOwned, getTeamTotal, onSelect, placeholder, noResultsLabel }) {
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const blurTimerRef = useRef(null)
+  const inputRef = useRef(null)
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return TEAMS
+    return TEAMS.filter((tm) => tm.name.toLowerCase().includes(q))
+  }, [query])
+
+  const handleFocus = () => {
+    if (blurTimerRef.current) clearTimeout(blurTimerRef.current)
+    setOpen(true)
+  }
+
+  // Delay close so click on dropdown item registers before blur fires
+  const handleBlur = () => {
+    blurTimerRef.current = setTimeout(() => setOpen(false), 150)
+  }
+
+  const handleSelect = (code) => {
+    onSelect(code)
+    setQuery('')
+    setOpen(false)
+    inputRef.current?.blur()
+  }
+
+  useEffect(() => () => {
+    if (blurTimerRef.current) clearTimeout(blurTimerRef.current)
+  }, [])
+
+  return (
+    <div className="relative mb-3">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={placeholder}
+          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400/40 focus:bg-white/8 transition-colors"
+        />
+        {query && (
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => setQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.12 }}
+            className="absolute z-30 left-0 right-0 mt-1 rounded-xl bg-slate-900 border border-white/10 shadow-2xl max-h-72 overflow-y-auto"
+          >
+            {filtered.length === 0 ? (
+              <div className="px-3 py-3 text-xs text-slate-400 text-center">
+                {noResultsLabel}
+              </div>
+            ) : (
+              filtered.map((tm) => {
+                const owned = getTeamOwned(tm.code)
+                const total = getTeamTotal(tm.code)
+                const complete = owned === total
+                return (
+                  <button
+                    key={tm.code}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleSelect(tm.code)}
+                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-white/8 transition-colors text-left"
+                  >
+                    <Flag code={tm.isoCode} size="sm" />
+                    <span className="flex-1 text-sm text-white truncate">{tm.name}</span>
+                    <span className={`text-xs font-mono font-bold flex-shrink-0 ${complete ? 'text-emerald-400' : 'text-slate-300'}`}>
+                      {owned}/{total}
+                    </span>
+                  </button>
+                )
+              })
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
@@ -128,7 +231,11 @@ export default function Marketplace() {
           transition={{ duration: 0.25, ease: 'easeOut' }}
           className="mb-6"
         >
-          <div className="text-4xl mb-2">📦</div>
+          <img
+            src="/assets/images/home/stickers.png"
+            alt="Álbum"
+            className="w-14 h-14 object-contain mb-3"
+          />
           <h1 className="text-3xl font-black text-white">{t.marketplace.title}</h1>
           <div className="flex items-center gap-4 mt-2">
             <span className="text-slate-400 text-sm">
@@ -166,7 +273,16 @@ export default function Marketplace() {
         <AnimatePresence mode="wait">
           {mainTab === 'My Album' ? (
             <motion.div key="album" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              {/* Team tabs */}
+              {/* Searchable team combobox */}
+              <TeamSearch
+                getTeamOwned={getTeamOwned}
+                getTeamTotal={getTeamTotal}
+                onSelect={setSelectedTeam}
+                placeholder={t.marketplace.searchTeam}
+                noResultsLabel={t.marketplace.noResults}
+              />
+
+              {/* Team tabs (horizontal scroll) */}
               <div className="flex gap-2 overflow-x-auto pb-3 mb-4 scroll-smooth" style={{ scrollbarWidth: 'none' }}>
                 <motion.button whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedTeam('ALL')}

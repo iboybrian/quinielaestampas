@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Loader2, Users, MessageCircle, ChevronLeft } from 'lucide-react'
 import { TEAMS, ALL_STICKERS } from '../../lib/stickerData'
 import { findDuplicateOwners } from '../../hooks/useStickers'
 import { useAuth } from '../../contexts/AuthContext'
 import { useLang } from '../../contexts/LangContext'
+import { useCountryFilter } from '../../hooks/useCountryFilter'
+import { countryNameToCode } from '../../lib/countries'
 import Flag from '../ui/Flag'
 
 // ── Team selector ────────────────────────────────────────────────────────────
@@ -118,8 +120,13 @@ function OwnerRow({ owner, onChat, contactLabel }) {
         </div>
       )}
       <div className="flex-1 min-w-0">
-        <div className="font-bold text-white truncate">{owner.username ?? 'Collector'}</div>
-        {owner.country && <div className="text-xs text-slate-500">{owner.country}</div>}
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-white truncate">{owner.username ?? 'Collector'}</span>
+          {owner.country && countryNameToCode(owner.country) && (
+            <Flag code={countryNameToCode(owner.country)} size="xs" />
+          )}
+        </div>
+        {owner.country && <div className="text-xs text-slate-400">{owner.country}</div>}
         <div className="text-xs text-violet-400 font-bold mt-0.5">+{owner.extras} extra</div>
       </div>
       <motion.button
@@ -139,6 +146,7 @@ function OwnerList({ sticker, team, onBack, onChat }) {
   const { t } = useLang()
   const { user } = useAuth()
   const [owners, setOwners] = useState(null) // null = loading
+  const { onlyMyCountry, toggle, myCountry, apply } = useCountryFilter()
 
   useEffect(() => {
     let cancelled = false
@@ -147,6 +155,8 @@ function OwnerList({ sticker, team, onBack, onChat }) {
       .catch(() => { if (!cancelled) setOwners([]) })
     return () => { cancelled = true }
   }, [sticker.id, user?.id])
+
+  const visibleOwners = useMemo(() => apply(owners ?? []), [owners, apply])
 
   return (
     <div>
@@ -160,27 +170,44 @@ function OwnerList({ sticker, team, onBack, onChat }) {
         <span className="text-sm text-slate-400">{sticker.name}</span>
         <span className="text-xs text-slate-600">#{sticker.id.split('-').pop()}</span>
       </div>
-      <h3 className="font-bold text-white mb-4">{t.marketplace.ownersTitle}</h3>
+      <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+        <h3 className="font-bold text-white">{t.marketplace.ownersTitle}</h3>
+        {myCountry && owners?.length > 0 && (
+          <button
+            type="button"
+            onClick={toggle}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors ${
+              onlyMyCountry
+                ? 'bg-amber-500/15 border-amber-400/30 text-amber-300'
+                : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+            }`}
+            title={onlyMyCountry ? 'Mostrar todos los países' : 'Solo mi país'}
+          >
+            {countryNameToCode(myCountry) && <Flag code={countryNameToCode(myCountry)} size="xs" />}
+            <span>{onlyMyCountry ? 'Solo mi país' : 'Todos'}</span>
+          </button>
+        )}
+      </div>
 
       {owners === null ? (
         <div className="flex items-center justify-center py-12 text-slate-500">
           <Loader2 className="w-5 h-5 animate-spin mr-2" />
           {t.marketplace.loadingOwners}
         </div>
-      ) : owners.length === 0 ? (
+      ) : visibleOwners.length === 0 ? (
         <div className="text-center py-12">
           <Users className="w-10 h-10 mx-auto mb-3 text-slate-700" />
-          <p className="text-slate-400">{t.marketplace.noOwners}</p>
+          <p className="text-slate-400">{onlyMyCountry ? 'Sin dueños en tu país. Desactiva el filtro.' : t.marketplace.noOwners}</p>
         </div>
       ) : (
         <div className="space-y-2">
-          {owners.map((owner) => (
+          {visibleOwners.map((owner) => (
             <OwnerRow
-          key={owner.id}
-          owner={owner}
-          onChat={(o) => onChat(o, { type: 'mercado', sticker })}
-          contactLabel={t.marketplace.contact}
-        />
+              key={owner.id}
+              owner={owner}
+              onChat={(o) => onChat(o, { type: 'mercado', sticker })}
+              contactLabel={t.marketplace.contact}
+            />
           ))}
         </div>
       )}

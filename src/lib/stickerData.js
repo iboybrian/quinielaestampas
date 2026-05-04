@@ -258,11 +258,96 @@ export const SPECIAL_STICKERS = [
   { id: 'CC12', name: 'Antonee Robinson',  rarity: 'legendary', emoji: '⭐' },
 ]
 
+// Per-team rarity overrides for players based on real-world fame/stats.
+// Max 2 legendary + 3 rare per team (excluding emblem & team photo).
+// Names MUST match exactly the entries in TEAMS[].players.
+const PLAYER_RARITY = {
+  // ── Group A ──────────────────────────────────────────────────────────────────
+  MEX: { legendary: ['Hirving Lozano', 'Raúl Jiménez'],            rare: ['Edson Álvarez', 'Santiago Giménez', 'Diego Laínez'] },
+  RSA: { legendary: ['Ronwen Williams'],                            rare: ['Lyle Foster', 'Teboho Mokoena', 'Sipho Mbule'] },
+  KOR: { legendary: ['Heung-min Son', 'Min-jae Kim'],               rare: ['Kang-in Lee', 'Hee-chan Hwang', 'Jae-sung Lee'] },
+  CZE: { legendary: ['Patrik Schick', 'Tomáš Souček'],              rare: ['Adam Hložek', 'Václav Černý', 'Ladislav Krejčí'] },
+
+  // ── Group B ──────────────────────────────────────────────────────────────────
+  CAN: { legendary: ['Alphonso Davies', 'Jonathan David'],          rare: ['Cyle Larin', 'Stephen Eustáquio', 'Tajon Buchanan'] },
+  BIH: { legendary: ['Edin Džeko', 'Sead Kolašinac'],               rare: ['Ermedin Demirović', 'Esmir Bajraktarević', 'Haris Tabaković'] },
+  QAT: { legendary: ['Akram Afif', 'Almoez Ali'],                   rare: ['Hassan Al-Haydos', 'Edmilson Junior', 'Boualem Khoukhi'] },
+  SUI: { legendary: ['Granit Xhaka', 'Manuel Akanji'],              rare: ['Breel Embolo', 'Gregor Kobel', 'Dan Ndoye'] },
+
+  // ── Group C ──────────────────────────────────────────────────────────────────
+  BRA: { legendary: ['Vinícius Júnior', 'Rodrygo'],                 rare: ['Casemiro', 'Marquinhos', 'Raphinha'] },
+  MAR: { legendary: ['Achraf Hakimi', 'Brahim Díaz'],               rare: ['Youssef En-Nesyri', 'Sofyan Amrabat', 'Yassine Bounou'] },
+  HAI: { legendary: ['Frantzdy Pierrot', 'Jean-Ricner Bellegarde'], rare: ['Duckens Nazon', 'Derrick Etienne Jr.', 'Hannes Delcroix'] },
+  SCO: { legendary: ['Andrew Robertson', 'Scott McTominay'],        rare: ['John McGinn', 'Kieran Tierney', 'Billy Gilmour'] },
+
+  // ── Group D ──────────────────────────────────────────────────────────────────
+  USA: { legendary: ['Christian Pulisic', 'Antonee Robinson'],      rare: ['Weston McKennie', 'Tyler Adams', 'Folarin Balogun'] },
+  PAR: { legendary: ['Miguel Almirón', 'Antonio Sanabria'],         rare: ['Julio Enciso', 'Diego Gómez', 'Gustavo Gómez'] },
+  AUS: { legendary: ['Mathew Ryan', 'Jackson Irvine'],              rare: ['Harry Souttar', 'Riley McGree', 'Nestory Irankunda'] },
+  TUR: { legendary: ['Hakan Çalhanoğlu', 'Arda Güler'],             rare: ['Kenan Yıldız', 'Merih Demiral', 'Kerem Aktürkoğlu'] },
+
+  // ── Group E ──────────────────────────────────────────────────────────────────
+  GER: { legendary: ['Joshua Kimmich', 'Jamal Musiala'],            rare: ['Florian Wirtz', 'Kai Havertz', 'Antonio Rüdiger'] },
+  CUW: { legendary: ['Tahith Chong', 'Leandro Bacuna'],             rare: ['Juninho Bacuna', 'Jürgen Locadia', 'Sontje Hansen'] },
+  CIV: { legendary: ['Franck Kessié', 'Sébastien Haller'],          rare: ['Amad Diallo', 'Wilfried Singo', 'Simon Adingra'] },
+  ECU: { legendary: ['Moisés Caicedo', 'Enner Valencia'],           rare: ['Pervis Estupiñán', 'Piero Hincapié', 'Kendry Páez'] },
+
+  // ── Group F ──────────────────────────────────────────────────────────────────
+  NED: { legendary: ['Virgil van Dijk', 'Frenkie de Jong'],         rare: ['Cody Gakpo', 'Memphis Depay', 'Xavi Simons'] },
+  JPN: { legendary: ['Takefusa Kubo', 'Daichi Kamada'],             rare: ['Takumi Minamino', 'Ritsu Dōan', 'Junya Ito'] },
+  SWE: { legendary: ['Alexander Isak', 'Viktor Gyökeres'],          rare: ['Dejan Kulusevski', 'Anthony Elanga', 'Victor Nilsson Lindelöf'] },
+  TUN: { legendary: ['Hannibal Mejbri', 'Naïm Sliti'],              rare: ['Ellyes Skhiri', 'Aïssa Laïdouni', 'Elias Saad'] },
+
+  // ── Group G ──────────────────────────────────────────────────────────────────
+  BEL: { legendary: ['Kevin De Bruyne', 'Romelu Lukaku'],           rare: ['Thibaut Courtois', 'Jérémy Doku', 'Youri Tielemans'] },
+  EGY: { legendary: ['Mohamed Salah', 'Omar Marmoush'],             rare: ['Trézéguet', 'Mostafa Mohamed', 'Emam Ashour'] },
+  IRN: { legendary: ['Sardar Azmoun', 'Mehdi Taremi'],              rare: ['Alireza Jahanbakhsh', 'Ehsan Hajsafi', 'Saman Ghoddos'] },
+  NZL: { legendary: ['Chris Wood', 'Marko Stamenić'],               rare: ['Sarpreet Singh', 'Liberato Cacace', 'Kosta Barbarouses'] },
+
+  // ── Group H ──────────────────────────────────────────────────────────────────
+  ESP: { legendary: ['Lamine Yamal', 'Pedri'],                      rare: ['Rodri', 'Nico Williams', 'Dani Olmo'] },
+  CPV: { legendary: ['Garry Rodrigues', 'Bebé'],                    rare: ['Ryan Mendes', 'Jovane Cabral', 'Jamiro Monteiro'] },
+  KSA: { legendary: ['Salem Al-Dawsari', 'Firas Al-Buraikan'],      rare: ['Saleh Al-Shehri', 'Saud Abdulhamid', 'Abdulrahman Al-Aboud'] },
+  URU: { legendary: ['Federico Valverde', 'Darwin Núñez'],          rare: ['Ronald Araújo', 'José María Giménez', 'Rodrigo Bentancur'] },
+
+  // ── Group I ──────────────────────────────────────────────────────────────────
+  FRA: { legendary: ['Kylian Mbappé', 'Ousmane Dembélé'],           rare: ['Aurélien Tchouaméni', 'Eduardo Camavinga', 'William Saliba'] },
+  SEN: { legendary: ['Sadio Mané', 'Kalidou Koulibaly'],            rare: ['Édouard Mendy', 'Idrissa Gana Gueye', 'Nicolas Jackson'] },
+  IRQ: { legendary: ['Aymen Hussein', 'Mohanad Ali'],               rare: ['Zidane Iqbal', 'Ali Al-Hamadi', 'Ali Jasim'] },
+  NOR: { legendary: ['Erling Haaland', 'Martin Ødegaard'],          rare: ['Alexander Sørloth', 'Antonio Nusa', 'Oscar Bobb'] },
+
+  // ── Group J ──────────────────────────────────────────────────────────────────
+  ARG: { legendary: ['Lionel Messi', 'Lautaro Martínez'],           rare: ['Julián Álvarez', 'Emiliano Martínez', 'Enzo Fernández'] },
+  ALG: { legendary: ['Riyad Mahrez', 'Ismael Bennacer'],            rare: ['Houssem Aouar', 'Mohammed Amoura', 'Saïd Benrahma'] },
+  AUT: { legendary: ['David Alaba', 'Marcel Sabitzer'],             rare: ['Marko Arnautović', 'Konrad Laimer', 'Christoph Baumgartner'] },
+  JOR: { legendary: ['Mousa Al-Taamari', 'Yazan Al-Naimat'],        rare: ['Ali Olwan', 'Nizar Al-Rashdan', 'Yazan Al-Arab'] },
+
+  // ── Group K ──────────────────────────────────────────────────────────────────
+  POR: { legendary: ['Cristiano Ronaldo', 'Bernardo Silva'],        rare: ['Bruno Fernandes', 'Rúben Dias', 'Rafael Leão'] },
+  UZB: { legendary: ['Eldor Shomurodov', 'Abdukodir Khusanov'],     rare: ['Jaloliddin Masharipov', 'Abbosbek Fayzullaev', 'Otabek Shukurov'] },
+  COL: { legendary: ['James Rodríguez', 'Luis Díaz'],               rare: ['Yerry Mina', 'Dávinson Sánchez', 'David Ospina'] },
+  COD: { legendary: ['Aaron Wan-Bissaka', 'Yoane Wissa'],           rare: ['Cédric Bakambu', 'Théo Bongonda', 'Chancel Mbemba'] },
+
+  // ── Group L ──────────────────────────────────────────────────────────────────
+  ENG: { legendary: ['Harry Kane', 'Jude Bellingham'],              rare: ['Bukayo Saka', 'Phil Foden', 'Declan Rice'] },
+  CRO: { legendary: ['Luka Modrić', 'Joško Gvardiol'],              rare: ['Mateo Kovačić', 'Ivan Perišić', 'Andrej Kramarić'] },
+  GHA: { legendary: ['Mohammed Kudus', 'Iñaki Williams'],           rare: ['Thomas Partey', 'Jordan Ayew', 'André Ayew'] },
+  PAN: { legendary: ['Michael Amir Murillo', 'Aníbal Godoy'],       rare: ['Adalberto Carrasquilla', 'Édgar Bárcenas', 'Cecilio Waterman'] },
+}
+
+function getPlayerRarity(teamCode, playerName) {
+  const map = PLAYER_RARITY[teamCode]
+  if (!map) return 'common'
+  if (map.legendary?.includes(playerName)) return 'legendary'
+  if (map.rare?.includes(playerName)) return 'rare'
+  return 'common'
+}
+
 // Generates 20 stickers per team matching Panini numbering:
-//   ${code}1        → Emblem
-//   ${code}2–12     → players 1–11
-//   ${code}13       → Team Photo
-//   ${code}14–20    → players 12–18
+//   ${code}1        → Emblem (legendary)
+//   ${code}2–12     → players 1–11 (rarity from PLAYER_RARITY)
+//   ${code}13       → Team Photo (rare)
+//   ${code}14–20    → players 12–18 (rarity from PLAYER_RARITY)
 export function generateTeamStickers(team) {
   const stickers = []
 
@@ -270,7 +355,7 @@ export function generateTeamStickers(team) {
     id: `${team.code}1`,
     teamCode: team.code,
     type: 'badge',
-    rarity: 'rare',
+    rarity: 'legendary',
     name: `${team.name} — Emblem`,
     number: 1,
   })
@@ -280,7 +365,7 @@ export function generateTeamStickers(team) {
       id: `${team.code}${i + 2}`,
       teamCode: team.code,
       type: 'player',
-      rarity: i < 2 ? 'legendary' : i < 5 ? 'rare' : 'common',
+      rarity: getPlayerRarity(team.code, playerName),
       name: playerName,
       number: i + 2,
     })
@@ -300,7 +385,7 @@ export function generateTeamStickers(team) {
       id: `${team.code}${i + 14}`,
       teamCode: team.code,
       type: 'player',
-      rarity: 'common',
+      rarity: getPlayerRarity(team.code, playerName),
       name: playerName,
       number: i + 14,
     })
