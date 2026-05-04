@@ -5,6 +5,7 @@ import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import Sidebar from './components/layout/Sidebar'
 import Footer from './components/layout/Footer'
+import SiteFooter from './components/layout/SiteFooter'
 
 import Home from './pages/Home'
 import Auth from './pages/Auth'
@@ -14,6 +15,7 @@ import ManageQuiniela from './pages/ManageQuiniela'
 import Marketplace from './pages/Marketplace'
 import Profile from './pages/Profile'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import Terms from './pages/Terms'
 import ResetPassword from './pages/ResetPassword'
 
 export default function App() {
@@ -40,13 +42,17 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Profile />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           {/* Catch-all → home */}
           <Route path="*" element={<Home />} />
         </Routes>
       </AnimatePresence>
 
-      {/* Fixed bottom footer */}
+      {/* Site-wide legal footer (always in flow) */}
+      <SiteFooter />
+
+      {/* Mobile bottom nav (md:hidden, fixed) */}
       <Footer />
     </div>
   )

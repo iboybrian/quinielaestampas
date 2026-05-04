@@ -174,6 +174,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [acceptedLegal, setAcceptedLegal] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -186,9 +187,11 @@ export default function Auth() {
       } else {
         if (!username.trim()) { setError(t.auth.usernameRequired); setLoading(false); return }
         if (!country) { setError(t.auth.countryRequired); setLoading(false); return }
+        if (!acceptedLegal) { setError(t.legal.acceptRequired); setLoading(false); return }
         await signUp(email, password, username.trim(), country)
         setSuccess(t.auth.successMsg)
         setMode('login')
+        setAcceptedLegal(false)
       }
     } catch (err) {
       setError(err.message ?? t.auth.somethingWrong)
@@ -305,10 +308,32 @@ export default function Auth() {
                 )}
               </AnimatePresence>
 
+              {mode === 'register' && (
+                <label className="flex items-start gap-2.5 text-xs text-slate-300 leading-relaxed cursor-pointer select-none px-1">
+                  <input
+                    type="checkbox"
+                    checked={acceptedLegal}
+                    onChange={(e) => setAcceptedLegal(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded accent-emerald-500 cursor-pointer flex-shrink-0"
+                  />
+                  <span>
+                    {t.legal.acceptPrefix}{' '}
+                    <Link to="/privacy" target="_blank" className="text-emerald-500 hover:text-emerald-400 underline font-semibold">
+                      {t.siteFooter.privacy}
+                    </Link>
+                    {' '}{t.legal.acceptAnd}{' '}
+                    <Link to="/terms" target="_blank" className="text-emerald-500 hover:text-emerald-400 underline font-semibold">
+                      {t.siteFooter.terms}
+                    </Link>
+                    .
+                  </span>
+                </label>
+              )}
+
               <motion.button
                 type="submit"
                 whileTap={{ scale: 0.97 }}
-                disabled={loading || !email || !password}
+                disabled={loading || !email || !password || (mode === 'register' && !acceptedLegal)}
                 className="btn-primary w-full py-3.5 mt-2"
               >
                 {loading

@@ -213,74 +213,130 @@ export const translations = {
     },
     privacy: {
       title: 'Política de Privacidad',
-      lastUpdated: 'Última actualización: 14 de abril de 2026',
+      lastUpdated: 'Última actualización: 4 de mayo de 2026',
       back: 'Volver',
-      footer: 'WC 2026 Hub — construido con React, Supabase & ❤️',
+      footer: '© 2026 WC Hub — Todos los derechos reservados.',
+      preamble: 'En WC 2026 Hub, nos tomamos muy en serio la seguridad de tu información. Esta política describe cómo recopilamos, utilizamos y protegemos tus datos al utilizar nuestra plataforma de quinielas y álbum de estampas.',
       sections: [
         {
           title: 'Información que Recopilamos',
           paragraphs: [
-            'Recopilamos la información que nos proporcionas directamente al crear una cuenta, incluyendo tu correo electrónico, nombre de usuario y país (opcional).',
-            'También recopilamos datos de uso como las predicciones de partidos que envías, las estampas que marcas en tu colección y los mensajes que envías a través del chat de intercambio.',
-            'Al usar la app, recibimos automáticamente información técnica básica como el tipo de navegador, dirección IP e identificadores de sesión.',
+            'Datos de Cuenta: Al registrarte, almacenamos tu correo electrónico y nombre de usuario. El país es un dato opcional para mejorar tu experiencia en el marketplace de estampas.',
+            'Actividad del Usuario: Registramos tus predicciones de partidos, el estado de tu colección de estampas y los mensajes enviados a través del chat de intercambio para garantizar el funcionamiento del servicio.',
+            'Información Técnica: Recopilamos automáticamente datos básicos como dirección IP, tipo de navegador e identificadores de sesión para prevenir fraudes y ataques.',
           ],
+          richFirstWord: ['Datos de Cuenta:', 'Actividad del Usuario:', 'Información Técnica:'],
         },
         {
-          title: 'Cómo Usamos tu Información',
+          title: 'Uso de la Información',
           paragraphs: [
-            'Tu información se usa para operar y proveer los servicios de WC 2026 Hub, incluyendo el mantenimiento de tu cuenta, la visualización de clasificaciones y el intercambio de estampas.',
-            'No vendemos, alquilamos ni compartimos tu información personal con terceros para sus fines de marketing.',
-            'Las predicciones de partidos son visibles para los demás miembros del mismo grupo de Quiniela después del inicio del partido.',
+            'Utilizamos tus datos para gestionar tu cuenta, mostrar clasificaciones en tiempo real y facilitar el intercambio de estampas entre usuarios.',
+            'Privacidad de Predicciones: Tus predicciones son privadas hasta que comienza el partido; en ese momento, se vuelven visibles para los demás miembros de tu grupo de quiniela para garantizar la transparencia del juego.',
+            'No Comercialización: No vendemos, alquilamos ni compartimos tu información personal con terceros para fines publicitarios.',
           ],
+          richFirstWord: [null, 'Privacidad de Predicciones:', 'No Comercialización:'],
         },
         {
-          title: 'Almacenamiento de Datos',
+          title: 'Seguridad y Almacenamiento',
           paragraphs: [
-            'Todos los datos de usuario se almacenan de forma segura en Supabase, que proporciona almacenamiento cifrado y seguridad a nivel de fila. Solo tú puedes leer y modificar tus propias predicciones, colección de estampas e información de perfil.',
-            'Los mensajes de chat dentro de las conversaciones de intercambio se almacenan y son visibles solo para los dos participantes del intercambio.',
+            'Toda la información se almacena de forma segura utilizando cifrado y seguridad a nivel de fila (RLS), asegurando que solo tú y los destinatarios autorizados tengan acceso a tus datos personales y mensajes.',
           ],
-        },
-        {
-          title: 'Cookies y Almacenamiento Local',
-          paragraphs: [
-            'Usamos el almacenamiento local del navegador para mantener tu sesión activa entre visitas. No se utilizan cookies de seguimiento de terceros.',
-          ],
-        },
-        {
-          title: 'Servicios de Terceros',
-          paragraphs: [
-            'Supabase — proveedor de base de datos y autenticación. Sujeto a la política de privacidad de Supabase.',
-            'API-Football — usado para obtener marcadores en vivo. No se comparten datos personales con este servicio.',
-            'Google Fonts — la tipografía Inter se carga desde el CDN de Google. Google puede registrar solicitudes de fuentes.',
-          ],
-          richFirstWord: ['Supabase', 'API-Football', 'Google Fonts'],
         },
         {
           title: 'Tus Derechos',
           paragraphs: [
-            'Puedes solicitar la eliminación de tu cuenta y todos los datos asociados en cualquier momento contactándonos. Tras la eliminación, tus predicciones, datos de estampas y mensajes de chat serán eliminados permanentemente.',
-            'Puedes actualizar tu nombre de usuario y país en cualquier momento desde la página de Perfil.',
-          ],
-        },
-        {
-          title: 'Privacidad de Menores',
-          paragraphs: [
-            'WC 2026 Hub no está dirigido a menores de 13 años. No recopilamos conscientemente información personal de niños.',
-          ],
-        },
-        {
-          title: 'Cambios a esta Política',
-          paragraphs: [
-            'Podemos actualizar esta política de privacidad de vez en cuando. Te notificaremos de cualquier cambio actualizando la fecha en la parte superior de este documento. El uso continuado de la app después de los cambios constituye la aceptación de la política revisada.',
+            'Puedes actualizar tu perfil en cualquier momento desde la sección de ajustes.',
+            'Tienes derecho a solicitar la eliminación total de tu cuenta y datos asociados. Una vez procesada, esta acción es irreversible.',
           ],
         },
         {
           title: 'Contacto',
           paragraphs: [
-            'Si tienes preguntas sobre esta política de privacidad, abre un issue en el repositorio del proyecto o contacta al administrador de tu instancia de WC 2026 Hub.',
+            'Si tienes dudas sobre el manejo de tus datos o deseas ejercer tus derechos de privacidad, puedes contactarnos en:',
+            '📧 support@quinielaestampas.com',
           ],
         },
       ],
+    },
+    terms: {
+      title: 'Términos de Servicio',
+      lastUpdated: 'Última actualización: 4 de mayo de 2026',
+      back: 'Volver',
+      footer: '© 2026 WC Hub — Todos los derechos reservados.',
+      preamble: 'Al utilizar WC 2026 Hub, aceptas cumplir con los siguientes términos. Si no estás de acuerdo con alguna parte de estos términos, te pedimos que no utilices el aplicativo.',
+      sections: [
+        {
+          title: '1. Descripción del Servicio',
+          paragraphs: [
+            'WC 2026 Hub es una plataforma de entretenimiento que permite a los usuarios participar en quinielas (predicciones deportivas) y gestionar una colección virtual de estampas. El servicio se proporciona "tal cual" y está sujeto a cambios sin previo aviso.',
+          ],
+        },
+        {
+          title: '2. Elegibilidad y Registro',
+          paragraphs: [
+            'Edad mínima: Debes tener al menos 13 años para crear una cuenta.',
+            'Responsabilidad: Eres el único responsable de mantener la confidencialidad de tus credenciales de acceso y de todas las actividades que ocurran bajo tu cuenta.',
+            'Datos exactos: Te comprometes a proporcionar información veraz durante el registro.',
+          ],
+          richFirstWord: ['Edad mínima:', 'Responsabilidad:', 'Datos exactos:'],
+        },
+        {
+          title: '3. Reglas de la Quiniela y Puntuación',
+          paragraphs: [
+            'Cierre de Pronósticos: Los pronósticos para cada partido se bloquean automáticamente según la hora configurada en el sistema (CST -6). No se aceptarán cambios una vez cumplido el plazo.',
+            'Sistema de Puntuación: La puntuación se calcula según la lógica oficial del sitio (Marcador exacto, Diferencia de goles o Ganador). En caso de discrepancia técnica, el resultado procesado por el servidor será el definitivo.',
+            'Premios y Fondos: WC 2026 Hub actúa únicamente como plataforma de gestión. El manejo de "Pozo" o "Cuotas" es responsabilidad exclusiva de los administradores de cada grupo privado.',
+          ],
+          richFirstWord: ['Cierre de Pronósticos:', 'Sistema de Puntuación:', 'Premios y Fondos:'],
+        },
+        {
+          title: '4. Intercambio de Estampas (Marketplace)',
+          paragraphs: [
+            'Intercambios: Los intercambios de estampas son voluntarios entre usuarios. La plataforma facilita la comunicación pero no garantiza la veracidad de los acuerdos externos.',
+            'Uso Justo: Se prohíbe el uso de scripts o bots para automatizar el llenado del álbum o la solicitud de intercambios.',
+          ],
+          richFirstWord: ['Intercambios:', 'Uso Justo:'],
+        },
+        {
+          title: '5. Conducta del Usuario',
+          paragraphs: [
+            'Te comprometes a no:',
+            '• Utilizar lenguaje ofensivo o discriminatorio en los chats de intercambio.',
+            '• Intentar vulnerar la seguridad del aplicativo o realizar ataques de denegación de servicio.',
+            '• Hacerse pasar por administradores del sistema o por otros usuarios.',
+          ],
+        },
+        {
+          title: '6. Limitación de Responsabilidad',
+          paragraphs: [
+            'Disponibilidad: No garantizamos que el servicio sea ininterrumpido o libre de errores (como retrasos en la actualización de marcadores en vivo).',
+            'Pérdida de Datos: Aunque realizamos copias de seguridad, no nos hacemos responsables por la pérdida de datos debida a fallos técnicos masivos o acciones de terceros.',
+          ],
+          richFirstWord: ['Disponibilidad:', 'Pérdida de Datos:'],
+        },
+        {
+          title: '7. Suspensión y Terminación',
+          paragraphs: [
+            'Nos reservamos el derecho de suspender o eliminar cuentas que violen estos términos, realicen trampas comprobadas en el sistema de quinielas o afecten la integridad de la comunidad sin previo aviso.',
+          ],
+        },
+        {
+          title: '8. Modificaciones',
+          paragraphs: [
+            'Podemos actualizar estos términos en cualquier momento. El uso continuado del aplicativo tras la publicación de cambios constituye la aceptación de los nuevos términos.',
+          ],
+        },
+      ],
+    },
+    siteFooter: {
+      rights: '© 2026 WC Hub — Todos los derechos reservados.',
+      privacy: 'Política de Privacidad',
+      terms: 'Términos de Servicio',
+    },
+    legal: {
+      acceptPrefix: 'He leído y acepto la',
+      acceptAnd: 'y los',
+      acceptRequired: 'Debes aceptar la Política de Privacidad y los Términos de Servicio para continuar.',
     },
   },
 
@@ -498,74 +554,130 @@ export const translations = {
     },
     privacy: {
       title: 'Privacy Policy',
-      lastUpdated: 'Last updated: April 14, 2026',
+      lastUpdated: 'Last updated: May 4, 2026',
       back: 'Back',
-      footer: 'WC 2026 Hub — built with React, Supabase & ❤️',
+      footer: '© 2026 WC Hub — All rights reserved.',
+      preamble: 'At WC 2026 Hub, we take the security of your information seriously. This policy describes how we collect, use, and protect your data when you use our quiniela and sticker album platform.',
       sections: [
         {
           title: 'Information We Collect',
           paragraphs: [
-            'We collect information you provide directly to us when you create an account, including your email address, username, and optional country.',
-            'We also collect usage data such as match predictions you submit, stickers you mark in your collection, and messages you send through the trade chat.',
-            'When using the app, we automatically receive basic technical information such as your browser type, IP address, and session identifiers.',
+            'Account Data: When you sign up, we store your email address and username. Country is optional and used to improve your experience in the sticker marketplace.',
+            'User Activity: We record your match predictions, sticker collection state and messages sent through the trade chat to ensure the service works correctly.',
+            'Technical Information: We automatically collect basic data such as IP address, browser type and session identifiers to prevent fraud and abuse.',
           ],
+          richFirstWord: ['Account Data:', 'User Activity:', 'Technical Information:'],
         },
         {
-          title: 'How We Use Your Information',
+          title: 'Use of Information',
           paragraphs: [
-            'Your information is used to operate and provide the WC 2026 Hub services, including maintaining your account, displaying leaderboards, and enabling sticker trading.',
-            'We do not sell, rent, or share your personal information with third parties for their marketing purposes.',
-            'Match predictions are visible to other members of the same Quiniela group after match kick-off.',
+            'We use your data to manage your account, show real-time leaderboards and enable sticker trades between users.',
+            'Prediction Privacy: Your predictions stay private until the match begins; at that point, they become visible to other members of your quiniela group to keep the game transparent.',
+            'No Commercialization: We do not sell, rent or share your personal information with third parties for advertising purposes.',
           ],
+          richFirstWord: [null, 'Prediction Privacy:', 'No Commercialization:'],
         },
         {
-          title: 'Data Storage',
+          title: 'Security & Storage',
           paragraphs: [
-            'All user data is stored securely in Supabase, which provides encrypted storage and row-level security. Only you can read and modify your own predictions, sticker collection, and profile information.',
-            'Chat messages within trade conversations are stored and visible only to the two participants of the trade.',
+            'All information is stored securely using encryption and Row-Level Security (RLS), ensuring that only you and authorized recipients have access to your personal data and messages.',
           ],
-        },
-        {
-          title: 'Cookies & Local Storage',
-          paragraphs: [
-            'We use browser local storage to maintain your session so you remain logged in across visits. No third-party tracking cookies are used.',
-          ],
-        },
-        {
-          title: 'Third-Party Services',
-          paragraphs: [
-            'Supabase — database and authentication provider. Subject to Supabase\'s privacy policy.',
-            'API-Football — used to fetch live match scores. No personal data is shared with this service.',
-            'Google Fonts — the Inter typeface is loaded from Google\'s CDN. Google may log font requests.',
-          ],
-          richFirstWord: ['Supabase', 'API-Football', 'Google Fonts'],
         },
         {
           title: 'Your Rights',
           paragraphs: [
-            'You may request deletion of your account and all associated data at any time by contacting us. Upon deletion, your predictions, sticker data, and chat messages will be permanently removed.',
-            'You can update your username and country at any time from the Profile page.',
-          ],
-        },
-        {
-          title: "Children's Privacy",
-          paragraphs: [
-            'WC 2026 Hub is not directed at children under the age of 13. We do not knowingly collect personal information from children.',
-          ],
-        },
-        {
-          title: 'Changes to This Policy',
-          paragraphs: [
-            'We may update this privacy policy from time to time. We will notify you of any changes by updating the date at the top of this document. Continued use of the app after changes constitutes acceptance of the revised policy.',
+            'You can update your profile at any time from the settings section.',
+            'You have the right to request full deletion of your account and associated data. Once processed, this action is irreversible.',
           ],
         },
         {
           title: 'Contact',
           paragraphs: [
-            'If you have questions about this privacy policy, please open an issue in the project repository or contact the administrator of your WC 2026 Hub instance.',
+            'If you have questions about how we handle your data or wish to exercise your privacy rights, you can reach us at:',
+            '📧 support@quinielaestampas.com',
           ],
         },
       ],
+    },
+    terms: {
+      title: 'Terms of Service',
+      lastUpdated: 'Last updated: May 4, 2026',
+      back: 'Back',
+      footer: '© 2026 WC Hub — All rights reserved.',
+      preamble: 'By using WC 2026 Hub, you agree to comply with the following terms. If you do not agree with any part of these terms, please do not use the app.',
+      sections: [
+        {
+          title: '1. Service Description',
+          paragraphs: [
+            'WC 2026 Hub is an entertainment platform that lets users participate in quinielas (sports predictions) and manage a virtual sticker collection. The service is provided "as is" and is subject to change without notice.',
+          ],
+        },
+        {
+          title: '2. Eligibility & Registration',
+          paragraphs: [
+            'Minimum age: You must be at least 13 years old to create an account.',
+            'Responsibility: You are solely responsible for keeping your access credentials confidential and for all activity that occurs under your account.',
+            'Accurate data: You agree to provide truthful information when registering.',
+          ],
+          richFirstWord: ['Minimum age:', 'Responsibility:', 'Accurate data:'],
+        },
+        {
+          title: '3. Quiniela Rules & Scoring',
+          paragraphs: [
+            'Prediction Lock: Predictions for each match lock automatically based on the time configured by the system (CST -6). No changes are accepted after the deadline.',
+            'Scoring System: Points are calculated according to the official site logic (Exact score, Goal difference or Winner). In case of a technical discrepancy, the result processed by the server is final.',
+            'Prizes & Funds: WC 2026 Hub acts only as a management platform. Handling of "Pozo" or "Cuotas" is the sole responsibility of the admin of each private group.',
+          ],
+          richFirstWord: ['Prediction Lock:', 'Scoring System:', 'Prizes & Funds:'],
+        },
+        {
+          title: '4. Sticker Marketplace',
+          paragraphs: [
+            'Trades: Sticker trades are voluntary between users. The platform facilitates communication but does not guarantee the accuracy of external agreements.',
+            'Fair Use: Using scripts or bots to automate album filling or trade requests is prohibited.',
+          ],
+          richFirstWord: ['Trades:', 'Fair Use:'],
+        },
+        {
+          title: '5. User Conduct',
+          paragraphs: [
+            'You agree not to:',
+            '• Use offensive or discriminatory language in trade chats.',
+            '• Attempt to compromise app security or perform denial-of-service attacks.',
+            '• Impersonate system administrators or other users.',
+          ],
+        },
+        {
+          title: '6. Limitation of Liability',
+          paragraphs: [
+            'Availability: We do not guarantee uninterrupted or error-free service (such as delays in live score updates).',
+            'Data Loss: Although we run backups, we are not liable for data loss caused by major technical failures or third-party actions.',
+          ],
+          richFirstWord: ['Availability:', 'Data Loss:'],
+        },
+        {
+          title: '7. Suspension & Termination',
+          paragraphs: [
+            'We reserve the right to suspend or remove accounts that violate these terms, perform proven cheating in the quiniela system, or affect community integrity, without prior notice.',
+          ],
+        },
+        {
+          title: '8. Modifications',
+          paragraphs: [
+            'We may update these terms at any time. Continued use of the app after changes are published constitutes acceptance of the new terms.',
+          ],
+        },
+      ],
+    },
+    siteFooter: {
+      rights: '© 2026 WC Hub — All rights reserved.',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service',
+    },
+    legal: {
+      acceptPrefix: 'I have read and accept the',
+      acceptAnd: 'and the',
+      acceptRequired: 'You must accept the Privacy Policy and the Terms of Service to continue.',
     },
   },
 }
