@@ -69,16 +69,21 @@ All flag rendering uses `src/components/ui/Flag.jsx`, fetches from `flagcdn.com`
 Pass `null` or omit `code` for neutral placeholder. Supports subdivision codes like `gb-eng`, `gb-wls`, `gb-sct`. **Never use emoji flags** — don't render on Windows.
 
 ### Quiniela group page tabs
-`QuinielaGroup.jsx` renders four tabs: **Standings → Groups → Matches → Bracket** (Bracket only when knockout fixtures exist). Groups tab has internal sub-nav: group cards view → predictions entry view (`showPredictions` state). `PredictionModal` rendered at page level to overlay all tabs.
+`QuinielaGroup.jsx` renders five tabs: **Standings → Matrix → Groups → Matches → Bracket** (Bracket only when knockout fixtures exist). Groups tab has internal sub-nav: group cards view → predictions entry view (`showPredictions` state). `PredictionModal` rendered at page level to overlay all tabs.
+
+Page header is a **hero card** (`bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40`) with stats grid (Cuota / Pozo / Cierre / Participantes), avatar stack (max 7 + `+N` overflow), code-copy pill, admin gear shortcut. Currency rendered as `Q` (Quetzales). `Pozo` is computed live from `entry_fee × members.length`. `formatDeadline()` and `StatCard` helpers live at the bottom of the file.
 
 ### Marketplace tabs
 `Marketplace.jsx` renders four tabs: **My Album → Trade → Mercado → Chats**.
-- **My Album**: sticker grid with team/filter nav. Triggers `AchievementOverlay` on team completion or legendary sticker.
+- **My Album**: sticker grid with team/filter nav. Triggers `AchievementOverlay` on team completion or legendary sticker. **TeamSearch** combobox above the horizontal team scroll filters teams by country name in real time (dropdown opens on focus, items show flag + name + owned/total count).
 - **Trade**: `TradeMatcher` — finds users whose extras match your needs and vice versa, scored and ranked.
 - **Mercado**: `DuplicateSearch` — find users with duplicates of specific sticker.
 - **Chats**: `ChatInbox` — active trade conversations sorted by last message.
 - `TradeChat` (slide-over panel) rendered at page level, opened from any tab via `openChat(partner, context)`.
 - Unread badge on Trade and Chats tabs from `useTradeNotifications`.
+
+### Country filter
+Trade/Mercado/Chats views render the partner's country flag inline next to the username. `src/lib/countries.js` exports `COUNTRIES` (used by signup, intended to replace the duplicated list in `Auth.jsx`) and `countryNameToCode(name)` to map DB-stored country names back to ISO codes for `<Flag>`. `src/hooks/useCountryFilter.js` provides `{ onlyMyCountry, toggle, myCountry, apply }` — `apply(list)` either filters to same-country users (when toggle on) or sorts same-country first (default). State persisted in `localStorage['country_filter_only']`. Toggle UI shown only when the user's profile has a `country` set; no toggle on `ChatInbox` (existing conversations don't get filtered, only flag-decorated).
 
 ### Trade chat context encoding
 `trade_requests.wanting_stickers` (text[]) doubles as context carrier. Entries prefixed `ctx_type:` and `ctx_sticker:` encode which tab/sticker initiated chat. Use `buildContextPayload(context)` from `useChats.js` to build, `parseContext()` to read. Don't store real sticker IDs without prefix — treated as regular want-list entries.
@@ -97,7 +102,16 @@ Prediction scoring implemented **twice** — must stay in sync:
 2. `supabase/migrations/001_initial.sql` → `score_predictions()` trigger — server-side, fires when `matches.status` → `'finished'`.
 
 ### Sticker data
-All sticker definitions client-side in `src/lib/stickerData.js` (16 teams, ~16 players each + specials). Each team has: `code` (3-letter FIFA, e.g. `'ARG'`) used as sticker ID prefix, `isoCode` (2-letter ISO, e.g. `'ar'`) used with `Flag`. DB only stores sticker IDs (`user_stickers.sticker_id TEXT`) — no sticker table in Supabase.
+All sticker definitions client-side in `src/lib/stickerData.js` — **48 teams × 20 stickers + 32 specials = 992 total**. Each team has: `code` (3-letter FIFA, e.g. `'ARG'`) used as sticker ID prefix, `isoCode` (2-letter ISO, e.g. `'ar'`) used with `Flag`. DB only stores sticker IDs (`user_stickers.sticker_id TEXT`) — no sticker table in Supabase.
+
+Sticker numbering follows Panini: `{CODE}1` = emblem, `{CODE}2-12` = players 1-11, `{CODE}13` = team photo, `{CODE}14-20` = players 12-18.
+
+**Rarity assignment** (don't revert to positional):
+- Emblem (`{CODE}1`): **legendary**
+- Team photo (`{CODE}13`): **rare**
+- Players: looked up by name in **`PLAYER_RARITY`** map at top of `stickerData.js`. Max 2 legendary + 3 rare per team based on real-world fame (e.g. Messi/Ronaldo legendary). `getPlayerRarity(teamCode, playerName)` returns `'common'` fallback when name not in map. **Never edit `TEAMS[].players` to add new names** — list is the official Panini album; only adjust rarity via `PLAYER_RARITY`.
+
+Specials are split into three groups (all `teamCode: 'SPEC'`): general FWC emblems/mascots/host emblems (rare), 11 historical winner team photos `FWC9-FWC19` (legendary), and 12 Coca-Cola star cards `CC1-CC12` (legendary). CC stickers and per-team player stickers can both be the same player — they're separate sticker IDs.
 
 ### Images
 Custom images in `public/assets/images/home/` (root `public/`, NOT `src/public/`). Reference via URL string:
@@ -133,4 +147,4 @@ Key behaviors:
 - Realtime enabled on `matches`, `predictions`, `messages`, `quiniela_members`.
 - RLS enabled on all tables. `matches` allows any authenticated user to insert/update (no admin role yet).
 
-Run migrations by pasting SQL into Supabase SQL editor in order (`001_initial.sql`, `002_admin_features.sql`, `003_push_subscriptions.sql`) — no CLI runner configured. Migration 003 adds `push_subscriptions` for Web Push.
+Run migrations by pasting SQL into Supabase SQL editor in order: `001_initial.sql` → `002_admin_features.sql` → `003_push_subscriptions.sql` → `004_security_hardening.sql` → `005_rank_change.sql`. No CLI runner configured. `004` tightens RLS; `005` adds rank-change tracking columns.
