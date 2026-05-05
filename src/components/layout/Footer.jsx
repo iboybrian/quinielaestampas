@@ -1,12 +1,51 @@
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import { Star, Edit3, User } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLang } from '../../contexts/LangContext'
+
+// Auto-hide on scroll down, reappear on scroll up. Threshold prevents jitter
+// from iOS overscroll bounce. Always visible near top of page.
+const SCROLL_THRESHOLD = 8
+const TOP_LOCK = 16
+
+function useAutoHideOnScroll() {
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    let lastY = window.scrollY
+    let ticking = false
+
+    const update = () => {
+      const y = window.scrollY
+      if (y < TOP_LOCK) {
+        setHidden(false)
+      } else if (Math.abs(y - lastY) >= SCROLL_THRESHOLD) {
+        setHidden(y > lastY)
+      }
+      lastY = y
+      ticking = false
+    }
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update)
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return hidden
+}
 
 export default function Footer() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { t } = useLang()
+  const hidden = useAutoHideOnScroll()
 
   const buttons = [
     { icon: Star,  label: t.footer.myAlbum,     path: '/marketplace', activeColor: 'text-amber-400',   activeBg: 'bg-amber-400/10'   },
@@ -17,9 +56,9 @@ export default function Footer() {
   return (
     <motion.footer
       initial={{ y: 80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.35, ease: 'easeOut' }}
-      className="md:hidden fixed bottom-0 left-0 right-0 z-30 h-16 safe-area-inset-bottom"
+      animate={{ y: hidden ? 80 : 0, opacity: 1 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      className="md:hidden fixed bottom-0 left-0 right-0 z-30 h-16 safe-area-inset-bottom will-change-transform"
     >
       <div className="absolute inset-0 bg-[#050B1A]/90 backdrop-blur-xl border-t border-white/5" />
       <div className="relative flex items-center justify-around h-full px-4 max-w-md mx-auto">

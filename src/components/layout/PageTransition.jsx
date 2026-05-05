@@ -15,7 +15,7 @@ export default function PageTransition({ children }) {
       initial="initial"
       animate="enter"
       exit="exit"
-      className="min-h-screen pt-16 pb-20 md:pb-8"
+      className="min-h-screen pt-16 pb-6 md:pb-8"
     >
       {children}
     </motion.div>

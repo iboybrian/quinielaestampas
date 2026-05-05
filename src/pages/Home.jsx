@@ -1,8 +1,9 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Zap, Users, Trophy, Star, Shield, TrendingUp, ArrowRight } from 'lucide-react'
+import { Zap, Users, Trophy, Star, Shield, TrendingUp, ArrowRight, Lock, UserPlus, LogIn } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useLang } from '../contexts/LangContext'
+import { useAuth } from '../contexts/AuthContext'
 
 const trophyImg     = '/assets/images/home/trophy.png'
 const stickersImg   = '/assets/images/home/stickers.png'
@@ -21,6 +22,7 @@ const FEATURE_COLORS = [
 export default function Home() {
   const navigate = useNavigate()
   const { t } = useLang()
+  const { user } = useAuth()
   const shouldReduce = useReducedMotion()
 
   const container = {
@@ -34,7 +36,7 @@ export default function Home() {
 
   return (
     <PageTransition>
-      <div className="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-start pt-12 md:pt-20 px-4 overflow-hidden">
+      <div className="relative flex flex-col items-center justify-start pt-12 md:pt-20 px-4 overflow-hidden">
 
         {/* Animated background orbs — CSS-driven, GPU-accelerated */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -81,9 +83,48 @@ export default function Home() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={item} className="text-lg md:text-xl text-slate-400 mb-12 max-w-xl mx-auto leading-relaxed">
+          <motion.p variants={item} className="text-lg md:text-xl text-slate-400 mb-8 max-w-xl mx-auto leading-relaxed">
             {t.home.subtitle}
           </motion.p>
+
+          {/* Sign-up CTA banner — visible only for guests */}
+          {!user && (
+            <motion.div
+              variants={item}
+              className="relative overflow-hidden rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-500/15 via-slate-900/60 to-emerald-500/10 p-5 md:p-6 mb-10 max-w-2xl mx-auto text-left"
+            >
+              <div className="absolute -top-10 -right-10 opacity-[0.08] pointer-events-none">
+                <Lock className="w-32 h-32 text-amber-400" strokeWidth={1.5} />
+              </div>
+              <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-400/30 flex items-center justify-center flex-shrink-0">
+                  <Lock className="w-5 h-5 text-amber-300" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg md:text-xl font-black text-white mb-1">{t.home.signUpCta.title}</h3>
+                  <p className="text-sm text-slate-300 leading-relaxed">{t.home.signUpCta.desc}</p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto md:flex-shrink-0">
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => navigate('/auth')}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 text-black font-bold text-sm hover:bg-amber-300 transition-colors shadow-lg shadow-amber-500/20"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    {t.home.signUpCta.signUp}
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => navigate('/auth')}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-semibold text-sm hover:bg-white/10 transition-colors"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    {t.home.signUpCta.signIn}
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* CTA Cards — side-by-side on md+ */}
           <motion.div variants={item} className="grid md:grid-cols-2 gap-5 max-w-2xl mx-auto mb-16">

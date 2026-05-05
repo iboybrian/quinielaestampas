@@ -29,6 +29,12 @@ export const translations = {
         { label: 'Juego Limpio',       desc: 'Predicciones se bloquean auto' },
         { label: 'Análisis',           desc: 'Rastrea tus predicciones' },
       ],
+      signUpCta: {
+        title: 'Crea tu cuenta para empezar',
+        desc: 'Regístrate gratis para desbloquear las quinielas, guardar tu álbum de estampas y conectar con otros coleccionistas.',
+        signUp: 'Crear Cuenta',
+        signIn: 'Ya tengo cuenta',
+      },
     },
     auth: {
       signIn: 'Iniciar Sesión',
@@ -370,6 +376,12 @@ export const translations = {
         { label: 'Fair Play',    desc: 'Predictions auto-lock' },
         { label: 'Analytics',    desc: 'Track your predictions' },
       ],
+      signUpCta: {
+        title: 'Create your account to get started',
+        desc: 'Sign up free to unlock the quinielas, save your sticker album, and connect with other collectors.',
+        signUp: 'Sign Up',
+        signIn: 'I have an account',
+      },
     },
     auth: {
       signIn: 'Sign In',
