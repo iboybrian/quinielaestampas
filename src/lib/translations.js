@@ -34,6 +34,8 @@ export const translations = {
         desc: 'Regístrate gratis para desbloquear las quinielas, guardar tu álbum de estampas y conectar con otros coleccionistas.',
         signUp: 'Crear Cuenta',
         signIn: 'Ya tengo cuenta',
+        heroLink: 'Crea tu cuenta gratis',
+        lockBadge: 'Requiere cuenta',
       },
     },
     auth: {
@@ -344,6 +346,21 @@ export const translations = {
       acceptAnd: 'y los',
       acceptRequired: 'Debes aceptar la Política de Privacidad y los Términos de Servicio para continuar.',
     },
+    authGate: {
+      title: 'Crea tu cuenta',
+      defaultMessage: 'Esta función está disponible solo para usuarios registrados. Crea tu cuenta gratis para desbloquearla.',
+      signUp: 'Crear Cuenta',
+      signIn: 'Ya tengo cuenta',
+      cancel: 'Cancelar',
+      messages: {
+        createQuiniela: 'Necesitas una cuenta para crear una quiniela y administrar a sus participantes.',
+        joinQuiniela: 'Necesitas una cuenta para unirte a una quiniela con un código.',
+        toggleSticker: 'Crea tu cuenta para guardar tu colección de estampas y marcar las que tienes o buscas.',
+        openTrades: 'Necesitas una cuenta para encontrar socios de intercambio.',
+        openMercado: 'Necesitas una cuenta para contactar a otros coleccionistas.',
+        openChats: 'Necesitas una cuenta para conversar con otros coleccionistas.',
+      },
+    },
   },
 
   en: {
@@ -381,6 +398,8 @@ export const translations = {
         desc: 'Sign up free to unlock the quinielas, save your sticker album, and connect with other collectors.',
         signUp: 'Sign Up',
         signIn: 'I have an account',
+        heroLink: 'Sign up free',
+        lockBadge: 'Account required',
       },
     },
     auth: {
@@ -690,6 +709,21 @@ export const translations = {
       acceptPrefix: 'I have read and accept the',
       acceptAnd: 'and the',
       acceptRequired: 'You must accept the Privacy Policy and the Terms of Service to continue.',
+    },
+    authGate: {
+      title: 'Create your account',
+      defaultMessage: 'This feature is only available to registered users. Sign up free to unlock it.',
+      signUp: 'Sign Up',
+      signIn: 'I have an account',
+      cancel: 'Cancel',
+      messages: {
+        createQuiniela: 'You need an account to create a quiniela and manage its members.',
+        joinQuiniela: 'You need an account to join a quiniela with a code.',
+        toggleSticker: 'Sign up to save your sticker collection and mark which ones you have or need.',
+        openTrades: 'You need an account to find trading partners.',
+        openMercado: 'You need an account to contact other collectors.',
+        openChats: 'You need an account to chat with other collectors.',
+      },
     },
   },
 }

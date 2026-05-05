@@ -4,8 +4,10 @@ import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare, Search, 
 import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
 import { useTradeNotifications } from '../hooks/useTradeNotifications'
+import { useAuthGate } from '../hooks/useAuthGate'
 import { useLang } from '../contexts/LangContext'
 import Flag from '../components/ui/Flag'
+import AuthGateModal from '../components/ui/AuthGateModal'
 import StickerCard from '../components/marketplace/StickerCard'
 import TradeMatcher from '../components/marketplace/TradeMatcher'
 import TradeChat from '../components/marketplace/TradeChat'
@@ -157,6 +159,7 @@ export default function Marketplace() {
   const { collection, loading, toggleHave, toggleNeed, hasSticker, needsSticker, duplicateCount, markDuplicate, removeDuplicate, stats } = useMyCollection()
   const { achievement, trigger: triggerAchievement, dismiss: dismissAchievement } = useAchievements()
   const { unreadTrades, tradePartners, totalUnread, markTradeRead } = useTradeNotifications()
+  const { requireAuth, isAuthed, gateProps } = useAuthGate()
 
   // unreadByUserId for TradeMatcher dots
   const unreadByUserId = useMemo(() => {
@@ -181,7 +184,16 @@ export default function Marketplace() {
     { key: 'Chats',    label: t.marketplace.chats,   icon: MessageSquare },
   ]
 
+  const gateStickerAction = (fn) => (...args) => {
+    if (!requireAuth(null, { message: t.authGate.messages.toggleSticker })) return
+    return fn(...args)
+  }
+  const handleToggleNeed     = gateStickerAction(toggleNeed)
+  const handleMarkDuplicate  = gateStickerAction(markDuplicate)
+  const handleRemoveDuplicate = gateStickerAction(removeDuplicate)
+
   const handleToggleHave = async (stickerId) => {
+    if (!requireAuth(null, { message: t.authGate.messages.toggleSticker })) return
     const wasHave = hasSticker(stickerId)
     await toggleHave(stickerId)
     if (!wasHave) {
@@ -348,9 +360,9 @@ export default function Marketplace() {
                         needsIt={needsSticker(sticker.id)}
                         duplicates={duplicateCount(sticker.id)}
                         onToggleHave={handleToggleHave}
-                        onToggleNeed={toggleNeed}
-                        onMarkDuplicate={markDuplicate}
-                        onRemoveDuplicate={removeDuplicate}
+                        onToggleNeed={handleToggleNeed}
+                        onMarkDuplicate={handleMarkDuplicate}
+                        onRemoveDuplicate={handleRemoveDuplicate}
                       />
                     ))}
                   </AnimatePresence>
@@ -382,7 +394,7 @@ export default function Marketplace() {
       />
       <AchievementOverlay achievement={achievement} onDismiss={dismissAchievement} />
 
-
+      <AuthGateModal {...gateProps} />
     </PageTransition>
   )
 }

@@ -5,7 +5,9 @@ import { Plus, Key, Trophy, Copy, Check, ChevronRight, Users, Settings, Loader2 
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import { useMyQuinielas, createQuiniela, joinQuiniela } from '../hooks/useQuiniela'
+import { useAuthGate } from '../hooks/useAuthGate'
 import PageTransition from '../components/layout/PageTransition'
+import AuthGateModal from '../components/ui/AuthGateModal'
 
 function QuinielaCard({ quiniela }) {
   const navigate = useNavigate()
@@ -148,6 +150,21 @@ export default function QuinielaHub() {
   const [activeTab, setActiveTab] = useState(null)
   const { quinielas, loading, refresh } = useMyQuinielas()
   const { t } = useLang()
+  const { requireAuth, gateProps } = useAuthGate()
+
+  const handleCreateClick = () => {
+    requireAuth(
+      () => setActiveTab(activeTab === 'create' ? null : 'create'),
+      { message: t.authGate.messages.createQuiniela }
+    )
+  }
+
+  const handleJoinClick = () => {
+    requireAuth(
+      () => setActiveTab(activeTab === 'join' ? null : 'join'),
+      { message: t.authGate.messages.joinQuiniela }
+    )
+  }
 
   return (
     <PageTransition>
@@ -171,7 +188,7 @@ export default function QuinielaHub() {
           <motion.button
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => setActiveTab(activeTab === 'create' ? null : 'create')}
+            onClick={handleCreateClick}
             className={`glass rounded-2xl p-5 text-left transition-all ${activeTab === 'create' ? 'border-amber-400/30 bg-amber-400/5' : 'hover:border-white/20'}`}
           >
             <Plus className={`w-6 h-6 mb-3 ${activeTab === 'create' ? 'text-amber-400' : 'text-slate-400'}`} />
@@ -182,7 +199,7 @@ export default function QuinielaHub() {
           <motion.button
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => setActiveTab(activeTab === 'join' ? null : 'join')}
+            onClick={handleJoinClick}
             className={`glass rounded-2xl p-5 text-left transition-all ${activeTab === 'join' ? 'border-emerald-400/30 bg-emerald-400/5' : 'hover:border-white/20'}`}
           >
             <Key className={`w-6 h-6 mb-3 ${activeTab === 'join' ? 'text-emerald-400' : 'text-slate-400'}`} />
@@ -240,6 +257,7 @@ export default function QuinielaHub() {
           )}
         </div>
       </div>
+      <AuthGateModal {...gateProps} />
     </PageTransition>
   )
 }

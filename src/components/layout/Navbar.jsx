@@ -37,21 +37,23 @@ export default function Navbar({ onMenuOpen }) {
           <Menu className="w-5 h-5" />
         </motion.button>
 
-        {/* ── MOBILE: logo centered (absolute) ── */}
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/')}
-          className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2 group"
-        >
-          <div className="relative">
-            <div className="absolute inset-0 bg-amber-400/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Trophy className="w-6 h-6 text-amber-400 relative" />
-          </div>
-          <span className="font-black text-lg tracking-tight">
-            <span className="gold-text">WC</span>
-            <span className="text-white"> 2026</span>
-          </span>
-        </motion.button>
+        {/* ── MOBILE: logo centered (absolute wrapper handles centering, motion handles tap scale) ── */}
+        <div className="md:hidden absolute left-1/2 -translate-x-1/2">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 group"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-amber-400/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Trophy className="w-6 h-6 text-amber-400 relative" />
+            </div>
+            <span className="font-black text-lg tracking-tight">
+              <span className="gold-text">WC</span>
+              <span className="text-white"> 2026</span>
+            </span>
+          </motion.button>
+        </div>
 
         {/* ── DESKTOP: logo (left) ── */}
         <motion.button
