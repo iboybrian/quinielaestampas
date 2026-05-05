@@ -35,11 +35,12 @@ BrowserRouter → AuthProvider → LangProvider → App
 - **LangProvider** (`src/contexts/LangContext.jsx`): i18n, Spanish default. `useLang()` returns `{ lang, toggle, t }` where `t` is full translation object from `src/lib/translations.js`.
 
 ### Layout system
-`App.jsx` owns `sidebarOpen` state, passes `onMenuOpen` to Navbar, `isOpen/onClose` to Sidebar. Every page wrapped in `<PageTransition>` — applies `pt-16 pb-20 md:pb-8` (fixed 64px navbar top, 64px footer bottom on mobile).
+`App.jsx` owns `sidebarOpen` state, passes `onMenuOpen` to Navbar, `isOpen/onClose` to Sidebar. Every page wrapped in `<PageTransition>` — applies `pt-16 pb-6 md:pb-8` (fixed 64px navbar top; small bottom buffer because the mobile bottom-nav auto-hides on scroll). `App.jsx` also resets `window.scrollTo(0,0)` on every `location.pathname` change so logo/nav clicks always land at the top of the new page.
 
-- **Navbar**: hamburger + absolute-centered logo on mobile; logo-left, centered nav links, lang toggle + auth button on desktop. `md:hidden` bottom Footer is mobile only.
+- **Navbar**: hamburger + absolute-centered logo on mobile; logo-left, centered nav links, lang toggle + auth button on desktop. The mobile logo is wrapped in a centering `<div>` so Framer Motion's `whileTap` transform doesn't override the `-translate-x-1/2`.
 - **Sidebar**: mobile slide-out panel, triggered by hamburger.
-- **SiteFooter** (`components/layout/SiteFooter.jsx`): site-wide legal footer rendered in document flow at the bottom of every page. `bg-gradient-to-b from-slate-900 to-emerald-950/40`, copyright + links to `/privacy` + `/terms`. Mobile bottom-nav `Footer` (md:hidden, fixed) overlays on top.
+- **Footer** (mobile bottom nav, `md:hidden fixed`): three core shortcuts (Album / Predicciones / Perfil). **Auto-hides on scroll down, slides back in on scroll up** via an internal `useAutoHideOnScroll` hook (rAF-throttled, 8px jitter threshold, top-lock zone). Animated with Framer Motion `animate={{ y: hidden ? 80 : 0 }}`.
+- **SiteFooter** (`components/layout/SiteFooter.jsx`): site-wide legal footer in document flow at the bottom of every page. `bg-gradient-to-b from-slate-900 to-emerald-950/40`, copyright + links to `/privacy` + `/terms`. Uses `pb-20 md:pb-6` so its content stays above the mobile fixed bottom-nav even when that nav is visible.
 
 ### Legal pages & signup acceptance
 Two legal pages share a `Section` renderer that handles a `richFirstWord[]` array (each entry is the bold prefix for the corresponding paragraph; `null` skips bold for that paragraph). Both render an optional `preamble` paragraph between the header and the first section.
@@ -50,6 +51,35 @@ Two legal pages share a `Section` renderer that handles a `richFirstWord[]` arra
 Content lives in `t.privacy` and `t.terms` (sections + `preamble`) in `translations.js`. Footer line is `t.privacy.footer` / `t.terms.footer`. Official contact email is `support@quinielaestampas.com` — referenced in privacy "Contacto" and "Tus Derechos".
 
 Signup flow ([`Auth.jsx`](src/pages/Auth.jsx)) requires `acceptedLegal` checkbox in register mode. Submit button is disabled until checked (`disabled={... || (mode === 'register' && !acceptedLegal)}`). Strings live in `t.legal.{acceptPrefix,acceptAnd,acceptRequired}`. Checkbox uses `accent-emerald-500`, links use `text-emerald-500`. Login mode skips the checkbox.
+
+### Auth gate (guest action interception)
+Guests can browse pages but write actions are blocked behind a floating modal:
+
+- Hook: `useAuthGate()` (`src/hooks/useAuthGate.js`) → `{ requireAuth(cb, ctx?), isAuthed, gateProps }`.
+  - `requireAuth(cb, { message })` runs `cb()` if signed in, otherwise opens the modal with optional context message and returns `false`. Pass `null` as the callback when you only want the gate check (e.g. inside an existing handler that should bail).
+- Modal: `<AuthGateModal {...gateProps} />` (`src/components/ui/AuthGateModal.jsx`) — dismissable (X / backdrop / Cancel), backdrop blur, three CTAs (Sign Up / Sign In / Cancel), navigates to `/auth`.
+- Strings: `t.authGate.{title,defaultMessage,signUp,signIn,cancel,messages.*}` — `messages` keys are per-action (`createQuiniela`, `joinQuiniela`, `toggleSticker`, etc.).
+
+**What is gated vs. what stays static:** specific write actions trigger the modal (sticker Have/Need/Duplicate toggles, QuinielaHub Create/Join card clicks). Tabs that require an account (Marketplace Trade / Mercado / Chats) keep their existing inline empty states (`if (!user) return <SignInPrompt />`) — don't gate the tab click itself, let users land on the tab and read the prompt.
+
+**Landing page CTA**: Home renders an inline "Crea tu cuenta gratis →" link in the subtitle and small "Requiere cuenta" lock badges in the corner of the Album/Quinielas cards (both `!user`-only). The decorative banner with two large buttons was removed because it read as cluttered; do not re-add unless the design system is rethought.
+
+### Framer Motion + Tailwind transform gotcha
+Framer Motion's `animate`/`whileTap`/`whileHover` props that include `x`, `y`, `scale`, or `rotate` write to the element's inline `transform` style and **override Tailwind transform utilities** (`-translate-x-1/2`, `translate-y-full`, etc.). Symptoms: an element using `whileTap={{ scale: 0.95 }}` snaps out of its centered position, a modal using `animate={{ y: 0 }}` ignores `-translate-y-1/2` and renders top-aligned.
+
+Pattern to use: wrap the element in a non-animated parent that owns the layout, and let the inner motion element only animate scale/opacity/y-offset.
+
+```jsx
+<div className="absolute left-1/2 -translate-x-1/2">
+  <motion.button whileTap={{ scale: 0.95 }}>{logo}</motion.button>
+</div>
+
+<div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+  <motion.div animate={{ y: 0 }} className="pointer-events-auto">{modal}</motion.div>
+</div>
+```
+
+Both `Navbar` (mobile logo) and `AuthGateModal` already follow this pattern — keep it when adding new animated centered elements.
 
 ### Data flow — Supabase hooks
 Hooks in `src/hooks/` abstract all Supabase queries:
