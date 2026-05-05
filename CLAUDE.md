@@ -39,6 +39,17 @@ BrowserRouter → AuthProvider → LangProvider → App
 
 - **Navbar**: hamburger + absolute-centered logo on mobile; logo-left, centered nav links, lang toggle + auth button on desktop. `md:hidden` bottom Footer is mobile only.
 - **Sidebar**: mobile slide-out panel, triggered by hamburger.
+- **SiteFooter** (`components/layout/SiteFooter.jsx`): site-wide legal footer rendered in document flow at the bottom of every page. `bg-gradient-to-b from-slate-900 to-emerald-950/40`, copyright + links to `/privacy` + `/terms`. Mobile bottom-nav `Footer` (md:hidden, fixed) overlays on top.
+
+### Legal pages & signup acceptance
+Two legal pages share a `Section` renderer that handles a `richFirstWord[]` array (each entry is the bold prefix for the corresponding paragraph; `null` skips bold for that paragraph). Both render an optional `preamble` paragraph between the header and the first section.
+
+- `/privacy` — [`PrivacyPolicy.jsx`](src/pages/PrivacyPolicy.jsx), amber accent.
+- `/terms` — [`Terms.jsx`](src/pages/Terms.jsx), emerald accent.
+
+Content lives in `t.privacy` and `t.terms` (sections + `preamble`) in `translations.js`. Footer line is `t.privacy.footer` / `t.terms.footer`. Official contact email is `support@quinielaestampas.com` — referenced in privacy "Contacto" and "Tus Derechos".
+
+Signup flow ([`Auth.jsx`](src/pages/Auth.jsx)) requires `acceptedLegal` checkbox in register mode. Submit button is disabled until checked (`disabled={... || (mode === 'register' && !acceptedLegal)}`). Strings live in `t.legal.{acceptPrefix,acceptAnd,acceptRequired}`. Checkbox uses `accent-emerald-500`, links use `text-emerald-500`. Login mode skips the checkbox.
 
 ### Data flow — Supabase hooks
 Hooks in `src/hooks/` abstract all Supabase queries:
