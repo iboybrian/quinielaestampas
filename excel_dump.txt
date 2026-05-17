@@ -31,16 +31,18 @@ SHEET: Coca-Colas's Specials
 Headers: ['ID', 'Description']
 {'ID': 'CC1', 'Description': 'Lamine Yamal'}
 {'ID': 'CC2', 'Description': 'Joshua Kimmich'}
-{'ID': 'CC3', 'Description': 'Eduardo Camavinga'}
-{'ID': 'CC4', 'Description': 'Joško Gvardiol'}
-{'ID': 'CC5', 'Description': 'Federico Valverde'}
-{'ID': 'CC6', 'Description': 'Virgil van Dijk'}
-{'ID': 'CC7', 'Description': 'Alphonso Davies'}
-{'ID': 'CC8', 'Description': 'Raúl Jiménez'}
-{'ID': 'CC9', 'Description': 'William Saliba'}
-{'ID': 'CC10', 'Description': 'Lautaro Martínez'}
-{'ID': 'CC11', 'Description': 'Harry Kane'}
-{'ID': 'CC12', 'Description': 'Antonee Robinson'}
+{'ID': 'CC3', 'Description': 'Harry Kane'}
+{'ID': 'CC4', 'Description': 'Santiago Gimenez'}
+{'ID': 'CC5', 'Description': 'Joško Gvardiol'}
+{'ID': 'CC6', 'Description': 'Federico Valverde'}
+{'ID': 'CC7', 'Description': 'Jefferson Lerma'}
+{'ID': 'CC8', 'Description': 'Enner Valencia'}
+{'ID': 'CC9', 'Description': 'Gabriel Magalhães'}
+{'ID': 'CC10', 'Description': 'Virgil van Dijk'}
+{'ID': 'CC11', 'Description': 'Alphonso Davies'}
+{'ID': 'CC12', 'Description': 'Emiliano Martiniez'}
+{'ID': 'CC13', 'Description': 'Raúl Jiménez'}
+{'ID': 'CC14', 'Description': 'Lautaro Martinez'}
 
 ================================================================================
 SHEET: A1 México
