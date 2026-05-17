@@ -11,17 +11,19 @@ export function useTradeNotifications() {
   const tradeIdsRef = useRef([])
 
   useEffect(() => {
-    if (!user) return
-    let channel
+  if (!user) return
+  let channel  // keep this
+  let cancelled = false  // add this
 
-    async function setup() {
-      // Fetch trades involving this user
-      const { data: trades } = await supabase
-        .from('trade_requests')
-        .select('id, from_user, to_user')
-        .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
+  async function setup() {
+    const { data: trades } = await supabase
+      .from('trade_requests')
+      .select('id, from_user, to_user')
+      .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
 
-      if (!trades?.length) return
+    if (!trades?.length || cancelled) return  // 👈 bail if cleanup already ran
+
+    // ... rest of your existing logic unchanged ...
 
       tradeIdsRef.current = trades.map((t) => t.id)
 
@@ -43,26 +45,30 @@ export function useTradeNotifications() {
 
       // Realtime: listen for new messages in any of these trades
       channel = supabase
-        .channel(`trade-notifications-${user.id}`)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-          const msg = payload.new
-          if (msg.sender_id === user.id) return
-          if (!tradeIdsRef.current.includes(msg.trade_id)) return
-          setUnreadTrades((prev) => ({
-            ...prev,
-            [msg.trade_id]: {
-              count: (prev[msg.trade_id]?.count ?? 0) + 1,
-              lastMsg: msg.content,
-              partnerUsername: partners[msg.trade_id]?.partnerUsername ?? 'Collector',
-            },
-          }))
-        })
-        .subscribe()
-    }
+      .channel(`trade-notifications-${user.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+  const msg = payload.new
+  if (msg.sender_id === user.id) return
+  if (!tradeIdsRef.current.includes(msg.trade_id)) return
+  setUnreadTrades((prev) => ({
+    ...prev,
+    [msg.trade_id]: {
+      count: (prev[msg.trade_id]?.count ?? 0) + 1,
+      lastMsg: msg.content,
+      partnerUsername: partners[msg.trade_id]?.partnerUsername ?? 'Collector',
+    },
+  }))
+})
+.subscribe()
+  }
 
-    setup()
-    return () => { channel?.unsubscribe() }
-  }, [user])
+  setup()
+
+  return () => {
+    cancelled = true                          // 👈 prevent late setup from subscribing
+    if (channel) supabase.removeChannel(channel)  // 👈 fully deregisters the channel
+  }
+}, [user])
 
   const markTradeRead = useCallback((tradeId) => {
     setUnreadTrades((prev) => {
