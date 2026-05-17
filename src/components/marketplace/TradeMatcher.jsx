@@ -8,6 +8,17 @@ import { ALL_STICKERS } from '../../lib/stickerData'
 import { countryNameToCode } from '../../lib/countries'
 import Flag from '../ui/Flag'
 
+import { ALL_STICKERS } from '../../lib/stickerData'
+
+useEffect(() => {
+  if (!user) { setLoading(false); return }
+  const allIds = ALL_STICKERS.map((s) => s.id)  // ← agrega esto
+  findTradeMatches(user.id, allIds)              // ← pasa allIds
+    .then(setMatches)
+    .catch(() => setMatches([]))
+    .finally(() => setLoading(false))
+}, [user])
+
 const MAX_STICKER_CHIPS = 3
 
 function StickerChip({ stickerId, colorClass }) {
