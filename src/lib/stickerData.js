@@ -246,16 +246,18 @@ export const SPECIAL_STICKERS = [
   // Coca-Cola's Specials
   { id: 'CC1',  name: 'Lamine Yamal',      rarity: 'legendary', emoji: '⭐' },
   { id: 'CC2',  name: 'Joshua Kimmich',    rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC3',  name: 'Eduardo Camavinga', rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC4',  name: 'Joško Gvardiol',    rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC5',  name: 'Federico Valverde', rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC6',  name: 'Virgil van Dijk',   rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC7',  name: 'Alphonso Davies',   rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC8',  name: 'Raúl Jiménez',      rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC9',  name: 'William Saliba',    rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC10', name: 'Lautaro Martínez',  rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC11', name: 'Harry Kane',        rarity: 'legendary', emoji: '⭐' },
-  { id: 'CC12', name: 'Antonee Robinson',  rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC3',  name: 'Harry Kane', rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC4',  name: 'Santiago Gimenez',    rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC5',  name: 'Joško Gvardiol', rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC6',  name: 'Federico Valverde',   rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC7',  name: 'Jefferson Lerma',   rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC8',  name: 'Enner Valencia',      rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC9',  name: 'Gabriel Magalhães',    rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC10', name: 'Virgil van Dijk',  rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC11', name: 'Alphonso Davies',        rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC12', name: 'Emiliano Martiniez',  rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC13', name: 'Raúl Jiménez',  rarity: 'legendary', emoji: '⭐' },
+  { id: 'CC14', name: 'Lautaro Martinez',  rarity: 'legendary', emoji: '⭐' },
 ]
 
 // Per-team rarity overrides for players based on real-world fame/stats.
