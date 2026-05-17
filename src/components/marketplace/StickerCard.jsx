@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { Star, Plus, Check, Copy, CopyMinus } from 'lucide-react'
 import { RARITY_STYLES } from '../../lib/stickerData'
 
-export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, onToggleHave, onToggleNeed, onMarkDuplicate, onRemoveDuplicate, compact = false }) {
+export default function StickerCard({ sticker, hasIt, duplicates = 0, onToggleHave, onMarkDuplicate, onRemoveDuplicate, compact = false }) {
+  const needsIt = !hasIt
   const style = RARITY_STYLES[sticker.rarity] ?? RARITY_STYLES.common
   const isLegendary = sticker.rarity === 'legendary'
   const isRare = sticker.rarity === 'rare'
@@ -70,7 +71,7 @@ export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, o
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.88 }}
-            onClick={(e) => { e.stopPropagation(); onToggleNeed(sticker.id) }}
+            
             className={`flex-1 rounded-lg py-1 text-[10px] font-bold transition-all flex items-center justify-center gap-1 ${
               needsIt
                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
