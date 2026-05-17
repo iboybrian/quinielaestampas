@@ -73,8 +73,8 @@ export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, o
             onClick={(e) => { e.stopPropagation(); onToggleNeed(sticker.id) }}
             className={`flex-1 rounded-lg py-1 text-[10px] font-bold transition-all flex items-center justify-center gap-1 ${
               needsIt
-                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                : 'bg-white/5 text-slate-500 hover:bg-amber-500/10 hover:text-amber-400 border border-white/5'
+                ? 'bg-white/10 text-white border border-white/20'
+                : 'bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white border border-white/5'
             }`}
           >
             {needsIt ? '★' : '☆'}
