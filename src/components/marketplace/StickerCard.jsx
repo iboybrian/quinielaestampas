@@ -15,7 +15,7 @@ export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, o
       className={`relative rounded-2xl border overflow-hidden cursor-pointer select-none transition-all duration-200
         ${style.border} ${style.bg} ${style.glow}
         ${hasIt ? 'ring-2 ring-emerald-400/60' : ''}
-        ${needsIt && !hasIt ? 'ring-2 ring-white/20' : ''}
+        ${needsIt && !hasIt ? 'border-white/20' : style.border}
         ${!hasIt && !needsIt ? 'opacity-50' : ''}
       `}
     >
