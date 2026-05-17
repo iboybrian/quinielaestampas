@@ -124,57 +124,57 @@ export async function findDuplicateOwners(stickerId, currentUserId) {
     .map((r) => ({ ...r.profiles, extras: r.quantity - 1 }))
 }
 
-export async function findTradeMatches(userId, allStickerIds) {
-  // Lo que tengo (owned y extras) — UNA sola query
-  const { data: myOwned } = await supabase
+export async function findTradeMatches(userId) {
+  // Get what I need
+  const { data: myNeeds } = await supabase
     .from('user_stickers')
-    .select('sticker_id, quantity')
+    .select('sticker_id')
     .eq('user_id', userId)
-    .gt('quantity', 0)
+    .eq('is_needed', true)
 
-  const myOwnedSet = new Set(myOwned?.map((s) => s.sticker_id) ?? [])
-  const extraIds = myOwned?.filter((s) => s.quantity > 1).map((s) => s.sticker_id) ?? []
+  // Get what I have extras of (quantity > 1)
+  const { data: myExtras } = await supabase
+    .from('user_stickers')
+    .select('sticker_id')
+    .eq('user_id', userId)
+    .gt('quantity', 1)
 
-  // Lo que necesito = todo lo que NO tengo ← aquí está el cambio clave
-  const needIds = allStickerIds.filter((id) => !myOwnedSet.has(id))
+  if (!myNeeds?.length || !myExtras?.length) return []
 
-  if (!needIds.length && !extraIds.length) return []
+  const needIds = myNeeds.map((s) => s.sticker_id)
+  const extraIds = myExtras.map((s) => s.sticker_id)
 
+  // Find users who have what I need (quantity > 1 = has extras to trade)
+  const { data: haveWhatINeed } = await supabase
+    .from('user_stickers')
+    .select('user_id, sticker_id')
+    .in('sticker_id', needIds)
+    .gt('quantity', 1)
+    .neq('user_id', userId)
+
+  // Find users who need what I have
+  const { data: needWhatIHave } = await supabase
+    .from('user_stickers')
+    .select('user_id, sticker_id')
+    .in('sticker_id', extraIds)
+    .eq('is_needed', true)
+    .neq('user_id', userId)
+
+  // Score + per-user sticker lists
   const scoreMap = {}
   const theyHaveINeedMap = {}
   const iHaveTheyNeedMap = {}
 
-  if (needIds.length) {
-    const { data: haveWhatINeed } = await supabase
-      .from('user_stickers')
-      .select('user_id, sticker_id')
-      .in('sticker_id', needIds)
-      .gt('quantity', 1)
-      .neq('user_id', userId)
-
-    haveWhatINeed?.forEach(({ user_id, sticker_id }) => {
-      scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
-      if (!theyHaveINeedMap[user_id]) theyHaveINeedMap[user_id] = []
-      theyHaveINeedMap[user_id].push(sticker_id)
-    })
-  }
-
-  if (extraIds.length) {
-    const { data: needWhatIHave } = await supabase
-      .from('user_stickers')
-      .select('user_id, sticker_id')
-      .in('sticker_id', extraIds)
-      .gt('quantity', 0)
-      .neq('user_id', userId)
-
-    // Quienes NO tienen esas estampas = las necesitan
-    needWhatIHave?.forEach(({ user_id, sticker_id }) => {
-      if (!myOwnedSet.has(sticker_id)) return
-      scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
-      if (!iHaveTheyNeedMap[user_id]) iHaveTheyNeedMap[user_id] = []
-      iHaveTheyNeedMap[user_id].push(sticker_id)
-    })
-  }
+  haveWhatINeed?.forEach(({ user_id, sticker_id }) => {
+    scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
+    if (!theyHaveINeedMap[user_id]) theyHaveINeedMap[user_id] = []
+    theyHaveINeedMap[user_id].push(sticker_id)
+  })
+  needWhatIHave?.forEach(({ user_id, sticker_id }) => {
+    scoreMap[user_id] = (scoreMap[user_id] || 0) + 1
+    if (!iHaveTheyNeedMap[user_id]) iHaveTheyNeedMap[user_id] = []
+    iHaveTheyNeedMap[user_id].push(sticker_id)
+  })
 
   const topUserIds = Object.entries(scoreMap)
     .sort(([, a], [, b]) => b - a)
