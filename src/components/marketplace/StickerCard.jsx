@@ -15,7 +15,7 @@ export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, o
       className={`relative rounded-2xl border overflow-hidden cursor-pointer select-none transition-all duration-200
         ${style.border} ${style.bg} ${style.glow}
         ${hasIt ? 'ring-2 ring-emerald-400/60' : ''}
-        ${needsIt && !hasIt ? 'border-white/20' : style.border}
+        ${needsIt && !hasIt ? 'ring-2 ring-white/30' : ''}
         ${!hasIt && !needsIt ? 'opacity-50' : ''}
       `}
     >
@@ -72,12 +72,12 @@ export default function StickerCard({ sticker, hasIt, needsIt, duplicates = 0, o
             whileTap={{ scale: 0.88 }}
             onClick={(e) => { e.stopPropagation(); onToggleNeed(sticker.id) }}
             className={`flex-1 rounded-lg py-1 text-[10px] font-bold transition-all flex items-center justify-center gap-1 ${
-              needsIt
-                ? 'bg-white/10 text-white border border-white/20'
+              needsIt && !hasIt
+                ? 'bg-white/15 text-white border border-white/25'
                 : 'bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white border border-white/5'
             }`}
           >
-            {needsIt ? '★' : '☆'}
+            {needsIt && !hasIt ? <Star className="w-3 h-3 fill-white" /> : <Star className="w-3 h-3" />}
             Need
           </motion.button>
         </div>
