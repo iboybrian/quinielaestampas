@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare, Search, X } from 'lucide-react'
+import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare, Search, X, Download } from 'lucide-react'
 import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
 import { useTradeNotifications } from '../hooks/useTradeNotifications'
@@ -212,6 +212,58 @@ export default function Marketplace() {
     }
   }
 
+  const exportNeeded = () => {
+    const neededIds = new Set(
+      Object.entries(collection)
+        .filter(([, s]) => s.isNeeded)
+        .map(([id]) => id)
+    )
+    if (neededIds.size === 0) return
+
+    const lines = []
+    lines.push('=== Estampas que necesito — Mundial 2026 ===')
+    lines.push(`Fecha: ${new Date().toLocaleDateString('es-ES')}`)
+    lines.push(`Total: ${neededIds.size} estampas`)
+    lines.push('')
+
+    const groups = {}
+    TEAMS.forEach((team) => {
+      if (!groups[team.group]) groups[team.group] = []
+      groups[team.group].push(team)
+    })
+
+    Object.keys(groups).sort().forEach((groupLetter) => {
+      const groupLines = []
+      groups[groupLetter].forEach((team) => {
+        const numbers = ALL_STICKERS
+          .filter((s) => s.teamCode === team.code && neededIds.has(s.id))
+          .sort((a, b) => a.number - b.number)
+          .map((s) => s.number)
+        if (numbers.length > 0) groupLines.push(`${team.code}: ${numbers.join(', ')}`)
+      })
+      if (groupLines.length > 0) {
+        lines.push(`--- Grupo ${groupLetter} ---`)
+        groupLines.forEach((l) => lines.push(l))
+        lines.push('')
+      }
+    })
+
+    const specStickers = ALL_STICKERS
+      .filter((s) => s.teamCode === 'SPEC' && neededIds.has(s.id))
+    if (specStickers.length > 0) {
+      lines.push('--- Especiales ---')
+      lines.push(specStickers.map((s) => s.id).join(', '))
+    }
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'estampas-faltantes.txt'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const displayedStickers = useMemo(() => {
     let stickers = selectedTeam === 'ALL'
       ? ALL_STICKERS
@@ -338,9 +390,19 @@ export default function Marketplace() {
                     {t.marketplace.filters[key]}
                   </button>
                 ))}
-                <span className="ml-auto text-xs text-slate-600 self-center">
-                  {displayedStickers.length} {t.marketplace.stickersLabel}
-                </span>
+                <div className="ml-auto flex items-center gap-2">
+                  <span className="text-xs text-slate-600 self-center">
+                    {displayedStickers.length} {t.marketplace.stickersLabel}
+                  </span>
+                  <button
+                    onClick={exportNeeded}
+                    disabled={stats.needed === 0}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Download className="w-3 h-3" />
+                    Descargar faltantes
+                  </button>
+                </div>
               </div>
 
               {/* Sticker grid */}
