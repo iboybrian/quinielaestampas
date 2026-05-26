@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRightLeft, BookOpen, Loader2, ShoppingBag, MessageSquare, Search, X, Download } from 'lucide-react'
-import { TEAMS, ALL_STICKERS, SPECIAL_STICKERS } from '../lib/stickerData'
+import { TEAMS, ALL_STICKERS, FWC_STICKERS, CC_STICKERS } from '../lib/stickerData'
 import { useMyCollection } from '../hooks/useStickers'
 import { useTradeNotifications } from '../hooks/useTradeNotifications'
 import { useAuthGate } from '../hooks/useAuthGate'
@@ -319,8 +319,10 @@ export default function Marketplace() {
   const displayedStickers = useMemo(() => {
     let stickers = selectedTeam === 'ALL'
       ? ALL_STICKERS
-      : selectedTeam === 'SPEC'
-      ? SPECIAL_STICKERS.map((s) => ({ ...s, teamCode: 'SPEC', type: 'special' }))
+      : selectedTeam === 'FWC'
+      ? FWC_STICKERS.map((s) => ({ ...s, teamCode: 'SPEC', type: 'special' }))
+      : selectedTeam === 'CC'
+      ? CC_STICKERS.map((s) => ({ ...s, teamCode: 'SPEC', type: 'special' }))
       : ALL_STICKERS.filter((s) => s.teamCode === selectedTeam)
 
     switch (filter) {
@@ -337,6 +339,8 @@ export default function Marketplace() {
     ALL_STICKERS.filter((s) => s.teamCode === teamCode && hasSticker(s.id)).length
   const getTeamTotal = (teamCode) =>
     ALL_STICKERS.filter((s) => s.teamCode === teamCode).length
+  const getFwcOwned = () => FWC_STICKERS.filter((s) => hasSticker(s.id)).length
+  const getCcOwned  = () => CC_STICKERS.filter((s) => hasSticker(s.id)).length
 
   return (
     <PageTransition>
@@ -421,13 +425,28 @@ export default function Marketplace() {
                   />
                 ))}
                 <motion.button whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedTeam('SPEC')}
+                  onClick={() => setSelectedTeam('FWC')}
                   className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                    selectedTeam === 'SPEC'
+                    selectedTeam === 'FWC'
                       ? 'bg-amber-500/20 text-amber-400 border border-amber-400/30'
                       : 'bg-white/5 text-slate-400 hover:bg-white/10 border border-transparent'
                   }`}>
-                  {t.marketplace.special}
+                  <div>FWC</div>
+                  <div className={`text-[9px] mt-1 ${getFwcOwned() === FWC_STICKERS.length ? 'text-emerald-400' : 'text-slate-600'}`}>
+                    {getFwcOwned()}/{FWC_STICKERS.length}
+                  </div>
+                </motion.button>
+                <motion.button whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedTeam('CC')}
+                  className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    selectedTeam === 'CC'
+                      ? 'bg-red-500/20 text-red-400 border border-red-400/30'
+                      : 'bg-white/5 text-slate-400 hover:bg-white/10 border border-transparent'
+                  }`}>
+                  <div>Coca-Cola</div>
+                  <div className={`text-[9px] mt-1 ${getCcOwned() === CC_STICKERS.length ? 'text-emerald-400' : 'text-slate-600'}`}>
+                    {getCcOwned()}/{CC_STICKERS.length}
+                  </div>
                 </motion.button>
               </div>
 

@@ -221,7 +221,6 @@ export const TEAMS = [
   },
 ]
 
-// FWC special stickers — Panini IDs from Specials sheet
 export const SPECIAL_STICKERS = [
   { id: '0',     name: 'Panini Logo',                                          rarity: 'rare',      emoji: '📖' },
   { id: 'FWC1',  name: 'Official Emblem 1',                                    rarity: 'rare',      emoji: '🌍' },
@@ -395,6 +394,9 @@ export function generateTeamStickers(team) {
 
   return stickers
 }
+
+export const FWC_STICKERS = SPECIAL_STICKERS.filter((s) => s.id === '0' || s.id.startsWith('FWC'))
+export const CC_STICKERS  = SPECIAL_STICKERS.filter((s) => s.id.startsWith('CC'))
 
 export const ALL_STICKERS = [
   ...TEAMS.flatMap(generateTeamStickers),
