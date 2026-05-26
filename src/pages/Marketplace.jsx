@@ -57,7 +57,7 @@ function TeamSearch({ getTeamOwned, getTeamTotal, onSelect, placeholder, noResul
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return TEAMS
-    return TEAMS.filter((tm) => tm.name.toLowerCase().includes(q))
+    return TEAMS.filter((tm) => tm.name.toLowerCase().includes(q) || tm.code.toLowerCase().includes(q))
   }, [query])
 
   const handleFocus = () => {
