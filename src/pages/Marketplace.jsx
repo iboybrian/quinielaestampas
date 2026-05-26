@@ -16,7 +16,7 @@ import ChatInbox from '../components/marketplace/ChatInbox'
 import AchievementOverlay, { useAchievements } from '../components/animations/AchievementOverlay'
 import PageTransition from '../components/layout/PageTransition'
 
-const FILTER_KEYS = ['All', 'Have', 'Missing']
+const FILTER_KEYS = ['All', 'Have', 'Missing', 'Duplicate']
 
 function TeamTab({ team, isActive, ownedCount, totalCount, onClick }) {
   const pct = Math.round((ownedCount / totalCount) * 100)
@@ -264,6 +264,58 @@ export default function Marketplace() {
     URL.revokeObjectURL(url)
   }
 
+  const exportDuplicates = () => {
+    const dupIds = Object.entries(collection)
+      .filter(([, s]) => s.quantity > 1)
+      .map(([id, s]) => ({ id, extras: s.quantity - 1 }))
+    if (dupIds.length === 0) return
+
+    const extrasMap = Object.fromEntries(dupIds.map(({ id, extras }) => [id, extras]))
+
+    const lines = []
+    lines.push('=== Estampas repetidas — Mundial 2026 ===')
+    lines.push(`Fecha: ${new Date().toLocaleDateString('es-ES')}`)
+    lines.push(`Total: ${dupIds.length} estampas con repetidas`)
+    lines.push('')
+
+    const groups = {}
+    TEAMS.forEach((team) => {
+      if (!groups[team.group]) groups[team.group] = []
+      groups[team.group].push(team)
+    })
+
+    Object.keys(groups).sort().forEach((groupLetter) => {
+      const groupLines = []
+      groups[groupLetter].forEach((team) => {
+        const stickers = ALL_STICKERS
+          .filter((s) => s.teamCode === team.code && extrasMap[s.id])
+          .sort((a, b) => a.number - b.number)
+          .map((s) => extrasMap[s.id] > 1 ? `${s.number} ×${extrasMap[s.id]}` : `${s.number}`)
+        if (stickers.length > 0) groupLines.push(`${team.code}: ${stickers.join(', ')}`)
+      })
+      if (groupLines.length > 0) {
+        lines.push(`--- Grupo ${groupLetter} ---`)
+        groupLines.forEach((l) => lines.push(l))
+        lines.push('')
+      }
+    })
+
+    const specStickers = ALL_STICKERS
+      .filter((s) => s.teamCode === 'SPEC' && extrasMap[s.id])
+    if (specStickers.length > 0) {
+      lines.push('--- Especiales ---')
+      lines.push(specStickers.map((s) => extrasMap[s.id] > 1 ? `${s.id} ×${extrasMap[s.id]}` : s.id).join(', '))
+    }
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'estampas-repetidas.txt'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const displayedStickers = useMemo(() => {
     let stickers = selectedTeam === 'ALL'
       ? ALL_STICKERS
@@ -274,7 +326,8 @@ export default function Marketplace() {
     switch (filter) {
       case 'Have':    stickers = stickers.filter((s) => hasSticker(s.id));  break
       case 'Needed':  stickers = stickers.filter((s) => needsSticker(s.id)); break
-      case 'Missing': stickers = stickers.filter((s) => !hasSticker(s.id)); break
+      case 'Missing':   stickers = stickers.filter((s) => !hasSticker(s.id)); break
+      case 'Duplicate': stickers = stickers.filter((s) => duplicateCount(s.id) > 0); break
       default: break
     }
     return stickers
@@ -378,8 +431,28 @@ export default function Marketplace() {
                 </motion.button>
               </div>
 
+              {/* Download buttons */}
+              <div className="flex justify-end gap-2 mb-3">
+                <button
+                  onClick={exportDuplicates}
+                  disabled={!Object.values(collection).some((s) => s.quantity > 1)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-400/20 hover:bg-amber-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <Download className="w-3 h-3" />
+                  Descargar repetidas
+                </button>
+                <button
+                  onClick={exportNeeded}
+                  disabled={stats.needed === 0}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <Download className="w-3 h-3" />
+                  Descargar faltantes
+                </button>
+              </div>
+
               {/* Filter chips */}
-              <div className="flex gap-2 mb-5 flex-wrap">
+              <div className="flex gap-2 mb-5 flex-wrap items-center">
                 {FILTER_KEYS.map((key) => (
                   <button key={key} onClick={() => setFilter(key)}
                     className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
@@ -390,19 +463,9 @@ export default function Marketplace() {
                     {t.marketplace.filters[key]}
                   </button>
                 ))}
-                <div className="ml-auto flex items-center gap-2">
-                  <span className="text-xs text-slate-600 self-center">
-                    {displayedStickers.length} {t.marketplace.stickersLabel}
-                  </span>
-                  <button
-                    onClick={exportNeeded}
-                    disabled={stats.needed === 0}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <Download className="w-3 h-3" />
-                    Descargar faltantes
-                  </button>
-                </div>
+                <span className="ml-auto text-xs text-slate-600 self-center">
+                  {displayedStickers.length} {t.marketplace.stickersLabel}
+                </span>
               </div>
 
               {/* Sticker grid */}
