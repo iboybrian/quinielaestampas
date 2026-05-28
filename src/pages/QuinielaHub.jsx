@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Key, Trophy, Copy, Check, ChevronRight, Users, Settings, Loader2 } from 'lucide-react'
+import { Plus, Key, Trophy, Copy, Check, ChevronRight, Users, Settings, Loader2, Share2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import { useMyQuinielas, createQuiniela, joinQuiniela } from '../hooks/useQuiniela'
@@ -59,6 +59,7 @@ function CreateForm({ onDone }) {
   const [loading, setLoading] = useState(false)
   const [created, setCreated] = useState(null)
   const [copied, setCopied] = useState(false)
+  const [invitationCopied, setInvitationCopied] = useState(false)
 
   const handleCreate = async () => {
     if (!name.trim() || !user) return
@@ -79,6 +80,19 @@ function CreateForm({ onDone }) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const copyInvitation = () => {
+    const link = window.location.origin
+    const text = t.quiniela.invitationText
+      .replace('{quinielaName}', created.name)
+      .replace('{creatorName}', user.user_metadata?.username || 'Admin')
+      .replace('{code}', created.code)
+      .replace('{link}', link)
+    
+    navigator.clipboard.writeText(text)
+    setInvitationCopied(true)
+    setTimeout(() => setInvitationCopied(false), 2000)
+  }
+
   if (created) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="text-center">
@@ -88,9 +102,15 @@ function CreateForm({ onDone }) {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
           <div className="text-4xl font-black text-white tracking-[0.3em] font-mono mb-3">{created.code}</div>
           <motion.button whileTap={{ scale: 0.9 }} onClick={copyCode}
-            className="flex items-center gap-2 mx-auto text-sm text-slate-400 hover:text-white transition-colors">
+            className="flex items-center gap-2 mx-auto text-sm text-slate-400 hover:text-white transition-colors mb-4">
             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             {copied ? t.quiniela.copied : t.quiniela.copyCode}
+          </motion.button>
+          
+          <motion.button whileTap={{ scale: 0.98 }} onClick={copyInvitation}
+            className="flex items-center justify-center gap-2 w-full bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 py-2.5 rounded-xl border border-white/5 transition-colors text-sm font-medium">
+            {invitationCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+            {invitationCopied ? t.quiniela.invitationCopied : t.quiniela.copyInvitation}
           </motion.button>
         </div>
         <button onClick={onDone} className="btn-primary w-full py-3">{t.quiniela.enterGroup}</button>
