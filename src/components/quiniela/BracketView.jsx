@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import { MOCK_BRACKET } from '../../lib/footballApi'
 import Flag from '../ui/Flag'
+import { useLang } from '../../contexts/LangContext'
+import { es } from 'date-fns/locale'
 
 function getWinner(match) {
   if (match.status !== 'finished') return null
@@ -14,16 +16,19 @@ function getWinner(match) {
 }
 
 function BracketTeamRow({ team, isWinner, isLoser }) {
+  const { t } = useLang()
+  const teamName = team.team === 'TBD' ? t.quiniela.tbd : (t.countries[team.team] || team.team)
+
   return (
     <motion.div
       layout
       className={`flex items-center gap-2 px-3 py-2.5 transition-all duration-500 ${
         isLoser ? 'opacity-25 grayscale' : ''
-      } ${isWinner ? 'bg-amber-500/10' : ''}`}
+      }  ${isWinner ? 'bg-amber-500/10' : ''}`}
     >
       <Flag code={team.flag} size="sm" className="flex-shrink-0" />
       <span className={`text-sm font-semibold flex-1 truncate ${isWinner ? 'text-white' : 'text-slate-300'}`}>
-        {team.team}
+        {teamName}
       </span>
       {isWinner && <span className="text-amber-400 text-xs flex-shrink-0">✓</span>}
     </motion.div>
@@ -31,6 +36,7 @@ function BracketTeamRow({ team, isWinner, isLoser }) {
 }
 
 function BracketMatch({ match }) {
+  const { lang, t } = useLang()
   const winner = getWinner(match)
   const isTBD = match.home.team === 'TBD' || match.away.team === 'TBD'
 
@@ -48,7 +54,7 @@ function BracketMatch({ match }) {
       {match.status === 'live' && (
         <div className="bg-red-500 px-2 py-0.5 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-          <span className="text-[10px] font-bold text-white uppercase">Live</span>
+          <span className="text-[10px] font-bold text-white uppercase">{t.quiniela.liveBadge}</span>
         </div>
       )}
 
@@ -73,7 +79,7 @@ function BracketMatch({ match }) {
           </div>
           {match.homePenalties != null && match.awayPenalties != null && (
             <div className="text-[10px] text-slate-600 mt-0.5">
-              (pen. {match.homePenalties} – {match.awayPenalties})
+              ({t.quiniela.penalties} {match.homePenalties} – {match.awayPenalties})
             </div>
           )}
         </div>
@@ -81,7 +87,7 @@ function BracketMatch({ match }) {
 
       {match.status === 'scheduled' && match.date && (
         <div className="px-3 py-1 text-[10px] text-slate-600 text-center">
-          {format(new Date(match.date), 'MMM d')}
+          {format(new Date(match.date), 'MMM d', { locale: lang === 'es' ? es : undefined })}
         </div>
       )}
     </motion.div>
@@ -104,11 +110,12 @@ function BracketColumn({ title, matches, accentColor }) {
 }
 
 export default function BracketView({ bracket = MOCK_BRACKET }) {
+  const { t } = useLang()
   const rounds = [
-    { key: 'r16', title: 'Round of 16', color: 'text-slate-400' },
-    { key: 'qf', title: 'Quarter-Finals', color: 'text-blue-400' },
-    { key: 'sf', title: 'Semi-Finals', color: 'text-purple-400' },
-    { key: 'final', title: 'Final', color: 'text-amber-400' },
+    { key: 'r16', title: t.quiniela.rounds.r16, color: 'text-slate-400' },
+    { key: 'qf', title: t.quiniela.rounds.qf, color: 'text-blue-400' },
+    { key: 'sf', title: t.quiniela.rounds.sf, color: 'text-purple-400' },
+    { key: 'final', title: t.quiniela.rounds.final, color: 'text-amber-400' },
   ]
 
   return (
@@ -128,7 +135,7 @@ export default function BracketView({ bracket = MOCK_BRACKET }) {
 
         {/* Champion */}
         <div className="flex flex-col items-center min-w-[130px]">
-          <div className="text-center text-xs font-black uppercase tracking-widest mb-4 text-amber-400">Champion</div>
+          <div className="text-center text-xs font-black uppercase tracking-widest mb-4 text-amber-400">{t.quiniela.champion}</div>
           <motion.div
             animate={{ boxShadow: bracket.champion ? '0 0 30px rgba(251,191,36,0.4)' : 'none' }}
             className={`w-full rounded-2xl border text-center p-5 ${
@@ -139,7 +146,7 @@ export default function BracketView({ bracket = MOCK_BRACKET }) {
           >
             <div className="text-5xl mb-3">{bracket.champion ? '🏆' : '❓'}</div>
             <div className="font-black text-white text-sm">
-              {bracket.champion ?? 'TBD'}
+              {bracket.champion ? (t.countries[bracket.champion] || bracket.champion) : t.quiniela.tbd}
             </div>
           </motion.div>
         </div>

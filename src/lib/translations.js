@@ -184,6 +184,57 @@ export const translations = {
       liveBadge: 'En vivo',
       bracketDesc: 'Bracket en vivo — ganadores avanzan, perdedores quedan fuera.',
       errorLoadGroup: 'Error al cargar el grupo. Recarga la página.',
+      locked: 'Bloqueado',
+      yourPick: 'Tu pronóstico',
+      editBtn: 'Editar',
+      addPredictionBtn: '+ Agregar Predicción',
+      yourPredictionLabel: 'Tu predicción',
+      noPredictionSubmittedLabel: 'Sin predicción registrada',
+      exactScore: 'Marcador exacto',
+      goalDiff: 'Diferencia goles',
+      winner: 'Ganador',
+      savePickBtn: 'Guardar Predicción',
+      savingText: 'Guardando…',
+      penalties: 'pen.',
+      tbd: 'Por definirse',
+      champion: 'Campeón',
+      legend: 'Leyenda:',
+      legendExact: '5 pts — Exacto',
+      legendPartial: '2–3 pts — Parcial',
+      legendFallo: '0 pts — Fallo',
+      noParticipants: 'Sin participantes aún.',
+      noMatchesInPhase: 'Sin partidos en esta fase.',
+      participant: 'Participante',
+      userDefault: 'Usuario {num}',
+      matchesPage: '{total} partidos · página {current} / {max}',
+      rounds: {
+        r16: 'Octavos de Final',
+        qf: 'Cuartos de Final',
+        sf: 'Semifinales',
+        final: 'Final',
+      },
+      stages: {
+        groupStage: 'Fase de Grupos',
+        r32: 'Dieciseisavos de Final',
+        r16: 'Octavos de Final',
+        qf: 'Cuartos de Final',
+        sf: 'Semifinales',
+        final: 'Final',
+      },
+      matrixPhases: {
+        group_1: 'Jornada 1',
+        group_2: 'Jornada 2',
+        group_3: 'Jornada 3',
+        r32: 'Dieciseisavos',
+        r16: 'Octavos',
+        qf: 'Cuartos',
+        sf: 'Semis',
+        final: 'Final',
+      },
+      predsHiddenAlert: 'Predicciones de otros participantes ocultas hasta el cierre de {count} {matchOrMatches}.',
+      predsHiddenAlertMatrix: '🔒 Predicciones ocultas en {count} {matchOrMatches} — se revelan al cierre.',
+      matchSingle: 'partido',
+      matchPlural: 'partidos',
     },
     admin: {
       title: 'Administrar Quiniela',
@@ -603,6 +654,57 @@ export const translations = {
       liveBadge: 'Live',
       bracketDesc: 'Live knockout bracket — winners advance, losers fade out.',
       errorLoadGroup: 'Error loading the group. Please reload the page.',
+      locked: 'Locked',
+      yourPick: 'Your pick',
+      editBtn: 'Edit',
+      addPredictionBtn: '+ Add Prediction',
+      yourPredictionLabel: 'Your prediction',
+      noPredictionSubmittedLabel: 'No prediction submitted',
+      exactScore: 'Exact score',
+      goalDiff: 'Goal diff',
+      winner: 'Winner',
+      savePickBtn: 'Save Pick',
+      savingText: 'Saving…',
+      penalties: 'pen.',
+      tbd: 'TBD',
+      champion: 'Champion',
+      legend: 'Legend:',
+      legendExact: '5 pts — Exact',
+      legendPartial: '2–3 pts — Partial',
+      legendFallo: '0 pts — Miss',
+      noParticipants: 'No participants yet.',
+      noMatchesInPhase: 'No matches in this phase.',
+      participant: 'Participant',
+      userDefault: 'User {num}',
+      matchesPage: '{total} matches · page {current} / {max}',
+      rounds: {
+        r16: 'Round of 16',
+        qf: 'Quarter-Finals',
+        sf: 'Semi-Finals',
+        final: 'Final',
+      },
+      stages: {
+        groupStage: 'Group Stage',
+        r32: 'Round of 32',
+        r16: 'Round of 16',
+        qf: 'Quarter-Finals',
+        sf: 'Semi-Finals',
+        final: 'Final',
+      },
+      matrixPhases: {
+        group_1: 'Matchday 1',
+        group_2: 'Matchday 2',
+        group_3: 'Matchday 3',
+        r32: 'Round of 32',
+        r16: 'Round of 16',
+        qf: 'Quarters',
+        sf: 'Semis',
+        final: 'Final',
+      },
+      predsHiddenAlert: 'Other players\' predictions are hidden until the kickoff of {count} {matchOrMatches}.',
+      predsHiddenAlertMatrix: '🔒 Predictions hidden in {count} {matchOrMatches} — revealed at kickoff.',
+      matchSingle: 'match',
+      matchPlural: 'matches',
     },
     admin: {
       title: 'Manage Pool',
@@ -837,3 +939,20 @@ export const translations = {
     },
   },
 }
+
+export function translateStage(stage, t) {
+  if (!stage) return ''
+  const s = stage.toLowerCase()
+  if (s.includes('group stage')) {
+    const parts = stage.split('-')
+    const num = parts[1] ? parts[1].trim() : ''
+    return t.quiniela.stages?.groupStage ? `${t.quiniela.stages.groupStage}${num ? ` - ${num}` : ''}` : stage
+  }
+  if (s.includes('round of 32')) return t.quiniela.stages?.r32 || stage
+  if (s.includes('round of 16')) return t.quiniela.stages?.r16 || stage
+  if (s.includes('quarter')) return t.quiniela.stages?.qf || stage
+  if (s.includes('semi')) return t.quiniela.stages?.sf || stage
+  if (s.includes('final')) return t.quiniela.stages?.final || stage
+  return stage
+}
+

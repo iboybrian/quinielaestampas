@@ -4,8 +4,11 @@ import { ArrowLeft } from 'lucide-react'
 import { format } from 'date-fns'
 import MatchCard from './MatchCard'
 import { isGroupStage } from '../../lib/footballApi'
+import { useLang } from '../../contexts/LangContext'
+import { es } from 'date-fns/locale'
 
 export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t }) {
+  const { lang } = useLang()
   const groupMatches = useMemo(
     () =>
       fixtures
@@ -71,7 +74,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
         <div key={dateStr} className="mb-7">
           <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-1">
             {dateStr !== 'unknown'
-              ? format(new Date(dateStr + 'T12:00:00'), 'EEEE, MMMM d')
+              ? format(new Date(dateStr + 'T12:00:00'), 'EEEE, MMMM d', { locale: lang === 'es' ? es : undefined })
               : 'TBD'}
           </div>
           <div className="space-y-4">
@@ -92,7 +95,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
 
       {total === 0 && (
         <div className="text-center py-16 text-slate-500 text-sm">
-          Loading fixtures…
+          {t.quiniela.loadingFixtures}
         </div>
       )}
     </div>

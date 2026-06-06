@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Lock } from 'lucide-react'
 import { calculatePoints } from '../../lib/scoring'
 import Flag from '../ui/Flag'
+import { useLang } from '../../contexts/LangContext'
 
 // ── Phase definitions ─────────────────────────────────────────────────────────
 const PHASES = [
@@ -113,6 +114,7 @@ function PredCell({ match, prediction }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function ResultsMatrix({ members, predictions, fixtures }) {
+  const { t } = useLang()
   const shouldReduce = useReducedMotion()
 
   // Build available phases from actual fixture stages
@@ -145,7 +147,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
   if (!members.length) {
     return (
       <div className="text-center py-12 text-slate-500 text-sm">
-        Sin participantes aún.
+        {t.quiniela.noParticipants}
       </div>
     )
   }
@@ -164,7 +166,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
                 : 'bg-white/5 text-slate-400 hover:bg-white/10 border border-transparent'
             }`}
           >
-            {phase.label}
+            {t.quiniela.matrixPhases[phase.key] ?? phase.label}
           </button>
         ))}
       </div>
@@ -180,7 +182,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
         >
           {phaseMatches.length === 0 ? (
             <p className="text-center text-slate-600 text-sm py-8">
-              Sin partidos en esta fase.
+              {t.quiniela.noMatchesInPhase}
             </p>
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-white/8" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
@@ -191,7 +193,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
                     <th
                       className="sticky left-0 z-20 bg-[#050B1A] border border-white/8 px-4 py-3 text-left text-[10px] uppercase tracking-wider text-slate-500 font-bold min-w-[130px] whitespace-nowrap"
                     >
-                      Participante
+                      {t.quiniela.participant}
                     </th>
                     {phaseMatches.map((match) => (
                       <th
@@ -218,7 +220,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
                             {(member.username ?? '?')[0].toUpperCase()}
                           </div>
                           <span className="text-xs font-semibold text-white truncate max-w-[80px]">
-                            {member.username ?? `User ${rowIdx + 1}`}
+                            {member.username ?? (t.quiniela.userDefault ? t.quiniela.userDefault.replace('{num}', rowIdx + 1) : `User ${rowIdx + 1}`)}
                           </span>
                         </div>
                       </td>
@@ -241,11 +243,11 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
 
       {/* Legend */}
       <div className="flex items-center gap-4 mt-3 px-1 flex-wrap">
-        <span className="text-[10px] text-slate-600 font-medium uppercase tracking-wider">Leyenda:</span>
+        <span className="text-[10px] text-slate-600 font-medium uppercase tracking-wider">{t.quiniela.legend}</span>
         {[
-          { bg: 'bg-emerald-500/20 border-emerald-500/30', label: '5 pts — Exacto' },
-          { bg: 'bg-amber-400/20 border-amber-400/30',     label: '2–3 pts — Parcial' },
-          { bg: 'bg-slate-600/10 border-white/5',          label: '0 pts — Fallo' },
+          { bg: 'bg-emerald-500/20 border-emerald-500/30', label: t.quiniela.legendExact },
+          { bg: 'bg-amber-400/20 border-amber-400/30',     label: t.quiniela.legendPartial },
+          { bg: 'bg-slate-600/10 border-white/5',          label: t.quiniela.legendFallo },
         ].map(({ bg, label }) => (
           <div key={label} className="flex items-center gap-1.5">
             <div className={`w-3 h-3 rounded-sm border ${bg}`} />
