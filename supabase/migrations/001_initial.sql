@@ -177,15 +177,21 @@ CREATE POLICY "matches_select_all"   ON public.matches FOR SELECT USING (true);
 CREATE POLICY "matches_insert_admin" ON public.matches FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 CREATE POLICY "matches_update_admin" ON public.matches FOR UPDATE USING (auth.uid() IS NOT NULL);
 
+-- Helper: SECURITY DEFINER breaks the self-referential RLS recursion
+CREATE OR REPLACE FUNCTION public.get_my_quiniela_ids()
+RETURNS SETOF UUID LANGUAGE SQL SECURITY DEFINER STABLE AS $$
+  SELECT quiniela_id FROM public.quiniela_members WHERE user_id = auth.uid();
+$$;
+
 -- Quinielas (members can read, auth can create)
 CREATE POLICY "quinielas_select_members" ON public.quinielas FOR SELECT USING (
-  id IN (SELECT quiniela_id FROM public.quiniela_members WHERE user_id = auth.uid())
+  created_by = auth.uid() OR id IN (SELECT public.get_my_quiniela_ids())
 );
 CREATE POLICY "quinielas_insert_auth" ON public.quinielas FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
 -- Quiniela members
 CREATE POLICY "qm_select_members" ON public.quiniela_members FOR SELECT USING (
-  quiniela_id IN (SELECT quiniela_id FROM public.quiniela_members WHERE user_id = auth.uid())
+  quiniela_id IN (SELECT public.get_my_quiniela_ids())
 );
 CREATE POLICY "qm_insert_auth" ON public.quiniela_members FOR INSERT WITH CHECK (auth.uid() = user_id);
 

@@ -20,7 +20,7 @@ const TBD_CLASSES = {
   header: 'bg-white/5',
 }
 
-function GroupCard({ group, index }) {
+function GroupCard({ group, index, t }) {
   const isTBD = !group.teams
   const accent = isTBD ? TBD_CLASSES : ACCENTS[index % 8]
 
@@ -34,19 +34,19 @@ function GroupCard({ group, index }) {
       {/* Header */}
       <div className={`px-4 py-2.5 ${accent.header} border-b ${accent.border}`}>
         <span className={`text-xs font-black uppercase tracking-widest ${accent.text}`}>
-          Group {group.letter}
+          {t.quiniela.groupTitle.replace('{letter}', group.letter)}
         </span>
       </div>
 
       {/* Teams */}
       <div className="p-3 space-y-1.5">
         {isTBD ? (
-          <p className="text-center py-5 text-slate-600 text-xs">2026 draw pending</p>
+          <p className="text-center py-5 text-slate-600 text-xs">{t.quiniela.tbdGroupDesc}</p>
         ) : (
           group.teams.map((team) => (
             <div key={team.name} className="flex items-center gap-2.5 px-1 py-0.5">
               <Flag code={team.code} size="sm" />
-              <span className="text-sm text-white font-medium truncate">{team.name}</span>
+              <span className="text-sm text-white font-medium truncate">{t.countries[team.name] || team.name}</span>
             </div>
           ))
         )}
@@ -70,13 +70,13 @@ export default function GroupsView({ onMakePredictions, t }) {
 
       {/* Subtitle */}
       <p className="text-xs text-slate-500 text-center mb-5">
-        WC 2022 groups (A–H) · Groups I–L set at 2026 draw
+        {t.quiniela.groupsSubtitle}
       </p>
 
       {/* 12-group grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {WC2026_GROUPS.map((group, i) => (
-          <GroupCard key={group.letter} group={group} index={i} />
+          <GroupCard key={group.letter} group={group} index={i} t={t} />
         ))}
       </div>
     </div>

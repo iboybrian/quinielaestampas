@@ -4,6 +4,8 @@ import { X, Loader2, MapPin } from 'lucide-react'
 import { format } from 'date-fns'
 import { getFixtureStats } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
+import { es } from 'date-fns/locale'
+import { translateStage } from '../../lib/translations'
 import Flag from '../ui/Flag'
 
 // Stats to display, with both language labels and whether higher = better
@@ -109,7 +111,7 @@ export default function MatchDetailModal({ match, isOpen, onClose }) {
               <div className="flex items-center justify-between gap-2 mb-5">
                 <div className="text-center flex-1">
                   <div className="flex justify-center mb-2"><Flag code={match.home_flag} size="2xl" /></div>
-                  <div className="text-sm font-bold text-white leading-tight">{match.home_team}</div>
+                  <div className="text-sm font-bold text-white leading-tight">{t.countries[match.home_team] || match.home_team}</div>
                 </div>
 
                 <div className="text-center flex-shrink-0 px-1">
@@ -122,13 +124,13 @@ export default function MatchDetailModal({ match, isOpen, onClose }) {
                       </div>
                       {hasPenalties && (
                         <div className="text-xs text-slate-500 mt-1">
-                          pen. {match.home_penalties} – {match.away_penalties}
+                          {t.quiniela.penalties} {match.home_penalties} – {match.away_penalties}
                         </div>
                       )}
                       {isLive && (
                         <div className="flex items-center justify-center gap-1 mt-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                          <span className="text-xs text-red-400 font-bold uppercase tracking-wider">Live</span>
+                          <span className="text-xs text-red-400 font-bold uppercase tracking-wider">{t.quiniela.liveBadge}</span>
                         </div>
                       )}
                     </>
@@ -139,15 +141,15 @@ export default function MatchDetailModal({ match, isOpen, onClose }) {
 
                 <div className="text-center flex-1">
                   <div className="flex justify-center mb-2"><Flag code={match.away_flag} size="2xl" /></div>
-                  <div className="text-sm font-bold text-white leading-tight">{match.away_team}</div>
+                  <div className="text-sm font-bold text-white leading-tight">{t.countries[match.away_team] || match.away_team}</div>
                 </div>
               </div>
 
               {/* Stage / date / venue */}
               <div className="glass rounded-2xl p-4 mb-5 text-center space-y-1.5">
-                <div className="text-sm font-semibold text-white">{match.stage}</div>
+                <div className="text-sm font-semibold text-white">{translateStage(match.stage, t)}</div>
                 <div className="text-xs text-slate-400">
-                  {format(new Date(match.starts_at), 'EEEE, MMMM d yyyy · HH:mm')}
+                  {format(new Date(match.starts_at), 'EEEE, MMMM d yyyy · HH:mm', { locale: lang === 'es' ? es : undefined })}
                 </div>
                 {match.venue && (
                   <div className="flex items-center justify-center gap-1.5 text-xs text-slate-500">
@@ -174,11 +176,11 @@ export default function MatchDetailModal({ match, isOpen, onClose }) {
                       {/* Team label row */}
                       <div className="flex items-center py-1 mb-0.5">
                         <span className="text-[11px] font-bold text-amber-400/60 w-20 text-right pr-3 truncate">
-                          {match.home_team}
+                          {t.countries[match.home_team] || match.home_team}
                         </span>
                         <span className="flex-1" />
                         <span className="text-[11px] font-bold text-emerald-400/60 w-20 pl-3 truncate">
-                          {match.away_team}
+                          {t.countries[match.away_team] || match.away_team}
                         </span>
                       </div>
                       {STATS.map((stat) => {

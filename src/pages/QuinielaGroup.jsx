@@ -323,9 +323,16 @@ export default function QuinielaGroup() {
                   <div className="flex items-center gap-2 px-3 py-2.5 mb-4 rounded-xl bg-slate-800/60 border border-white/8 text-xs text-slate-400">
                     <EyeOff className="w-3.5 h-3.5 flex-shrink-0 text-slate-500" />
                     <span>
-                      Predicciones de otros participantes ocultas hasta el cierre de{' '}
-                      <span className="text-slate-300 font-semibold">{hiddenMatchCount}</span>{' '}
-                      {hiddenMatchCount === 1 ? 'partido' : 'partidos'}.
+                      {t.quiniela.predsHiddenAlert
+                        .split('{count}')
+                        .reduce((prev, current, i) => {
+                          if (i === 0) return [current]
+                          return [
+                            ...prev,
+                            <span key={i} className="text-slate-300 font-semibold">{hiddenMatchCount}</span>,
+                            current.replace('{matchOrMatches}', hiddenMatchCount === 1 ? t.quiniela.matchSingle : t.quiniela.matchPlural)
+                          ]
+                        }, [])}
                     </span>
                   </div>
                 )}
@@ -345,9 +352,16 @@ export default function QuinielaGroup() {
                     <div className="flex items-center gap-2 px-3 py-2.5 mb-4 rounded-xl bg-slate-800/60 border border-white/8 text-xs text-slate-400">
                       <EyeOff className="w-3.5 h-3.5 flex-shrink-0 text-slate-500" />
                       <span>
-                        🔒 Predicciones ocultas en{' '}
-                        <span className="text-slate-300 font-semibold">{hiddenMatchCount}</span>{' '}
-                        {hiddenMatchCount === 1 ? 'partido' : 'partidos'} — se revelan al cierre.
+                        {t.quiniela.predsHiddenAlertMatrix
+                          .split('{count}')
+                          .reduce((prev, current, i) => {
+                            if (i === 0) return [current]
+                            return [
+                              ...prev,
+                              <span key={i} className="text-slate-300 font-semibold">{hiddenMatchCount}</span>,
+                              current.replace('{matchOrMatches}', hiddenMatchCount === 1 ? t.quiniela.matchSingle : t.quiniela.matchPlural)
+                            ]
+                          }, [])}
                       </span>
                     </div>
                   )}

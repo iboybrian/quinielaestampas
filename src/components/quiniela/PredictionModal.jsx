@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import Flag from '../ui/Flag'
+import { useLang } from '../../contexts/LangContext'
 
 function ScoreInput({ value, onChange, label }) {
   return (
@@ -27,6 +28,7 @@ function ScoreInput({ value, onChange, label }) {
 }
 
 export default function PredictionModal({ match, prediction, isOpen, onClose, onSave }) {
+  const { t } = useLang()
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
   const [saving, setSaving] = useState(false)
@@ -75,7 +77,7 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
 
             {/* Header */}
             <div className="flex items-center justify-between p-5 pb-4">
-              <h3 className="font-bold text-white text-lg">Your Prediction</h3>
+              <h3 className="font-bold text-white text-lg">{t.quiniela.yourPredictionLabel}</h3>
               <motion.button whileTap={{ scale: 0.9 }} onClick={onClose} className="text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10">
                 <X className="w-4 h-4" />
               </motion.button>
@@ -86,28 +88,28 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
               <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="text-center">
                   <div className="flex justify-center mb-2"><Flag code={match.home_flag} size="xl" /></div>
-                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{match.home_team}</div>
+                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{t.countries[match.home_team] || match.home_team}</div>
                 </div>
                 <span className="text-slate-600 font-bold">vs</span>
                 <div className="text-center">
                   <div className="flex justify-center mb-2"><Flag code={match.away_flag} size="xl" /></div>
-                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{match.away_team}</div>
+                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{t.countries[match.away_team] || match.away_team}</div>
                 </div>
               </div>
 
               {/* Score inputs */}
               <div className="flex items-center justify-center gap-6 mb-8">
-                <ScoreInput value={homeScore} onChange={setHomeScore} label={match.home_team} />
+                <ScoreInput value={homeScore} onChange={setHomeScore} label={t.countries[match.home_team] || match.home_team} />
                 <div className="text-2xl font-black text-slate-600 mt-5">–</div>
-                <ScoreInput value={awayScore} onChange={setAwayScore} label={match.away_team} />
+                <ScoreInput value={awayScore} onChange={setAwayScore} label={t.countries[match.away_team] || match.away_team} />
               </div>
 
               {/* Points guide */}
               <div className="grid grid-cols-3 gap-2 mb-7 text-center">
                 {[
-                  { pts: 5, label: 'Exact score', color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                  { pts: 3, label: 'Goal diff', color: 'text-blue-400', bg: 'bg-blue-400/10' },
-                  { pts: 2, label: 'Winner', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
+                  { pts: 5, label: t.quiniela.exactScore, color: 'text-amber-400', bg: 'bg-amber-400/10' },
+                  { pts: 3, label: t.quiniela.goalDiff, color: 'text-blue-400', bg: 'bg-blue-400/10' },
+                  { pts: 2, label: t.quiniela.winner, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
                 ].map(({ pts, label, color, bg }) => (
                   <div key={pts} className={`${bg} rounded-xl py-2.5 px-1`}>
                     <div className={`${color} font-black text-lg`}>{pts}</div>
@@ -123,7 +125,7 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
                   onClick={onClose}
                   className="flex-1 py-3 rounded-xl border border-white/10 text-slate-400 hover:bg-white/5 font-medium transition-colors"
                 >
-                  Cancel
+                  {t.profile.cancel}
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
@@ -131,7 +133,7 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
                   disabled={saving}
                   className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold transition-colors disabled:opacity-50"
                 >
-                  {saving ? 'Saving…' : 'Save Pick'}
+                  {saving ? t.quiniela.savingText : t.quiniela.savePickBtn}
                 </motion.button>
               </div>
             </div>

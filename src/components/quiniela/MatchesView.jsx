@@ -4,13 +4,15 @@ import { format } from 'date-fns'
 import { Clock, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { isGroupStage } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
+import { es } from 'date-fns/locale'
+import { translateStage } from '../../lib/translations'
 import MatchDetailModal from './MatchDetailModal'
 import Flag from '../ui/Flag'
 
 const PAGE_SIZE = 10
 
 function MatchSummaryCard({ match, onClick }) {
-  const { t } = useLang()
+  const { lang, t } = useLang()
   const matchTime = new Date(match.starts_at)
   const isFinished = match.status === 'finished'
   const isLive     = match.status === 'live'
@@ -36,10 +38,10 @@ function MatchSummaryCard({ match, onClick }) {
       <div className="p-4">
         {/* Stage / date */}
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-500 font-medium">{match.stage}</span>
+          <span className="text-xs text-slate-500 font-medium">{translateStage(match.stage, t)}</span>
           <div className="flex items-center gap-1 text-xs text-slate-500">
             <Clock className="w-3 h-3" />
-            {format(matchTime, 'MMM d · HH:mm')}
+            {format(matchTime, 'MMM d · HH:mm', { locale: lang === 'es' ? es : undefined })}
           </div>
         </div>
 
@@ -47,7 +49,7 @@ function MatchSummaryCard({ match, onClick }) {
         <div className="flex items-center gap-3">
           <div className="flex-1 flex items-center gap-2.5">
             <Flag code={match.home_flag} size="md" />
-            <span className="font-bold text-white text-sm leading-tight">{match.home_team}</span>
+            <span className="font-bold text-white text-sm leading-tight">{t.countries[match.home_team] || match.home_team}</span>
           </div>
 
           <div className="flex-shrink-0 min-w-[68px] text-center">
@@ -64,7 +66,7 @@ function MatchSummaryCard({ match, onClick }) {
 
           <div className="flex-1 flex items-center gap-2.5 flex-row-reverse">
             <Flag code={match.away_flag} size="md" />
-            <span className="font-bold text-white text-sm leading-tight text-right">{match.away_team}</span>
+            <span className="font-bold text-white text-sm leading-tight text-right">{t.countries[match.away_team] || match.away_team}</span>
           </div>
         </div>
 
@@ -98,7 +100,10 @@ export default function MatchesView({ fixtures }) {
     <div>
       {/* Page indicator */}
       <div className="text-xs text-slate-500 text-center mb-4">
-        {groupMatches.length} matches · page {page + 1} / {totalPages}
+        {(t.quiniela.matchesPage ?? '{total} matches · page {current} / {max}')
+          .replace('{total}', groupMatches.length)
+          .replace('{current}', page + 1)
+          .replace('{max}', totalPages)}
       </div>
 
       {/* Match cards */}
