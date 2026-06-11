@@ -21,10 +21,12 @@ export function useFixtures() {
           ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
         )
         if (group.length) {
-          // ignoreDuplicates=true → INSERT ... ON CONFLICT DO NOTHING
-          // Only INSERT permission needed; UPDATE is admin-only via Supabase dashboard.
-          const { error: upsertErr } = await supabase.from('matches').upsert(group, { onConflict: 'id', ignoreDuplicates: true })
-          if (upsertErr) console.error('[useFixtures] matches upsert failed:', upsertErr)
+          // sync-matches Edge Function uses service_role to bypass RLS, so the
+          // score_predictions() trigger fires correctly when status → 'finished'.
+          const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
+            body: { matches: group },
+          })
+          if (fnErr) console.error('[useFixtures] sync-matches failed:', fnErr)
         }
 
         setFixtures(all)
