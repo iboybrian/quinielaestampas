@@ -59,9 +59,23 @@ serve(async (req) => {
     venue:      String(m.venue ?? ''),
   }))
 
+  // Fetch already-finished match IDs so we never downgrade their status
+  // (stale client cache could send 'scheduled' for a match already done in DB)
+  const { data: finishedRows } = await adminClient
+    .from('matches')
+    .select('id')
+    .eq('status', 'finished')
+    .in('id', sanitized.map((m) => m.id))
+
+  const finishedIds = new Set((finishedRows ?? []).map((r) => r.id))
+
+  const safeUpsert = sanitized.map((m) =>
+    finishedIds.has(m.id) ? { ...m, status: 'finished' } : m
+  )
+
   const { error: upsertErr } = await adminClient
     .from('matches')
-    .upsert(sanitized, { onConflict: 'id' })
+    .upsert(safeUpsert, { onConflict: 'id' })
 
   if (upsertErr) {
     console.error('[sync-matches] upsert failed:', upsertErr)
