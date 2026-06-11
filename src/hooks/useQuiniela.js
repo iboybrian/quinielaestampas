@@ -162,7 +162,7 @@ export async function joinQuiniela(code, userId) {
 }
 
 export async function updateQuiniela(quinielaId, fields) {
-  const allowed = ['prediction_deadline_minutes', 'entry_fee', 'participant_limit', 'description', 'info_contact']
+  const allowed = ['name', 'prediction_deadline_minutes', 'entry_fee', 'participant_limit', 'description', 'info_contact']
   const payload = Object.fromEntries(
     Object.entries(fields).filter(([k]) => allowed.includes(k))
   )

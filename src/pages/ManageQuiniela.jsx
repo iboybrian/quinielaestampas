@@ -17,6 +17,7 @@ export default function ManageQuiniela() {
   const [saved, setSaved] = useState(false)
 
   // Settings form state
+  const [name, setName] = useState('')
   const [deadline, setDeadline] = useState(10)
   const [entryFee, setEntryFee] = useState('')
   const [participantLimit, setParticipantLimit] = useState('')
@@ -25,6 +26,7 @@ export default function ManageQuiniela() {
 
   useEffect(() => {
     if (quiniela) {
+      setName(quiniela.name ?? '')
       setDeadline(quiniela.prediction_deadline_minutes ?? 10)
       setEntryFee(quiniela.entry_fee != null ? String(quiniela.entry_fee) : '')
       setParticipantLimit(quiniela.participant_limit != null ? String(quiniela.participant_limit) : '')
@@ -37,6 +39,7 @@ export default function ManageQuiniela() {
     setSaving(true)
     try {
       await updateQuiniela(id, {
+        ...(name.trim() && { name: name.trim() }),
         prediction_deadline_minutes: Number(deadline),
         entry_fee: entryFee !== '' ? Number(entryFee) : null,
         participant_limit: participantLimit !== '' ? Number(participantLimit) : null,
@@ -156,6 +159,16 @@ export default function ManageQuiniela() {
         {activeTab === 'settings' && (
           <motion.div key="settings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
             <div className="space-y-5">
+              <div>
+                <label className="block text-xs text-slate-400 mb-1.5 font-medium">{t.admin.nameLabel}</label>
+                <input
+                  type="text" value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={80}
+                  className="input-field"
+                />
+              </div>
+
               <div>
                 <label className="block text-xs text-slate-400 mb-1.5 font-medium">{t.admin.deadlineLabel}</label>
                 <input
