@@ -6,7 +6,7 @@ import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuin
 import { useAuth } from '../contexts/AuthContext'
 import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
-import { rankMembers } from '../lib/scoring'
+import { rankMembers, calculatePoints } from '../lib/scoring'
 import Standings from '../components/quiniela/Standings'
 import RankChangeNotification from '../components/animations/RankChangeNotification'
 import GroupsView from '../components/quiniela/GroupsView'
@@ -32,6 +32,19 @@ export default function QuinielaGroup() {
     () => maskPredictions(predictions, fixtures, user?.id),
     [predictions, fixtures, user?.id]
   )
+
+  // Override points_earned from DB (DEFAULT 0, never updated by trigger) with
+  // client-side calculation. Null for unfinished/hidden so Standings counts correctly.
+  const enrichedPredictions = useMemo(() => {
+    const fixtureMap = Object.fromEntries(fixtures.map((f) => [f.id, f]))
+    return visiblePredictions.map((p) => {
+      if (p.hidden) return p
+      const fix = fixtureMap[p.match_id]
+      if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
+      return { ...p, points_earned: calculatePoints(p, fix) }
+    })
+  }, [visiblePredictions, fixtures])
+
   const hiddenMatchCount = useMemo(
     () => fixtures.filter((f) => f.status === 'scheduled' || f.status === 'not_started').length,
     [fixtures]
@@ -52,7 +65,7 @@ export default function QuinielaGroup() {
     rankCheckedRef.current = true
 
     const memberStats = members.map((m) => {
-      const preds = visiblePredictions.filter((p) => p.user_id === m.id)
+      const preds = enrichedPredictions.filter((p) => p.user_id === m.id)
       return {
         ...m,
         totalPoints: preds.reduce((s, p) => s + (p.points_earned || 0), 0),
@@ -81,7 +94,7 @@ export default function QuinielaGroup() {
         prevRank,
       })
     }
-  }, [members, visiblePredictions, user, id])
+  }, [members, enrichedPredictions, user, id])
 
   // Fire the overlay when user lands on (or switches to) Standings tab
   useEffect(() => {
@@ -336,7 +349,7 @@ export default function QuinielaGroup() {
                     </span>
                   </div>
                 )}
-                <Standings quinielaId={id} members={members} predictions={visiblePredictions} />
+                <Standings quinielaId={id} members={members} predictions={enrichedPredictions} />
               </>
             )}
 
@@ -365,7 +378,7 @@ export default function QuinielaGroup() {
                       </span>
                     </div>
                   )}
-                  <ResultsMatrix members={members} predictions={visiblePredictions} fixtures={fixtures} />
+                  <ResultsMatrix members={members} predictions={enrichedPredictions} fixtures={fixtures} />
                 </>
               )
             )}
