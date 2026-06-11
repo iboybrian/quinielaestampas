@@ -184,10 +184,13 @@ function generateCode() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
 }
 
-// Rival predictions are hidden while match hasn't kicked off (status === 'scheduled').
-// Once status changes to 'live' or 'finished', predictions become visible.
+// Rival predictions are hidden until kickoff. Unlocks when:
+// 1. API reports status 'live' or 'finished', OR
+// 2. starts_at has passed (handles stale 1-hour cache where status is still 'scheduled').
 function isMatchLocked(fixture) {
-  return fixture?.status === 'scheduled' || fixture?.status === 'not_started'
+  if (fixture?.status === 'live' || fixture?.status === 'finished') return false
+  if (fixture?.starts_at && new Date(fixture.starts_at) <= new Date()) return false
+  return true
 }
 
 // Masks other users' predictions for matches that haven't started yet.
