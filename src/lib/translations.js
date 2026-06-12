@@ -254,6 +254,9 @@ export const translations = {
       saved: '¡Guardado!',
       notAdmin: 'No tienes permisos de administrador para este grupo.',
       backToGroup: 'Volver al grupo',
+      removeMember: 'Eliminar',
+      confirmRemove: '¿Eliminar a {name} de la quiniela? Esta acción no se puede deshacer.',
+      removing: 'Eliminando…',
     },
     profile: {
       signInTitle: 'Inicia Sesión para Continuar',
@@ -725,6 +728,9 @@ export const translations = {
       saved: 'Saved!',
       notAdmin: 'You do not have admin permissions for this group.',
       backToGroup: 'Back to group',
+      removeMember: 'Remove',
+      confirmRemove: 'Remove {name} from the pool? This cannot be undone.',
+      removing: 'Removing…',
     },
     profile: {
       signInTitle: 'Sign In to Continue',

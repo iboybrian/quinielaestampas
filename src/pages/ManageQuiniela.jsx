@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Check, Loader2, ShieldAlert } from 'lucide-react'
-import { useQuinielaGroup, updateQuiniela, toggleMemberPaid } from '../hooks/useQuiniela'
+import { ArrowLeft, Check, Loader2, ShieldAlert, Trash2, AlertTriangle } from 'lucide-react'
+import { useQuinielaGroup, updateQuiniela, toggleMemberPaid, removeMember } from '../hooks/useQuiniela'
 import { useLang } from '../contexts/LangContext'
+import { useAuth } from '../contexts/AuthContext'
 import PageTransition from '../components/layout/PageTransition'
 
 export default function ManageQuiniela() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useLang()
+  const { user } = useAuth()
   const { quiniela, members, loading, isAdmin, refresh } = useQuinielaGroup(id)
 
   const [activeTab, setActiveTab] = useState('participants')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [removing, setRemoving] = useState(false)
+  const [confirmModal, setConfirmModal] = useState(null) // { memberId, username }
 
   // Settings form state
   const [name, setName] = useState('')
@@ -62,6 +66,20 @@ export default function ManageQuiniela() {
       await refresh()
     } catch (e) {
       alert(e.message)
+    }
+  }
+
+  const handleConfirmRemove = async () => {
+    if (!confirmModal) return
+    setRemoving(true)
+    try {
+      await removeMember(id, confirmModal.memberId)
+      setConfirmModal(null)
+      await refresh()
+    } catch (e) {
+      alert(e.message)
+    } finally {
+      setRemoving(false)
     }
   }
 
@@ -148,6 +166,15 @@ export default function ManageQuiniela() {
                       {member.hasPaid && <Check className="w-3 h-3" />}
                       {member.hasPaid ? t.admin.paid : t.admin.notPaid}
                     </motion.button>
+                    {member.id !== user?.id && (
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setConfirmModal({ memberId: member.id, username: member.username ?? member.id.slice(0, 8) })}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:border-red-500/40 transition-all"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </motion.button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -235,6 +262,63 @@ export default function ManageQuiniela() {
           </motion.div>
         )}
       </div>
+
+      {/* Remove member confirmation modal */}
+      <AnimatePresence>
+        {confirmModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => !removing && setConfirmModal(null)}
+            />
+            <div className="relative z-10">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: 8 }}
+                transition={{ type: 'tween', ease: 'easeOut', duration: 0.18 }}
+                className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl p-6 shadow-2xl"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+                    <AlertTriangle className="w-5 h-5 text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-white text-base">{t.admin.removeMember}</h3>
+                    <p className="text-xs text-slate-400 mt-0.5">{confirmModal.username}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-300 mb-6">
+                  {t.admin.confirmRemove.replace('{name}', confirmModal.username)}
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setConfirmModal(null)}
+                    disabled={removing}
+                    className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-semibold hover:bg-white/10 transition-all disabled:opacity-50"
+                  >
+                    {t.authGate?.cancel ?? 'Cancelar'}
+                  </button>
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={handleConfirmRemove}
+                    disabled={removing}
+                    className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-bold hover:bg-red-500/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {removing
+                      ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{t.admin.removing}</>
+                      : <><Trash2 className="w-3.5 h-3.5" />{t.admin.removeMember}</>
+                    }
+                  </motion.button>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
     </PageTransition>
   )
 }

@@ -181,6 +181,15 @@ export async function toggleMemberPaid(quinielaId, memberId, hasPaid) {
   if (error) throw error
 }
 
+export async function removeMember(quinielaId, memberId) {
+  const { error } = await supabase
+    .from('quiniela_members')
+    .delete()
+    .eq('quiniela_id', quinielaId)
+    .eq('user_id', memberId)
+  if (error) throw error
+}
+
 function generateCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
