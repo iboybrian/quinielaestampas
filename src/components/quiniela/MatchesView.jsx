@@ -131,41 +131,56 @@ export default function MatchesView({ fixtures }) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-2">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setPage((p) => p - 1)}
             disabled={page === 0}
-            className="flex items-center gap-1.5 px-4 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-3 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
           >
             <ChevronLeft className="w-4 h-4" />
-            {t.quiniela.prevPage}
+            <span className="hidden sm:inline">{t.quiniela.prevPage}</span>
           </motion.button>
 
-          {/* Page dots */}
-          <div className="flex gap-1.5">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
-                  i === page
-                    ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30'
-                    : 'text-slate-600 hover:text-slate-400'
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
+          {/* Page numbers — windowed */}
+          <div className="flex gap-1 items-center">
+            {(() => {
+              const pages = []
+              const addPage = (i) => pages.push(
+                <button
+                  key={i}
+                  onClick={() => setPage(i)}
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                    i === page
+                      ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30'
+                      : 'text-slate-600 hover:text-slate-400'
+                  }`}
+                >{i + 1}</button>
+              )
+              const addDots = (key) => pages.push(
+                <span key={key} className="text-slate-700 text-xs px-0.5">…</span>
+              )
+
+              if (totalPages <= 7) {
+                for (let i = 0; i < totalPages; i++) addPage(i)
+              } else {
+                addPage(0)
+                if (page > 2) addDots('start')
+                for (let i = Math.max(1, page - 1); i <= Math.min(totalPages - 2, page + 1); i++) addPage(i)
+                if (page < totalPages - 3) addDots('end')
+                addPage(totalPages - 1)
+              }
+              return pages
+            })()}
           </div>
 
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setPage((p) => p + 1)}
             disabled={page >= totalPages - 1}
-            className="flex items-center gap-1.5 px-4 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-3 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
           >
-            {t.quiniela.nextPage}
+            <span className="hidden sm:inline">{t.quiniela.nextPage}</span>
             <ChevronRight className="w-4 h-4" />
           </motion.button>
         </div>
