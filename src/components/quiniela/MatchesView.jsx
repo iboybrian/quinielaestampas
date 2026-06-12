@@ -14,9 +14,12 @@ const PAGE_SIZE = 10
 function MatchSummaryCard({ match, onClick }) {
   const { lang, t } = useLang()
   const matchTime = new Date(match.starts_at)
+  const matchTimeMs = new Date(match.starts_at).getTime()
+  const nowMs = Date.now()
   const isFinished = match.status === 'finished'
-  const isLive     = match.status === 'live'
-  const hasScore   = isFinished || isLive
+  const isLive = match.status === 'live' ||
+    (match.status === 'scheduled' && nowMs >= matchTimeMs && nowMs <= matchTimeMs + 120 * 60 * 1000)
+  const hasScore = (isFinished || isLive) && match.home_score !== null
 
   return (
     <motion.div

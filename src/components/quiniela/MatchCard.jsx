@@ -10,9 +10,12 @@ import { translateStage } from '../../lib/translations'
 export default function MatchCard({ match, prediction, onPredict, deadlineMinutes = 10 }) {
   const { lang, t } = useLang()
   const matchTime = new Date(match.starts_at)
-  const deadlineCutoff = new Date(matchTime.getTime() - deadlineMinutes * 60 * 1000)
+  const matchTimeMs = matchTime.getTime()
+  const nowMs = Date.now()
+  const deadlineCutoff = new Date(matchTimeMs - deadlineMinutes * 60 * 1000)
   const isLocked = match.status !== 'scheduled' || isPast(deadlineCutoff)
-  const isLive = match.status === 'live'
+  const isLive = match.status === 'live' ||
+    (match.status === 'scheduled' && nowMs >= matchTimeMs && nowMs <= matchTimeMs + 120 * 60 * 1000)
   const isFinished = match.status === 'finished'
   const hasPrediction = prediction != null
   const pointInfo = isFinished && hasPrediction ? getPointLabel(prediction.points_earned) : null

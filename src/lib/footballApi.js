@@ -174,13 +174,28 @@ function teamToCode(teamName) {
 // Bump this when the shape of normalizeFixture changes to bust stale caches
 const CACHE_VERSION = 4
 
+const LIVE_TTL = 3 * 60 * 1000  // 3 minutes during active match window
+
+function isInLiveWindow(fixtures) {
+  const now = Date.now()
+  return fixtures.some(f => {
+    const start = new Date(f.starts_at).getTime()
+    return f.status !== 'finished' && start <= now && now <= start + 120 * 60 * 1000
+  })
+}
+
 export async function getFixtures() {
   const CACHE_KEY = `wc_fixtures_${WC_SEASON}_v${CACHE_VERSION}`
   const cached = getCached(CACHE_KEY, FIXTURES_TTL)
-  if (cached) return cached
+
+  if (cached) {
+    if (!isInLiveWindow(cached)) return cached
+    const recentCached = getCached(CACHE_KEY, LIVE_TTL)
+    if (recentCached) return recentCached
+  }
 
   const data = await apiFetch('/fixtures', { league: WC_LEAGUE, season: WC_SEASON })
-  const fixtures = data ? data.map(normalizeFixture) : MOCK_FIXTURES
+  const fixtures = data ? data.map(normalizeFixture) : (cached ?? MOCK_FIXTURES)
   if (data) setCached(CACHE_KEY, fixtures)
   return fixtures
 }
