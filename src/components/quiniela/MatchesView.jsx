@@ -99,6 +99,8 @@ export default function MatchesView({ fixtures }) {
   const totalPages  = Math.max(1, Math.ceil(groupMatches.length / PAGE_SIZE))
   const pageMatches = groupMatches.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
+  const changePage = (n) => { setPage(n); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+
   return (
     <div>
       {/* Page indicator */}
@@ -134,7 +136,7 @@ export default function MatchesView({ fixtures }) {
         <div className="flex items-center justify-between gap-2">
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => setPage((p) => p - 1)}
+            onClick={() => changePage(page - 1)}
             disabled={page === 0}
             className="flex items-center gap-1 px-3 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
           >
@@ -149,7 +151,7 @@ export default function MatchesView({ fixtures }) {
               const addPage = (i) => pages.push(
                 <button
                   key={i}
-                  onClick={() => setPage(i)}
+                  onClick={() => changePage(i)}
                   className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
                     i === page
                       ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30'
@@ -176,7 +178,7 @@ export default function MatchesView({ fixtures }) {
 
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => changePage(page + 1)}
             disabled={page >= totalPages - 1}
             className="flex items-center gap-1 px-3 py-2.5 glass rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
           >

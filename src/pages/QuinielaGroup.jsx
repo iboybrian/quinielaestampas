@@ -140,6 +140,7 @@ export default function QuinielaGroup() {
   const handleTabChange = (key) => {
     setActiveTab(key)
     setShowPredictions(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   if (loading) {
