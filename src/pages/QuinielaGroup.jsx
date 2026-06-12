@@ -62,7 +62,7 @@ export default function QuinielaGroup() {
   const rankCheckedRef = useRef(false)
 
   useEffect(() => {
-    if (rankCheckedRef.current || !user || members.length === 0) return
+    if (rankCheckedRef.current || !user || members.length === 0 || fixturesLoading) return
     rankCheckedRef.current = true
 
     const memberStats = members.map((m) => {
@@ -95,7 +95,7 @@ export default function QuinielaGroup() {
         prevRank,
       })
     }
-  }, [members, enrichedPredictions, user, id])
+  }, [members, enrichedPredictions, fixturesLoading, user, id])
 
   // Fire the overlay when user lands on (or switches to) Standings tab
   useEffect(() => {
