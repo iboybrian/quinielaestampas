@@ -8,40 +8,37 @@ export function useFixtures() {
   const [fixtures, setFixtures] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    let cancelled = false
-    async function load() {
-      try {
-        const all = await getFixtures()
-        if (cancelled) return
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const all = await getFixtures()
 
-        // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied.
-        // Strip fields not in the matches schema (home_penalties, away_penalties from API data).
-        const group = all.filter(isGroupStage).map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
-          ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
-        )
-        if (group.length) {
-          // sync-matches Edge Function uses service_role to bypass RLS, so the
-          // score_predictions() trigger fires correctly when status → 'finished'.
-          const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
-            body: { matches: group },
-          })
-          if (fnErr) console.error('[useFixtures] sync-matches failed:', fnErr)
-        }
-
-        setFixtures(all)
-      } catch (e) {
-        console.error('[useFixtures]', e)
-        if (!cancelled) setFixtures(MOCK_FIXTURES)
-      } finally {
-        if (!cancelled) setLoading(false)
+      // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied.
+      // Strip fields not in the matches schema (home_penalties, away_penalties from API data).
+      const group = all.filter(isGroupStage).map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
+        ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
+      )
+      if (group.length) {
+        // sync-matches Edge Function uses service_role to bypass RLS, so the
+        // score_predictions() trigger fires correctly when status → 'finished'.
+        const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
+          body: { matches: group },
+        })
+        if (fnErr) console.error('[useFixtures] sync-matches failed:', fnErr)
       }
+
+      setFixtures(all)
+    } catch (e) {
+      console.error('[useFixtures]', e)
+      setFixtures(MOCK_FIXTURES)
+    } finally {
+      setLoading(false)
     }
-    load()
-    return () => { cancelled = true }
   }, [])
 
-  return { fixtures, loading }
+  useEffect(() => { load() }, [load])
+
+  return { fixtures, loading, refresh: load }
 }
 
 export function useMyQuinielas() {

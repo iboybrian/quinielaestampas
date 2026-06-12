@@ -8,7 +8,7 @@ export const WC_LEAGUE = 1
 export const WC_SEASON = 2026
 
 // ── Cache ─────────────────────────────────────────────────────────────────────
-const FIXTURES_TTL = 60 * 60 * 1000  // 1 hour
+const FIXTURES_TTL = 20 * 60 * 1000  // 20 min — low enough to catch finished matches within 1 cycle
 
 function getCached(key, ttlMs) {
   try {
@@ -179,9 +179,16 @@ const LIVE_TTL = 3 * 60 * 1000  // 3 minutes during active match window
 function isInLiveWindow(fixtures) {
   const now = Date.now()
   return fixtures.some(f => {
+    // Any cached 'live' status must stay fresh — match may have finished
+    if (f.status === 'live') return true
+    // Cover 210 min from kickoff (90 + 30 AET + 30 pen shootout + buffer)
     const start = new Date(f.starts_at).getTime()
-    return f.status !== 'finished' && start <= now && now <= start + 120 * 60 * 1000
+    return f.status !== 'finished' && start <= now && now <= start + 210 * 60 * 1000
   })
+}
+
+export function clearFixturesCache() {
+  try { localStorage.removeItem(`wc_fixtures_${WC_SEASON}_v${CACHE_VERSION}`) } catch {}
 }
 
 export async function getFixtures() {

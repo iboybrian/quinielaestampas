@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Copy, Check, Loader2, Clock, Users, Phone, EyeOff, Trophy, Settings, Ticket, Coins } from 'lucide-react'
+import { ArrowLeft, Copy, Check, Loader2, Clock, Users, Phone, EyeOff, Trophy, Settings, Ticket, Coins, RefreshCw } from 'lucide-react'
 import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuiniela'
 import { useAuth } from '../contexts/AuthContext'
-import { isKnockoutStage, normalizeBracket, MOCK_BRACKET } from '../lib/footballApi'
+import { isKnockoutStage, normalizeBracket, MOCK_BRACKET, clearFixturesCache } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
 import { rankMembers, calculatePoints } from '../lib/scoring'
 import Standings from '../components/quiniela/Standings'
@@ -23,8 +23,8 @@ export default function QuinielaGroup() {
   const { t, lang } = useLang()
 
   const { user } = useAuth()
-  const { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction } = useQuinielaGroup(id)
-  const { fixtures, loading: fixturesLoading } = useFixtures()
+  const { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction, refresh: fetchData } = useQuinielaGroup(id)
+  const { fixtures, loading: fixturesLoading, refresh: refreshFixtures } = useFixtures()
 
   // Mask other users' predictions for matches whose deadline hasn't passed yet.
   // myPredictions stays unmasked for editing/MatchCard. visiblePredictions goes to Matrix/Standings.
@@ -54,6 +54,7 @@ export default function QuinielaGroup() {
   const [showPredictions, setShowPredictions] = useState(false)
   const [predModal, setPredModal] = useState({ open: false, match: null })
   const [copied, setCopied] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   // Rank-change notification — detected once per mount, shown on first Standings visit
   const [pendingRankChange, setPendingRankChange] = useState(null)
@@ -128,6 +129,13 @@ export default function QuinielaGroup() {
   const openPredict  = (match) => setPredModal({ open: true, match })
   const closePredict = () => setPredModal({ open: false, match: null })
   const handleSave   = async (matchId, home, away) => { await savePrediction(matchId, home, away) }
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    clearFixturesCache()
+    await Promise.all([refreshFixtures(), fetchData()])
+    setRefreshing(false)
+  }, [refreshFixtures, fetchData])
 
   const handleTabChange = (key) => {
     setActiveTab(key)
@@ -206,16 +214,27 @@ export default function QuinielaGroup() {
                 </motion.button>
               )}
             </div>
-            {isAdmin && (
+            <div className="flex-shrink-0 flex items-center gap-1.5">
               <motion.button
                 whileTap={{ scale: 0.92 }}
-                onClick={() => navigate(`/quiniela/${id}/manage`)}
-                className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-colors"
-                title={t.quiniela.manage}
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-white transition-colors disabled:opacity-40"
+                title={lang === 'es' ? 'Actualizar datos' : 'Refresh data'}
               >
-                <Settings className="w-3.5 h-3.5" />
+                <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
               </motion.button>
-            )}
+              {isAdmin && (
+                <motion.button
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => navigate(`/quiniela/${id}/manage`)}
+                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-colors"
+                  title={t.quiniela.manage}
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                </motion.button>
+              )}
+            </div>
           </div>
 
           {/* Description */}
