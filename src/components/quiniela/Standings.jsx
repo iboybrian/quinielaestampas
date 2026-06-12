@@ -57,8 +57,8 @@ export default function Standings({ quinielaId, members, predictions }) {
       <div className="flex items-center justify-between px-4 text-xs text-slate-500 font-medium uppercase tracking-wider mb-4">
         <span>{t.quiniela.standingsPlayer}</span>
         <div className="flex gap-6 text-right">
-          <span className="w-10">{t.quiniela.standingsExact}</span>
-          <span className="w-10">{t.quiniela.standingsPlayed}</span>
+          <span className="hidden sm:block w-10">{t.quiniela.standingsExact}</span>
+          <span className="hidden sm:block w-10">{t.quiniela.standingsPlayed}</span>
           <span className="w-12">{t.quiniela.standingsPoints}</span>
         </div>
       </div>
@@ -82,14 +82,14 @@ export default function Standings({ quinielaId, members, predictions }) {
             <Avatar username={member.username} />
             <div className="flex-1 min-w-0">
               <div className="font-bold text-white truncate">{member.username ?? t.quiniela.standingsUnknown}</div>
-              <div className="text-xs text-slate-500">{member.correct} {t.quiniela.standingsCorrect}</div>
+              <div className="hidden sm:block text-xs text-slate-500">{member.correct} {t.quiniela.standingsCorrect}</div>
             </div>
             <div className="flex items-center gap-6 text-right">
-              <div className="w-10">
+              <div className="hidden sm:block w-10">
                 <div className="text-amber-400 font-bold">{member.exact}</div>
                 <div className="text-xs text-slate-600">{t.quiniela.standingsExactLabel}</div>
               </div>
-              <div className="w-10">
+              <div className="hidden sm:block w-10">
                 <div className="text-slate-300 font-bold">{member.played}</div>
                 <div className="text-xs text-slate-600">{t.quiniela.standingsPlayedLabel}</div>
               </div>

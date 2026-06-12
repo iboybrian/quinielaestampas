@@ -23,10 +23,10 @@ function getPhaseKey(stage) {
 
 // ── Cell color logic ──────────────────────────────────────────────────────────
 function cellStyle(points, matchFinished) {
-  if (!matchFinished) return 'bg-white/[0.03] border-white/5'
+  if (!matchFinished) return 'bg-white/[0.03] border-white/8'
   if (points === 5) return 'bg-emerald-500/20 border-emerald-500/30'
   if (points >= 2)  return 'bg-amber-400/20  border-amber-400/30'
-  return 'bg-slate-600/10 border-white/5'
+  return 'bg-slate-600/10 border-white/8'
 }
 
 // ── Winner flag from a prediction ────────────────────────────────────────────
@@ -64,7 +64,7 @@ function PredCell({ match, prediction }) {
 
   if (!prediction) {
     return (
-      <td className="p-0 border border-white/5 min-w-[72px]">
+      <td className="p-0 border border-white/8 min-w-[72px]">
         <div className="flex items-center justify-center h-[52px] text-slate-700 text-xs">
           ·
         </div>
@@ -74,7 +74,7 @@ function PredCell({ match, prediction }) {
 
   if (prediction.hidden) {
     return (
-      <td className="p-0 border border-white/5 min-w-[72px]">
+      <td className="p-0 border border-white/8 min-w-[72px]">
         <div className="flex flex-col items-center justify-center gap-1 h-[52px] text-slate-600">
           <Lock className="w-3 h-3" />
           <span className="text-[9px] font-medium">• • •</span>
@@ -186,12 +186,12 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
             </p>
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-white/8" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
-              <table className="border-collapse w-max">
+              <table className="border-separate border-spacing-0 w-max">
                 <thead>
                   <tr>
                     {/* Sticky participant header */}
                     <th
-                      className="sticky left-0 z-20 bg-[#050B1A] border border-white/8 px-4 py-3 text-left text-[10px] uppercase tracking-wider text-slate-500 font-bold min-w-[130px] whitespace-nowrap"
+                      className="sticky left-0 z-20 bg-[#050B1A] border border-white/8 px-4 py-3 text-left text-[10px] uppercase tracking-wider text-slate-500 font-bold min-w-[130px] whitespace-nowrap shadow-[4px_0_8px_rgba(0,0,0,0.8)]"
                     >
                       {t.quiniela.participant}
                     </th>
@@ -211,9 +211,7 @@ export default function ResultsMatrix({ members, predictions, fixtures }) {
                     <tr key={member.id}>
                       {/* Sticky name cell */}
                       <td
-                        className={`sticky left-0 z-10 bg-[#050B1A] border border-white/8 px-3 py-0 ${
-                          rowIdx % 2 === 0 ? 'bg-[#050B1A]' : 'bg-white/[0.015]'
-                        }`}
+                        className="sticky left-0 z-10 bg-[#050B1A] border border-white/8 px-3 py-0 shadow-[4px_0_8px_rgba(0,0,0,0.8)]"
                       >
                         <div className="flex items-center gap-2 h-[52px]">
                           <div className="w-6 h-6 rounded-full bg-gradient-to-br from-amber-400/30 to-orange-500/30 flex items-center justify-center text-[10px] font-black text-amber-400 flex-shrink-0">
