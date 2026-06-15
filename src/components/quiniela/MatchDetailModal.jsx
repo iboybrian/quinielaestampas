@@ -56,7 +56,7 @@ export default function MatchDetailModal({ match, isOpen, onClose }) {
     if (!isOpen || !match) { setStats(null); return }
     if (match.status !== 'finished' && match.status !== 'live') return
     setStatsLoading(true)
-    getFixtureStats(match.id)
+    getFixtureStats(match.id, match.status)
       .then(setStats)
       .catch(() => setStats(null))
       .finally(() => setStatsLoading(false))

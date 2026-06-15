@@ -45,6 +45,15 @@ export default function QuinielaGroup() {
     })
   }, [visiblePredictions, fixtures])
 
+  const myEnrichedPredictions = useMemo(() => {
+    const fixtureMap = Object.fromEntries(fixtures.map((f) => [f.id, f]))
+    return myPredictions.map((p) => {
+      const fix = fixtureMap[p.match_id]
+      if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
+      return { ...p, points_earned: calculatePoints(p, fix) }
+    })
+  }, [myPredictions, fixtures])
+
   const hiddenMatchCount = useMemo(
     () => fixtures.filter((f) => f.status === 'scheduled' || f.status === 'not_started').length,
     [fixtures]
@@ -416,10 +425,11 @@ export default function QuinielaGroup() {
               ) : (
                 <PredictionsView
                   fixtures={fixtures}
-                  myPredictions={myPredictions}
+                  myPredictions={myEnrichedPredictions}
                   onBack={() => setShowPredictions(false)}
                   onPredict={openPredict}
                   t={t}
+                  scrollToDate={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()}
                 />
               )
             )}
@@ -431,7 +441,15 @@ export default function QuinielaGroup() {
                   {t.quiniela.loadingFixtures}
                 </div>
               ) : (
-                <MatchesView fixtures={fixtures} />
+                <>
+                  <button
+                    onClick={() => { setActiveTab('Groups'); setShowPredictions(true) }}
+                    className="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold text-base transition-colors mb-6"
+                  >
+                    ⚽ {lang === 'es' ? 'Hacer Predicciones' : 'Make Predictions'}
+                  </button>
+                  <MatchesView fixtures={fixtures} />
+                </>
               )
             )}
 

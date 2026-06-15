@@ -154,6 +154,7 @@ const TEAM_TO_CODE = {
   'curaçao':                'cw',
   'cabo verde':             'cv',
   'cape verde':             'cv',
+  'cape verde islands':     'cv',
   'uzbekistan':             'uz',
   'congo dr':               'cd',
   'türkiye':                'tr',
@@ -172,7 +173,7 @@ function teamToCode(teamName) {
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 // Bump this when the shape of normalizeFixture changes to bust stale caches
-const CACHE_VERSION = 4
+const CACHE_VERSION = 5
 
 const LIVE_TTL = 3 * 60 * 1000  // 3 minutes during active match window
 
@@ -219,10 +220,11 @@ export async function getFixtureById(id) {
   return normalizeFixture(data[0])
 }
 
-export async function getFixtureStats(fixtureId) {
+export async function getFixtureStats(fixtureId, fixtureStatus) {
   const CACHE_KEY = `wc_stats_${fixtureId}`
-  // Finished match stats never change — cache for 7 days
-  const cached = getCached(CACHE_KEY, 7 * 24 * 60 * 60 * 1000)
+  const isLive = fixtureStatus === 'live'
+  const ttl = isLive ? LIVE_TTL : 7 * 24 * 60 * 60 * 1000
+  const cached = getCached(CACHE_KEY, ttl)
   if (cached) return cached
 
   const data = await apiFetch('/fixtures/statistics', { fixture: fixtureId })

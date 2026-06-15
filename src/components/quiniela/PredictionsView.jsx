@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import { format } from 'date-fns'
@@ -7,8 +7,17 @@ import { isGroupStage } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
 import { es } from 'date-fns/locale'
 
-export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t }) {
+export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t, scrollToDate }) {
   const { lang } = useLang()
+
+  useEffect(() => {
+    if (!scrollToDate) return
+    const el = document.getElementById(`pred-date-${scrollToDate}`)
+    if (el) setTimeout(() => {
+      const top = el.getBoundingClientRect().top + window.scrollY - 80
+      window.scrollTo({ top, behavior: 'smooth' })
+    }, 150)
+  }, [scrollToDate])
   const groupMatches = useMemo(
     () =>
       fixtures
@@ -28,7 +37,9 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
   const byDate = useMemo(() => {
     const map = {}
     groupMatches.forEach((m) => {
-      const day = m.starts_at?.split('T')[0] ?? 'unknown'
+      const day = m.starts_at
+        ? (() => { const d = new Date(m.starts_at); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
+        : 'unknown'
       if (!map[day]) map[day] = []
       map[day].push(m)
     })
@@ -71,7 +82,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
 
       {/* Matches grouped by day */}
       {Object.entries(byDate).map(([dateStr, dayMatches]) => (
-        <div key={dateStr} className="mb-7">
+        <div key={dateStr} id={`pred-date-${dateStr}`} className="mb-7">
           <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-1">
             {dateStr !== 'unknown'
               ? format(new Date(dateStr + 'T12:00:00'), 'EEEE, MMMM d', { locale: lang === 'es' ? es : undefined })
