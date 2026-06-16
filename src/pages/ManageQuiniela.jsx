@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Check, Loader2, ShieldAlert, Trash2, AlertTriangle } from 'lucide-react'
-import { useQuinielaGroup, updateQuiniela, toggleMemberPaid, removeMember } from '../hooks/useQuiniela'
+import { useQuinielaGroup, updateQuiniela, toggleMemberPaid, removeMember, deleteQuiniela } from '../hooks/useQuiniela'
 import { useLang } from '../contexts/LangContext'
 import { useAuth } from '../contexts/AuthContext'
 import PageTransition from '../components/layout/PageTransition'
@@ -12,13 +12,15 @@ export default function ManageQuiniela() {
   const navigate = useNavigate()
   const { t } = useLang()
   const { user } = useAuth()
-  const { quiniela, members, loading, isAdmin, refresh } = useQuinielaGroup(id)
+  const { quiniela, members, predictions, loading, isAdmin, refresh } = useQuinielaGroup(id)
 
   const [activeTab, setActiveTab] = useState('participants')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [removing, setRemoving] = useState(false)
   const [confirmModal, setConfirmModal] = useState(null) // { memberId, username }
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   // Settings form state
   const [name, setName] = useState('')
@@ -66,6 +68,17 @@ export default function ManageQuiniela() {
       await refresh()
     } catch (e) {
       alert(e.message)
+    }
+  }
+
+  const handleDeleteQuiniela = async () => {
+    setDeleting(true)
+    try {
+      await deleteQuiniela(id)
+      navigate('/quiniela')
+    } catch (e) {
+      alert(e.message)
+      setDeleting(false)
     }
   }
 
@@ -258,10 +271,88 @@ export default function ManageQuiniela() {
                   : t.admin.saveSettings
                 }
               </motion.button>
+
+              {/* Danger zone */}
+              <div className="mt-4 border border-red-500/20 rounded-2xl p-4">
+                <p className="text-xs font-bold text-red-400 uppercase tracking-wider mb-1">{t.admin.deleteZone}</p>
+                <p className="text-xs text-slate-500 mb-3">{t.admin.deleteDesc}</p>
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setDeleteModal(true)}
+                  className="w-full py-2.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-sm font-bold hover:bg-red-500/20 hover:border-red-500/40 transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {t.admin.deleteBtn}
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         )}
       </div>
+
+      {/* Delete quiniela confirmation modal */}
+      <AnimatePresence>
+        {deleteModal && (() => {
+          const otherMembers = members.filter(m => m.id !== user?.id)
+          const hasPoints = predictions.some(p => p.points_earned != null && p.points_earned > 0)
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                onClick={() => !deleting && setDeleteModal(false)}
+              />
+              <div className="relative z-10">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.92, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.92, y: 8 }}
+                  transition={{ type: 'tween', ease: 'easeOut', duration: 0.18 }}
+                  className="w-full max-w-sm bg-slate-900 border border-red-500/20 rounded-2xl p-6 shadow-2xl"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+                      <AlertTriangle className="w-5 h-5 text-red-400" />
+                    </div>
+                    <h3 className="font-black text-white text-base">{t.admin.confirmDeleteTitle}</h3>
+                  </div>
+                  <div className="space-y-2 mb-6">
+                    {hasPoints && (
+                      <p className="text-sm text-red-400 font-semibold">{t.admin.deleteWarningPoints}</p>
+                    )}
+                    {otherMembers.length > 0 && (
+                      <p className="text-sm text-amber-400">{t.admin.deleteWarningMembers.replace('{n}', otherMembers.length)}</p>
+                    )}
+                    <p className="text-sm text-slate-400">{t.admin.deleteIrreversible}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setDeleteModal(false)}
+                      disabled={deleting}
+                      className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-semibold hover:bg-white/10 transition-all disabled:opacity-50"
+                    >
+                      {t.authGate?.cancel ?? 'Cancelar'}
+                    </button>
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={handleDeleteQuiniela}
+                      disabled={deleting}
+                      className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-bold hover:bg-red-500/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {deleting
+                        ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{t.admin.deleting}</>
+                        : <><Trash2 className="w-3.5 h-3.5" />{t.admin.deleteBtn}</>
+                      }
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          )
+        })()}
+      </AnimatePresence>
 
       {/* Remove member confirmation modal */}
       <AnimatePresence>

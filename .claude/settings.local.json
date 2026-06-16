@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(python -c ' *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(git commit -m 'feat: improve Need button and card border visual distinction *)",
+      "Bash(Remove-Item \"d:\\\\Proyecto MUNDIAL 2026\\\\quinielaestampas\\\\supabase\\\\migrations\\\\006_matches_update_auth.sql\")",
+      "Skill(update-config)",
+      "Skill(update-config:*)"
     ]
   }
 }

@@ -187,6 +187,15 @@ export async function removeMember(quinielaId, memberId) {
   if (error) throw error
 }
 
+export async function deleteQuiniela(quinielaId) {
+  const { error: predErr } = await supabase.from('predictions').delete().eq('quiniela_id', quinielaId)
+  if (predErr) throw predErr
+  const { error: memErr } = await supabase.from('quiniela_members').delete().eq('quiniela_id', quinielaId)
+  if (memErr) throw memErr
+  const { error } = await supabase.from('quinielas').delete().eq('id', quinielaId)
+  if (error) throw error
+}
+
 function generateCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')

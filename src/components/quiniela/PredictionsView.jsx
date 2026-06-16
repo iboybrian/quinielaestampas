@@ -7,7 +7,7 @@ import { isGroupStage } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
 import { es } from 'date-fns/locale'
 
-export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t, scrollToDate }) {
+export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t, scrollToDate, deadlineMinutes = 10 }) {
   const { lang } = useLang()
 
   useEffect(() => {
@@ -97,6 +97,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
                   match={match}
                   prediction={pred}
                   onPredict={onPredict}
+                  deadlineMinutes={deadlineMinutes}
                 />
               )
             })}

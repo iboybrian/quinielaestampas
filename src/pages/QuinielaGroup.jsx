@@ -430,6 +430,7 @@ export default function QuinielaGroup() {
                   onPredict={openPredict}
                   t={t}
                   scrollToDate={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()}
+                  deadlineMinutes={quiniela?.prediction_deadline_minutes ?? 10}
                 />
               )
             )}
