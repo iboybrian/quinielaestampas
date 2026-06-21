@@ -21,9 +21,17 @@ export function useFixtures() {
       if (group.length) {
         const SYNC_INTERVAL = 5 * 60 * 1000 // 5 minutes
         const lastSync = localStorage.getItem('last_sync_matches')
-        const now = Date.now()
+        const nowMs = Date.now()
 
-        if (!lastSync || now - parseInt(lastSync) > SYNC_INTERVAL) {
+        // State filtering: Only trigger sync if there are matches within a 36-hour window of right now
+        // This completely shuts down the Edge Function on rest days and before the tournament starts.
+        const hasActiveMatches = group.some(m => {
+          if (!m.starts_at) return false
+          const diff = Math.abs(new Date(m.starts_at).getTime() - nowMs)
+          return diff < 36 * 60 * 60 * 1000
+        })
+
+        if (hasActiveMatches && (!lastSync || nowMs - parseInt(lastSync) > SYNC_INTERVAL)) {
           // sync-matches Edge Function uses service_role to bypass RLS, so the
           // score_predictions() trigger fires correctly when status → 'finished'.
           const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
@@ -33,7 +41,7 @@ export function useFixtures() {
           if (fnErr) {
             console.error('[useFixtures] sync-matches failed:', fnErr)
           } else {
-            localStorage.setItem('last_sync_matches', now.toString())
+            localStorage.setItem('last_sync_matches', nowMs.toString())
           }
         }
       }
