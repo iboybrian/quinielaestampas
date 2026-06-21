@@ -23,12 +23,15 @@ export function useFixtures() {
         const lastSync = localStorage.getItem('last_sync_matches')
         const nowMs = Date.now()
 
-        // State filtering: Only trigger sync if there are matches within a 36-hour window of right now
-        // This completely shuts down the Edge Function on rest days and before the tournament starts.
+        // State filtering: Only trigger sync if a match is currently live,
+        // or if it's marked as finished but started within the last 4 hours (to ensure final scores sync).
         const hasActiveMatches = group.some(m => {
-          if (!m.starts_at) return false
-          const diff = Math.abs(new Date(m.starts_at).getTime() - nowMs)
-          return diff < 36 * 60 * 60 * 1000
+          if (m.status === 'live') return true
+          if (m.status === 'finished' && m.starts_at) {
+            const msSinceStart = nowMs - new Date(m.starts_at).getTime()
+            return msSinceStart > 0 && msSinceStart < 4 * 60 * 60 * 1000 // Started less than 4 hours ago
+          }
+          return false
         })
 
         if (hasActiveMatches && (!lastSync || nowMs - parseInt(lastSync) > SYNC_INTERVAL)) {
