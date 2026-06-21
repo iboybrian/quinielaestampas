@@ -19,12 +19,23 @@ export function useFixtures() {
         ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
       )
       if (group.length) {
-        // sync-matches Edge Function uses service_role to bypass RLS, so the
-        // score_predictions() trigger fires correctly when status → 'finished'.
-        const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
-          body: { matches: group },
-        })
-        if (fnErr) console.error('[useFixtures] sync-matches failed:', fnErr)
+        const SYNC_INTERVAL = 5 * 60 * 1000 // 5 minutes
+        const lastSync = localStorage.getItem('last_sync_matches')
+        const now = Date.now()
+
+        if (!lastSync || now - parseInt(lastSync) > SYNC_INTERVAL) {
+          // sync-matches Edge Function uses service_role to bypass RLS, so the
+          // score_predictions() trigger fires correctly when status → 'finished'.
+          const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
+            body: { matches: group },
+          })
+          
+          if (fnErr) {
+            console.error('[useFixtures] sync-matches failed:', fnErr)
+          } else {
+            localStorage.setItem('last_sync_matches', now.toString())
+          }
+        }
       }
 
       setFixtures(all)
