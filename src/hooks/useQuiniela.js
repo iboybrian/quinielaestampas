@@ -19,28 +19,27 @@ export function useFixtures() {
         ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
       )
       if (group.length) {
-        const SYNC_INTERVAL = 5 * 60 * 1000 // 5 minutes
+        const SYNC_INTERVAL = 15 * 60 * 1000 // 15 minutes
         const lastSync = localStorage.getItem('last_sync_matches')
         const nowMs = Date.now()
 
-        // State filtering: Only trigger sync if a match is currently live,
-        // or if it's marked as finished but started within the last 4 hours (to ensure final scores sync).
-        const hasActiveMatches = group.some(m => {
+        // Only sync live matches or matches finished within the last hour.
+        // Scheduled matches have nothing to update; old finished matches are already scored.
+        const activeMatches = group.filter(m => {
           if (m.status === 'live') return true
           if (m.status === 'finished' && m.starts_at) {
             const msSinceStart = nowMs - new Date(m.starts_at).getTime()
-            return msSinceStart > 0 && msSinceStart < 4 * 60 * 60 * 1000 // Started less than 4 hours ago
+            return msSinceStart > 0 && msSinceStart < 60 * 60 * 1000
           }
           return false
         })
 
-        if (hasActiveMatches && (!lastSync || nowMs - parseInt(lastSync) > SYNC_INTERVAL)) {
+        if (activeMatches.length > 0 && (!lastSync || nowMs - parseInt(lastSync) > SYNC_INTERVAL)) {
           // sync-matches Edge Function uses service_role to bypass RLS, so the
           // score_predictions() trigger fires correctly when status → 'finished'.
           const { error: fnErr } = await supabase.functions.invoke('sync-matches', {
-            body: { matches: group },
+            body: { matches: activeMatches },
           })
-          
           if (fnErr) {
             console.error('[useFixtures] sync-matches failed:', fnErr)
           } else {
