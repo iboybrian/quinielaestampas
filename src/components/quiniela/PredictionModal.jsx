@@ -32,19 +32,27 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState(null)
 
   useEffect(() => {
     if (isOpen) {
       setHomeScore(prediction?.home_score ?? 0)
       setAwayScore(prediction?.away_score ?? 0)
+      setSaveError(null)
     }
   }, [isOpen, prediction])
 
   const handleSave = async () => {
     setSaving(true)
+    setSaveError(null)
     try {
       await onSave(match.id, homeScore, awayScore)
       onClose()
+    } catch (err) {
+      const isSessionErr = err?.message === 'session_expired'
+      setSaveError(isSessionErr
+        ? 'Tu sesión expiró. Recarga la página e intenta de nuevo.'
+        : 'Error al guardar. Intenta de nuevo.')
     } finally {
       setSaving(false)
     }
@@ -117,6 +125,13 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
                   </div>
                 ))}
               </div>
+
+              {/* Error message */}
+              {saveError && (
+                <div className="mb-4 px-3 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                  {saveError}
+                </div>
+              )}
 
               {/* Buttons */}
               <div className="flex gap-3">

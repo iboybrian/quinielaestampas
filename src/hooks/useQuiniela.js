@@ -133,9 +133,15 @@ export function useQuinielaGroup(quinielaId) {
   }, [quinielaId, fetchData])
 
   const savePrediction = useCallback(async (matchId, homeScore, awayScore) => {
-    if (!user || !quinielaId) return
+    if (!quinielaId) throw new Error('session_expired')
+    let userId = user?.id
+    if (!userId) {
+      const { data: { session }, error: refreshErr } = await supabase.auth.refreshSession()
+      if (refreshErr || !session) throw new Error('session_expired')
+      userId = session.user.id
+    }
     const { error } = await supabase.from('predictions').upsert(
-      { quiniela_id: quinielaId, user_id: user.id, match_id: matchId, home_score: homeScore, away_score: awayScore },
+      { quiniela_id: quinielaId, user_id: userId, match_id: matchId, home_score: homeScore, away_score: awayScore },
       { onConflict: 'quiniela_id,user_id,match_id' }
     )
     if (error) throw error
