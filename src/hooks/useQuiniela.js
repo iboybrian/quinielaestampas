@@ -106,7 +106,7 @@ export function useQuinielaGroup(quinielaId) {
         supabase.from('quiniela_members')
           .select('user_id, role, has_paid, profiles(id, username, avatar_url)')
           .eq('quiniela_id', quinielaId),
-        supabase.from('predictions').select('*').eq('quiniela_id', quinielaId).limit(5000),
+        supabase.from('predictions').select('*').eq('quiniela_id', quinielaId).limit(10000),
       ])
       if (qErr) throw qErr
       setQuiniela(q)
