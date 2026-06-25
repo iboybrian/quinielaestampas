@@ -135,6 +135,20 @@ export function useQuinielaGroup(quinielaId) {
     return () => channel.unsubscribe()
   }, [quinielaId, fetchData])
 
+  // Re-fetch when auth becomes available or refreshes.
+  // fetchData no longer has user in deps (prevents expiry from clearing predictions),
+  // but that means the initial fetchData on mount may run before AuthContext resolves (user=null → RLS blocks → []).
+  // INITIAL_SESSION / SIGNED_IN fire once auth is ready; TOKEN_REFRESHED fires after auto-renewal.
+  // Skip when session is null (SIGNED_OUT, unresolved auth) — those must NOT clear predictions.
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session && (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+        fetchData()
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [fetchData])
+
   const savePrediction = useCallback(async (matchId, homeScore, awayScore) => {
     if (!quinielaId) throw new Error('session_expired')
     let userId = user?.id
