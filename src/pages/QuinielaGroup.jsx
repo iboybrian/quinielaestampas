@@ -26,6 +26,20 @@ export default function QuinielaGroup() {
   const { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction, refresh: fetchData } = useQuinielaGroup(id)
   const { fixtures, loading: fixturesLoading, refresh: refreshFixtures } = useFixtures()
 
+  useEffect(() => {
+    console.log('[QG DEBUG]', {
+      quinielaId: id,
+      userId: user?.id ?? null,
+      predictionsTotal: predictions.length,
+      myPredictionsCount: myPredictions.length,
+      samplePredUserId: predictions[0]?.user_id ?? null,
+      sampleMatchId: predictions[0]?.match_id ?? null,
+      matchIdType: typeof predictions[0]?.match_id,
+      sampleFixtureId: fixtures[0]?.id ?? null,
+      fixtureIdType: typeof fixtures[0]?.id,
+    })
+  }, [predictions, myPredictions, user?.id, fixtures, id])
+
   // Mask other users' predictions for matches whose deadline hasn't passed yet.
   // myPredictions stays unmasked for editing/MatchCard. visiblePredictions goes to Matrix/Standings.
   const visiblePredictions = useMemo(
@@ -514,3 +528,4 @@ function formatDeadline(min) {
   const m = min % 60
   return m === 0 ? `${h}h` : `${h}h ${m}m`
 }
+
