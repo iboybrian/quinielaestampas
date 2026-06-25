@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { calculatePoints } from '../lib/scoring'
@@ -87,6 +87,9 @@ export function useMyQuinielas() {
 
 export function useQuinielaGroup(quinielaId) {
   const { user } = useAuth()
+  const userIdRef = useRef(user?.id)
+  useEffect(() => { userIdRef.current = user?.id }, [user])
+
   const [quiniela, setQuiniela] = useState(null)
   const [members, setMembers] = useState([])
   const [predictions, setPredictions] = useState([])
@@ -114,14 +117,14 @@ export function useQuinielaGroup(quinielaId) {
       })).filter((r) => r.id) ?? []
       setMembers(enrichedMembers)
       setPredictions(p ?? [])
-      const myMember = m?.find((r) => r.user_id === user?.id)
+      const myMember = m?.find((r) => r.user_id === userIdRef.current)
       setIsAdmin(myMember?.role === 'admin')
     } catch (e) {
       console.error('[useQuinielaGroup]', e)
       setLoadError(e?.message ?? 'Error loading group')
     }
     finally { setLoading(false) }
-  }, [quinielaId, user])
+  }, [quinielaId]) // user removed — session expiry must not re-trigger fetch and clear predictions
 
   useEffect(() => {
     fetchData()
@@ -148,7 +151,7 @@ export function useQuinielaGroup(quinielaId) {
     await fetchData()
   }, [user, quinielaId, fetchData])
 
-  const myPredictions = predictions.filter((p) => p.user_id === user?.id)
+  const myPredictions = predictions.filter((p) => p.user_id === (user?.id ?? userIdRef.current))
   return { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction, refresh: fetchData }
 }
 
