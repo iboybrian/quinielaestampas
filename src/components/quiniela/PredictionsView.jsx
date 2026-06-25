@@ -27,7 +27,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
   )
 
   const predictedCount = groupMatches.filter((m) =>
-    myPredictions.some((p) => p.match_id === m.id)
+    myPredictions.some((p) => String(p.match_id) === String(m.id))
   ).length
 
   const total = groupMatches.length
@@ -90,7 +90,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
           </div>
           <div className="space-y-4">
             {dayMatches.map((match) => {
-              const pred = myPredictions.find((p) => p.match_id === match.id)
+              const pred = myPredictions.find((p) => String(p.match_id) === String(match.id))
               return (
                 <MatchCard
                   key={match.id}

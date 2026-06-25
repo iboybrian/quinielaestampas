@@ -26,20 +26,6 @@ export default function QuinielaGroup() {
   const { quiniela, members, predictions, myPredictions, loading, loadError, isAdmin, savePrediction, refresh: fetchData } = useQuinielaGroup(id)
   const { fixtures, loading: fixturesLoading, refresh: refreshFixtures } = useFixtures()
 
-  useEffect(() => {
-    console.log('[QG DEBUG]', {
-      quinielaId: id,
-      userId: user?.id ?? null,
-      predictionsTotal: predictions.length,
-      myPredictionsCount: myPredictions.length,
-      samplePredUserId: predictions[0]?.user_id ?? null,
-      sampleMatchId: predictions[0]?.match_id ?? null,
-      matchIdType: typeof predictions[0]?.match_id,
-      sampleFixtureId: fixtures[0]?.id ?? null,
-      fixtureIdType: typeof fixtures[0]?.id,
-    })
-  }, [predictions, myPredictions, user?.id, fixtures, id])
-
   // Mask other users' predictions for matches whose deadline hasn't passed yet.
   // myPredictions stays unmasked for editing/MatchCard. visiblePredictions goes to Matrix/Standings.
   const visiblePredictions = useMemo(
@@ -50,19 +36,19 @@ export default function QuinielaGroup() {
   // Override points_earned from DB (DEFAULT 0, never updated by trigger) with
   // client-side calculation. Null for unfinished/hidden so Standings counts correctly.
   const enrichedPredictions = useMemo(() => {
-    const fixtureMap = Object.fromEntries(fixtures.map((f) => [f.id, f]))
+    const fixtureMap = new Map(fixtures.map((f) => [String(f.id), f]))
     return visiblePredictions.map((p) => {
       if (p.hidden) return p
-      const fix = fixtureMap[p.match_id]
+      const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       return { ...p, points_earned: calculatePoints(p, fix) }
     })
   }, [visiblePredictions, fixtures])
 
   const myEnrichedPredictions = useMemo(() => {
-    const fixtureMap = Object.fromEntries(fixtures.map((f) => [f.id, f]))
+    const fixtureMap = new Map(fixtures.map((f) => [String(f.id), f]))
     return myPredictions.map((p) => {
-      const fix = fixtureMap[p.match_id]
+      const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       return { ...p, points_earned: calculatePoints(p, fix) }
     })
@@ -483,7 +469,7 @@ export default function QuinielaGroup() {
       {/* Prediction modal */}
       <PredictionModal
         match={predModal.match}
-        prediction={myPredictions.find((p) => p.match_id === predModal.match?.id)}
+        prediction={myPredictions.find((p) => String(p.match_id) === String(predModal.match?.id))}
         isOpen={predModal.open}
         onClose={closePredict}
         onSave={handleSave}

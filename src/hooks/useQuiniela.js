@@ -258,10 +258,10 @@ function isMatchLocked(fixture) {
 // Own predictions (currentUserId) are always returned as-is.
 // Hidden predictions keep user_id/match_id so the matrix can render a lock cell.
 export function maskPredictions(predictions, fixtures, currentUserId) {
-  const fixtureMap = new Map(fixtures.map((f) => [f.id, f]))
+  const fixtureMap = new Map(fixtures.map((f) => [String(f.id), f]))
   return predictions.map((p) => {
     if (p.user_id === currentUserId) return p
-    const fixture = fixtureMap.get(p.match_id) ?? fixtureMap.get(String(p.match_id))
+    const fixture = fixtureMap.get(String(p.match_id))
     if (!fixture) return p
     if (isMatchLocked(fixture)) {
       return { user_id: p.user_id, match_id: p.match_id, quiniela_id: p.quiniela_id, hidden: true }
