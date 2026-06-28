@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import { Clock, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
-import { isGroupStage } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
 import { es } from 'date-fns/locale'
 import { translateStage } from '../../lib/translations'
@@ -91,7 +90,7 @@ export default function MatchesView({ fixtures }) {
   const groupMatches = useMemo(
     () =>
       fixtures
-        .filter(isGroupStage)
+        .slice()
         .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at)),
     [fixtures]
   )

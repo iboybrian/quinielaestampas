@@ -13,19 +13,19 @@ export function useFixtures() {
     try {
       const all = await getFixtures()
 
-      // Upsert group-stage fixtures to Supabase so prediction FK constraint is satisfied.
+      // Upsert all fixtures (group + knockout) to Supabase so prediction FK constraint is satisfied.
       // Strip fields not in the matches schema (home_penalties, away_penalties from API data).
-      const group = all.filter(isGroupStage).map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
+      const allNormalized = all.map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
         ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
       )
-      if (group.length) {
+      if (allNormalized.length) {
         const SYNC_INTERVAL = 15 * 60 * 1000 // 15 minutes
         const lastSync = localStorage.getItem('last_sync_matches')
         const nowMs = Date.now()
 
         // Only sync live matches or matches finished within the last hour.
         // Scheduled matches have nothing to update; old finished matches are already scored.
-        const activeMatches = group.filter(m => {
+        const activeMatches = allNormalized.filter(m => {
           if (m.status === 'live') return true
           if (m.status === 'finished' && m.starts_at) {
             const msSinceStart = nowMs - new Date(m.starts_at).getTime()
@@ -33,6 +33,23 @@ export function useFixtures() {
           }
           return false
         })
+
+        // Direct client upsert for scheduled matches — ensures FK constraint is satisfied
+        // for all matches (group + knockout) before a user can submit a prediction.
+        // Scheduled matches have null scores so we never overwrite finished results here.
+        const scheduledMatches = allNormalized.filter(m => m.status === 'scheduled')
+        const lastScheduledSync = localStorage.getItem('last_sync_scheduled')
+        if (scheduledMatches.length > 0 && (!lastScheduledSync || nowMs - parseInt(lastScheduledSync) > 60 * 60 * 1000)) {
+          const { error: schedErr } = await supabase.from('matches').upsert(
+            scheduledMatches,
+            { onConflict: 'id', ignoreDuplicates: true }
+          )
+          if (schedErr) {
+            console.error('[useFixtures] scheduled upsert failed:', schedErr)
+          } else {
+            localStorage.setItem('last_sync_scheduled', nowMs.toString())
+          }
+        }
 
         if (activeMatches.length > 0 && (!lastSync || nowMs - parseInt(lastSync) > SYNC_INTERVAL)) {
           // sync-matches Edge Function uses service_role to bypass RLS, so the

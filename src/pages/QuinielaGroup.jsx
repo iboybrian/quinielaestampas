@@ -116,16 +116,22 @@ export default function QuinielaGroup() {
 
   const handleRankChangeDismiss = useCallback(() => setActiveRankChange(null), [])
 
-  // Bracket tab appears only when knockout fixtures exist
   const hasKnockouts = fixtures.some(isKnockoutStage)
-  const bracket = hasKnockouts ? normalizeBracket(fixtures) : MOCK_BRACKET
+  const realBracket = hasKnockouts ? normalizeBracket(fixtures) : null
+  // Use real bracket if it has any round data, else fall back to MOCK_BRACKET
+  const bracketHasData = realBracket && (
+    (realBracket.r32?.length ?? 0) > 0 ||
+    (realBracket.r16?.length ?? 0) > 0 ||
+    (realBracket.qf?.length ?? 0) > 0
+  )
+  const bracket = bracketHasData ? realBracket : MOCK_BRACKET
 
   const TABS = [
     { key: 'Standings', label: `🏆 ${lang === 'es' ? 'Posiciones' : 'Standings'}` },
     { key: 'Matrix',    label: `📊 ${lang === 'es' ? 'Matriz' : 'Matrix'}` },
     { key: 'Groups',    label: `⚽ ${t.quiniela.groupsTab}` },
     { key: 'Matches',   label: `📋 ${t.quiniela.matchesTab}` },
-    ...(hasKnockouts ? [{ key: 'Bracket', label: `🌳 ${t.quiniela.bracketTab}` }] : []),
+    { key: 'Bracket',  label: `🌳 ${t.quiniela.bracketTab}` },
   ]
 
   const copyCode = () => {

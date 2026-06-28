@@ -189,7 +189,10 @@ function isInLiveWindow(fixtures) {
 }
 
 export function clearFixturesCache() {
-  try { localStorage.removeItem(`wc_fixtures_${WC_SEASON}_v${CACHE_VERSION}`) } catch {}
+  try {
+    localStorage.removeItem(`wc_fixtures_${WC_SEASON}_v${CACHE_VERSION}`)
+    localStorage.removeItem('last_sync_scheduled')
+  } catch {}
 }
 
 export async function getFixtures() {
@@ -260,12 +263,16 @@ export function normalizeBracket(allFixtures) {
       .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
       .map(toBracketMatch)
 
+  const r32   = byRound('round of 32')
   const r16   = byRound('round of 16')
   const qf    = byRound('quarter')
   const sf    = byRound('semi')
-  // "Final" only — filter out "Semi-finals" and "3rd Place Final"
+  // "Final" only — exclude "Semi-finals" and "3rd Place Final"
   const final = knockout
-    .filter((f) => f.stage?.toLowerCase() === 'final')
+    .filter((f) => {
+      const s = f.stage?.toLowerCase() ?? ''
+      return s === 'final' || (s.includes('final') && !s.includes('semi') && !s.includes('3rd') && !s.includes('place') && !s.includes('round') && !s.includes('quarter'))
+    })
     .map(toBracketMatch)
 
   let champion = null
@@ -276,12 +283,11 @@ export function normalizeBracket(allFixtures) {
     } else if (m.awayScore > m.homeScore) {
       champion = m.away.team
     } else if (m.homePenalties != null && m.awayPenalties != null) {
-      // Penalty shootout (e.g. Argentina 4–2 France, WC2022 final)
       champion = m.homePenalties > m.awayPenalties ? m.home.team : m.away.team
     }
   }
 
-  return { r16, qf, sf, final, champion }
+  return { r32, r16, qf, sf, final, champion }
 }
 
 function toBracketMatch(f) {
@@ -414,28 +420,46 @@ export const MOCK_FIXTURES = [
 ]
 
 export const MOCK_BRACKET = {
+  r32: [
+    { id: 'r32-1',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-04' },
+    { id: 'r32-2',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-04' },
+    { id: 'r32-3',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-05' },
+    { id: 'r32-4',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-05' },
+    { id: 'r32-5',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-06' },
+    { id: 'r32-6',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-06' },
+    { id: 'r32-7',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-07' },
+    { id: 'r32-8',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-07' },
+    { id: 'r32-9',  home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-08' },
+    { id: 'r32-10', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-08' },
+    { id: 'r32-11', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-09' },
+    { id: 'r32-12', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-09' },
+    { id: 'r32-13', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-10' },
+    { id: 'r32-14', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-10' },
+    { id: 'r32-15', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-11' },
+    { id: 'r32-16', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-11' },
+  ],
   r16: [
-    { id: 'r16-1', home: { team: 'Argentina',  flag: 'ar'     }, away: { team: 'Netherlands', flag: 'nl'     }, homeScore: 3,    awayScore: 2,    status: 'finished' },
-    { id: 'r16-2', home: { team: 'France',     flag: 'fr'     }, away: { team: 'Brazil',      flag: 'br'     }, homeScore: 1,    awayScore: 0,    status: 'finished' },
-    { id: 'r16-3', home: { team: 'Spain',      flag: 'es'     }, away: { team: 'USA',         flag: 'us'     }, homeScore: 2,    awayScore: 1,    status: 'finished' },
-    { id: 'r16-4', home: { team: 'England',    flag: 'gb-eng' }, away: { team: 'Portugal',    flag: 'pt'     }, homeScore: 2,    awayScore: 2,    awayPenalties: 4, homePenalties: 3, status: 'finished' },
-    { id: 'r16-5', home: { team: 'Germany',    flag: 'de'     }, away: { team: 'Japan',       flag: 'jp'     }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-01' },
-    { id: 'r16-6', home: { team: 'Morocco',    flag: 'ma'     }, away: { team: 'Colombia',    flag: 'co'     }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-01' },
-    { id: 'r16-7', home: { team: 'Mexico',     flag: 'mx'     }, away: { team: 'Senegal',     flag: 'sn'     }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-02' },
-    { id: 'r16-8', home: { team: 'Canada',     flag: 'ca'     }, away: { team: 'Poland',      flag: 'pl'     }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-02' },
+    { id: 'r16-1', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-14' },
+    { id: 'r16-2', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-14' },
+    { id: 'r16-3', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-15' },
+    { id: 'r16-4', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-15' },
+    { id: 'r16-5', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-16' },
+    { id: 'r16-6', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-16' },
+    { id: 'r16-7', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-17' },
+    { id: 'r16-8', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-17' },
   ],
   qf: [
-    { id: 'qf-1', home: { team: 'Argentina', flag: 'ar' }, away: { team: 'France',   flag: 'fr' }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-05' },
-    { id: 'qf-2', home: { team: 'Spain',     flag: 'es' }, away: { team: 'Portugal', flag: 'pt' }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-05' },
-    { id: 'qf-3', home: { team: 'TBD',       flag: null }, away: { team: 'TBD',      flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-06' },
-    { id: 'qf-4', home: { team: 'TBD',       flag: null }, away: { team: 'TBD',      flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-06' },
+    { id: 'qf-1', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-20' },
+    { id: 'qf-2', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-20' },
+    { id: 'qf-3', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-21' },
+    { id: 'qf-4', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-21' },
   ],
   sf: [
-    { id: 'sf-1', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-10' },
-    { id: 'sf-2', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-11' },
+    { id: 'sf-1', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-24' },
+    { id: 'sf-2', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-25' },
   ],
   final: [
-    { id: 'final', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-19' },
+    { id: 'final', home: { team: 'TBD', flag: null }, away: { team: 'TBD', flag: null }, homeScore: null, awayScore: null, status: 'scheduled', date: '2026-07-29' },
   ],
   champion: null,
 }

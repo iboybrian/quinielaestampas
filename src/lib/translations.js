@@ -208,6 +208,7 @@ export const translations = {
       userDefault: 'Usuario {num}',
       matchesPage: '{total} partidos · página {current} / {max}',
       rounds: {
+        r32: 'Dieciseisavos de Final',
         r16: 'Octavos de Final',
         qf: 'Cuartos de Final',
         sf: 'Semifinales',
@@ -690,6 +691,7 @@ export const translations = {
       userDefault: 'User {num}',
       matchesPage: '{total} matches · page {current} / {max}',
       rounds: {
+        r32: 'Round of 32',
         r16: 'Round of 16',
         qf: 'Quarter-Finals',
         sf: 'Semi-Finals',

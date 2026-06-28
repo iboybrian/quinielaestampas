@@ -112,6 +112,7 @@ function BracketColumn({ title, matches, accentColor }) {
 export default function BracketView({ bracket = MOCK_BRACKET }) {
   const { t } = useLang()
   const rounds = [
+    { key: 'r32', title: t.quiniela.rounds.r32, color: 'text-slate-300' },
     { key: 'r16', title: t.quiniela.rounds.r16, color: 'text-slate-400' },
     { key: 'qf', title: t.quiniela.rounds.qf, color: 'text-blue-400' },
     { key: 'sf', title: t.quiniela.rounds.sf, color: 'text-purple-400' },
@@ -120,7 +121,7 @@ export default function BracketView({ bracket = MOCK_BRACKET }) {
 
   return (
     <div className="overflow-x-auto pb-6">
-      <div className="flex gap-6 min-w-max px-2 pt-2 items-center" style={{ minHeight: '520px' }}>
+      <div className="flex gap-6 min-w-max px-2 pt-2 items-start" style={{ minHeight: '600px' }}>
         {rounds.map((round) => (
           <BracketColumn
             key={round.key}
