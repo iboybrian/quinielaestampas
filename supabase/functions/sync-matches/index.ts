@@ -17,6 +17,8 @@ function corsHeaders(origin: string | null): Record<string, string> {
 }
 
 const VALID_STATUSES = new Set(['scheduled', 'live', 'finished'])
+const VALID_SCORERS  = new Set(['home', 'away', 'none'])
+const VALID_HALVES   = new Set(['first', 'second'])
 
 serve(async (req) => {
   const origin = req.headers.get('origin')
@@ -44,20 +46,29 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Missing matches array' }), { status: 400, headers })
   }
 
-  // Sanitize — only known fields and valid status values
-  const sanitized = body.matches.map((m: Record<string, unknown>) => ({
-    id:         String(m.id),
-    home_team:  String(m.home_team ?? ''),
-    away_team:  String(m.away_team ?? ''),
-    home_flag:  String(m.home_flag ?? ''),
-    away_flag:  String(m.away_flag ?? ''),
-    home_score: m.home_score != null ? Number(m.home_score) : null,
-    away_score: m.away_score != null ? Number(m.away_score) : null,
-    status:     VALID_STATUSES.has(String(m.status)) ? String(m.status) : 'scheduled',
-    starts_at:  String(m.starts_at ?? ''),
-    stage:      String(m.stage ?? ''),
-    venue:      String(m.venue ?? ''),
-  }))
+  // Sanitize — only known fields and valid status/scorer/half values
+  const sanitized = body.matches.map((m: Record<string, unknown>) => {
+    const row: Record<string, unknown> = {
+      id:         String(m.id),
+      home_team:  String(m.home_team ?? ''),
+      away_team:  String(m.away_team ?? ''),
+      home_flag:  String(m.home_flag ?? ''),
+      away_flag:  String(m.away_flag ?? ''),
+      home_score: m.home_score != null ? Number(m.home_score) : null,
+      away_score: m.away_score != null ? Number(m.away_score) : null,
+      status:     VALID_STATUSES.has(String(m.status)) ? String(m.status) : 'scheduled',
+      starts_at:  String(m.starts_at ?? ''),
+      stage:      String(m.stage ?? ''),
+      venue:      String(m.venue ?? ''),
+    }
+    if (m.first_scorer != null && VALID_SCORERS.has(String(m.first_scorer))) {
+      row.first_scorer = String(m.first_scorer)
+    }
+    if (m.first_goal_half != null && VALID_HALVES.has(String(m.first_goal_half))) {
+      row.first_goal_half = String(m.first_goal_half)
+    }
+    return row
+  })
 
   // Fetch already-finished match IDs so we never downgrade their status
   // (stale client cache could send 'scheduled' for a match already done in DB)

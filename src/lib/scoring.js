@@ -4,9 +4,13 @@
  *  3 pts — correct goal difference + winner
  *  2 pts — correct winner only (or draw both sides)
  *  0 pts — wrong
+ *
+ * Extra points (when extraPointsEnabled = true and match has first_scorer set):
+ *  +1 — correct first scoring team ('home'|'away'|'none')
+ *  +1 — correct first goal half ('first'|'second')  [skipped when first_scorer = 'none']
  */
 
-export function calculatePoints(pred, actual) {
+export function calculatePoints(pred, actual, extraPointsEnabled = false) {
   if (
     pred.home_score == null ||
     pred.away_score == null ||
@@ -21,21 +25,33 @@ export function calculatePoints(pred, actual) {
   const aH = actual.home_score
   const aA = actual.away_score
 
-  // Exact score
-  if (pH === aH && pA === aA) return 5
+  let pts
+  if (pH === aH && pA === aA) {
+    pts = 5
+  } else {
+    const predDiff   = pH - pA
+    const actualDiff = aH - aA
+    if (predDiff === actualDiff) pts = 3
+    else if (Math.sign(predDiff) === Math.sign(actualDiff)) pts = 2
+    else pts = 0
+  }
 
-  const predDiff = pH - pA
-  const actualDiff = aH - aA
+  if (!extraPointsEnabled || actual.first_scorer == null) return pts
 
-  // Correct goal difference and winner direction
-  if (predDiff === actualDiff) return 3
+  let extra = 0
+  if (pred.first_scorer != null && pred.first_scorer === actual.first_scorer) {
+    extra += 1
+  }
+  if (
+    actual.first_scorer !== 'none' &&
+    actual.first_goal_half != null &&
+    pred.first_goal_half != null &&
+    pred.first_goal_half === actual.first_goal_half
+  ) {
+    extra += 1
+  }
 
-  // Correct winner (or both drew)
-  const predWinner = Math.sign(predDiff)
-  const actualWinner = Math.sign(actualDiff)
-  if (predWinner === actualWinner) return 2
-
-  return 0
+  return pts + extra
 }
 
 export function getPointLabel(points) {

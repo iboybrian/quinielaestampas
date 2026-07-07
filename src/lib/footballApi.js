@@ -253,6 +253,51 @@ export function isKnockoutStage(fixture) {
   return !isGroupStage(fixture)
 }
 
+// QF, SF, 3rd Place, Final — stages where extra points predictions apply
+export function isExtraPointsStage(fixture) {
+  const s = fixture.stage?.toLowerCase() ?? ''
+  return !s.includes('group') && !s.includes('round of 32') && !s.includes('round of 16')
+}
+
+// Fetches first goal event for a finished match.
+// Returns { first_scorer: 'home'|'away'|'none', first_goal_half: 'first'|'second'|null }
+// or null if API unavailable / team IDs don't match.
+export async function getFixtureEvents(fixtureId, homeTeamId, awayTeamId) {
+  if (!API_KEY) return null
+  const CACHE_KEY = `wc_events_${fixtureId}`
+  const cached = getCached(CACHE_KEY, 7 * 24 * 60 * 60 * 1000)
+  if (cached !== null) return cached
+
+  const data = await apiFetch('/fixtures/events', { fixture: fixtureId })
+  if (!data) return null
+
+  // First actual goal (not missed penalty)
+  const firstGoal = data.find(e => e.type === 'Goal' && e.detail !== 'Missed Penalty')
+
+  let result
+  if (!firstGoal) {
+    result = { first_scorer: 'none', first_goal_half: null }
+  } else {
+    let scorer
+    if (firstGoal.detail === 'Own Goal') {
+      // Own goal: beneficiary is the opposing team
+      scorer = firstGoal.team.id === homeTeamId ? 'away' : 'home'
+    } else {
+      scorer = firstGoal.team.id === homeTeamId ? 'home'
+             : firstGoal.team.id === awayTeamId ? 'away'
+             : null
+    }
+    if (!scorer) return null // unknown team — don't cache
+    result = {
+      first_scorer: scorer,
+      first_goal_half: (firstGoal.time.elapsed ?? 0) <= 45 ? 'first' : 'second',
+    }
+  }
+
+  setCached(CACHE_KEY, result)
+  return result
+}
+
 // ── Bracket normalization (for knockout view) ─────────────────────────────────
 export function normalizeBracket(allFixtures) {
   const knockout = allFixtures.filter(isKnockoutStage)
@@ -310,6 +355,8 @@ function normalizeFixture(f) {
     id: String(f.fixture.id),
     home_team: f.teams.home.name,
     away_team: f.teams.away.name,
+    home_team_id: f.teams.home.id,   // used by getFixtureEvents — not stored in DB
+    away_team_id: f.teams.away.id,   // used by getFixtureEvents — not stored in DB
     home_flag: teamToCode(f.teams.home.name),
     away_flag: teamToCode(f.teams.away.name),
     home_score: f.goals.home,

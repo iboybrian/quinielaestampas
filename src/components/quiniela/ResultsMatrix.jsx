@@ -24,6 +24,7 @@ function getPhaseKey(stage) {
 // ── Cell color logic ──────────────────────────────────────────────────────────
 function cellStyle(points, matchFinished) {
   if (!matchFinished) return 'bg-white/[0.03] border-white/8'
+  if (points >= 6)  return 'bg-purple-500/20  border-purple-500/30'
   if (points === 5) return 'bg-emerald-500/20 border-emerald-500/30'
   if (points >= 2)  return 'bg-amber-400/20  border-amber-400/30'
   return 'bg-slate-600/10 border-white/8'
@@ -100,6 +101,7 @@ function PredCell({ match, prediction }) {
         </span>
         {finished && points != null && (
           <span className={`text-[9px] font-black leading-none ${
+            points >= 6  ? 'text-purple-400'  :
             points === 5 ? 'text-emerald-400' :
             points >= 2  ? 'text-amber-400'   :
             'text-slate-600'

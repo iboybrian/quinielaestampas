@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, Check, Loader2, ShieldAlert, Trash2, AlertTriangle } from 'lucide-react'
 import { useQuinielaGroup, updateQuiniela, toggleMemberPaid, removeMember, deleteQuiniela } from '../hooks/useQuiniela'
 import { useLang } from '../contexts/LangContext'
@@ -14,7 +14,8 @@ export default function ManageQuiniela() {
   const { user } = useAuth()
   const { quiniela, members, predictions, loading, isAdmin, refresh } = useQuinielaGroup(id)
 
-  const [activeTab, setActiveTab] = useState('participants')
+  const [searchParams] = useSearchParams()
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') === 'settings' ? 'settings' : 'participants')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [removing, setRemoving] = useState(false)
@@ -29,6 +30,8 @@ export default function ManageQuiniela() {
   const [participantLimit, setParticipantLimit] = useState('')
   const [description, setDescription] = useState('')
   const [infoContact, setInfoContact] = useState('')
+  const [extraPointsEnabled, setExtraPointsEnabled] = useState(false)
+  const [closeAtPhase, setCloseAtPhase] = useState(null)
 
   useEffect(() => {
     if (quiniela) {
@@ -38,6 +41,8 @@ export default function ManageQuiniela() {
       setParticipantLimit(quiniela.participant_limit != null ? String(quiniela.participant_limit) : '')
       setDescription(quiniela.description ?? '')
       setInfoContact(quiniela.info_contact ?? '')
+      setExtraPointsEnabled(quiniela.extra_points_enabled ?? false)
+      setCloseAtPhase(quiniela.close_at_phase ?? null)
     }
   }, [quiniela])
 
@@ -51,6 +56,8 @@ export default function ManageQuiniela() {
         participant_limit: participantLimit !== '' ? Number(participantLimit) : null,
         description: description.trim() || null,
         info_contact: infoContact.trim() || null,
+        extra_points_enabled: extraPointsEnabled,
+        close_at_phase: closeAtPhase,
       })
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
@@ -199,6 +206,77 @@ export default function ManageQuiniela() {
         {activeTab === 'settings' && (
           <motion.div key="settings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
             <div className="space-y-5">
+
+              {/* Puntos Extra — shown first */}
+              <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-black text-amber-400">⚡ {t.admin.featureExtraPointsLabel}</span>
+                </div>
+                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                  {t.admin.extraPointsDesc}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: false, label: t.admin.extraPointsOff,  desc: t.admin.extraPointsOffDesc },
+                    { value: true,  label: t.admin.extraPointsOn,   desc: t.admin.extraPointsOnDesc },
+                  ].map(opt => (
+                    <motion.button
+                      key={String(opt.value)}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setExtraPointsEnabled(opt.value)}
+                      className={`py-3 px-3 rounded-xl border text-left transition-colors ${
+                        extraPointsEnabled === opt.value
+                          ? 'bg-amber-400/20 border-amber-400/50'
+                          : 'bg-white/5 border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <div className={`text-xs font-black mb-0.5 ${extraPointsEnabled === opt.value ? 'text-amber-300' : 'text-slate-300'}`}>{opt.label}</div>
+                      <div className="text-[10px] text-slate-500">{opt.desc}</div>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fase de cierre */}
+              <div className="rounded-2xl border border-slate-500/20 bg-white/3 p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-black text-slate-300">🔒 {t.admin.closeAtPhaseLabel}</span>
+                </div>
+                <p className="text-xs text-slate-400 mb-3 leading-relaxed">{t.admin.closeAtPhaseDesc}</p>
+                <div className="space-y-1.5">
+                  {[
+                    { value: null,    label: t.admin.closeAtPhaseOptions.none },
+                    { value: 'r16',   label: t.admin.closeAtPhaseOptions.r16 },
+                    { value: 'qf',    label: t.admin.closeAtPhaseOptions.qf },
+                    { value: 'sf',    label: t.admin.closeAtPhaseOptions.sf },
+                    { value: 'final', label: t.admin.closeAtPhaseOptions.final },
+                  ].map((opt) => {
+                    const selected = closeAtPhase === opt.value
+                    return (
+                      <motion.button
+                        key={String(opt.value)}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setCloseAtPhase(opt.value)}
+                        className={`w-full py-3 px-4 rounded-xl border text-left transition-all flex items-center gap-3 ${
+                          selected
+                            ? 'bg-emerald-500/15 border-emerald-500/50'
+                            : 'bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20'
+                        }`}
+                      >
+                        <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                          selected ? 'border-emerald-400 bg-emerald-400' : 'border-slate-600'
+                        }`}>
+                          {selected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span className={`text-sm font-semibold transition-colors ${selected ? 'text-emerald-300' : 'text-slate-400'}`}>
+                          {opt.label}
+                        </span>
+                      </motion.button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs text-slate-400 mb-1.5 font-medium">{t.admin.nameLabel}</label>
                 <input
@@ -208,6 +286,7 @@ export default function ManageQuiniela() {
                   className="input-field"
                 />
               </div>
+
 
               <div>
                 <label className="block text-xs text-slate-400 mb-1.5 font-medium">{t.admin.deadlineLabel}</label>

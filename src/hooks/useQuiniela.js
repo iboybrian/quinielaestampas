@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { calculatePoints } from '../lib/scoring'
-import { getFixtures, isGroupStage, MOCK_FIXTURES } from '../lib/footballApi'
+import { getFixtures, isGroupStage, isExtraPointsStage, getFixtureEvents, MOCK_FIXTURES } from '../lib/footballApi'
 
 export function useFixtures() {
   const [fixtures, setFixtures] = useState([])
@@ -13,11 +13,23 @@ export function useFixtures() {
     try {
       const all = await getFixtures()
 
+      // For finished extra-points-stage matches, fetch first goal events (7-day cached)
+      const epMatches = all.filter(m => m.status === 'finished' && isExtraPointsStage(m))
+      const eventsMap = {}
+      await Promise.all(epMatches.map(async m => {
+        const ev = await getFixtureEvents(m.id, m.home_team_id, m.away_team_id)
+        if (ev) eventsMap[m.id] = ev
+      }))
+
       // Upsert all fixtures (group + knockout) to Supabase so prediction FK constraint is satisfied.
-      // Strip fields not in the matches schema (home_penalties, away_penalties from API data).
-      const allNormalized = all.map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) =>
-        ({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue })
-      )
+      // Strip fields not in the matches schema (home_penalties, away_penalties, home_team_id, away_team_id).
+      const allNormalized = all.map(({ id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue }) => {
+        const ep = eventsMap[id]
+        return {
+          id, home_team, away_team, home_flag, away_flag, home_score, away_score, status, starts_at, stage, venue,
+          ...(ep && { first_scorer: ep.first_scorer, first_goal_half: ep.first_goal_half }),
+        }
+      })
       if (allNormalized.length) {
         const SYNC_INTERVAL = 15 * 60 * 1000 // 15 minutes
         const lastSync = localStorage.getItem('last_sync_matches')
@@ -166,7 +178,7 @@ export function useQuinielaGroup(quinielaId) {
     return () => subscription.unsubscribe()
   }, [fetchData])
 
-  const savePrediction = useCallback(async (matchId, homeScore, awayScore) => {
+  const savePrediction = useCallback(async (matchId, homeScore, awayScore, extras = {}) => {
     if (!quinielaId) throw new Error('session_expired')
     let userId = user?.id
     if (!userId) {
@@ -175,7 +187,12 @@ export function useQuinielaGroup(quinielaId) {
       userId = session.user.id
     }
     const { error } = await supabase.from('predictions').upsert(
-      { quiniela_id: quinielaId, user_id: userId, match_id: matchId, home_score: homeScore, away_score: awayScore },
+      {
+        quiniela_id: quinielaId, user_id: userId, match_id: matchId,
+        home_score: homeScore, away_score: awayScore,
+        ...(extras.first_scorer != null && { first_scorer: extras.first_scorer }),
+        ...(extras.first_goal_half != null && { first_goal_half: extras.first_goal_half }),
+      },
       { onConflict: 'quiniela_id,user_id,match_id' }
     )
     if (error) throw error
@@ -222,7 +239,7 @@ export async function joinQuiniela(code, userId) {
 }
 
 export async function updateQuiniela(quinielaId, fields) {
-  const allowed = ['name', 'prediction_deadline_minutes', 'entry_fee', 'participant_limit', 'description', 'info_contact']
+  const allowed = ['name', 'prediction_deadline_minutes', 'entry_fee', 'participant_limit', 'description', 'info_contact', 'extra_points_enabled', 'close_at_phase']
   const payload = Object.fromEntries(
     Object.entries(fields).filter(([k]) => allowed.includes(k))
   )

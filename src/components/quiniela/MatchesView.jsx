@@ -11,15 +11,15 @@ import Flag from '../ui/Flag'
 
 const PAGE_SIZE = 10
 
-// Each chip defines which stage strings it matches
-const PHASE_CHIPS = [
-  { key: 'group',  label: 'Grupos',    match: s => s?.toLowerCase().includes('group') },
-  { key: 'r32',    label: '32avos',    match: s => s?.toLowerCase().includes('round of 32') },
-  { key: 'r16',    label: '16avos',    match: s => s?.toLowerCase().includes('round of 16') },
-  { key: 'qf',     label: 'Cuartos',   match: s => s?.toLowerCase().includes('quarter') },
-  { key: 'sf',     label: 'Semis',     match: s => s?.toLowerCase().includes('semi') },
-  { key: 'tpf',    label: '3er Lugar', match: s => { const l = s?.toLowerCase(); return l?.includes('3rd place') || l?.includes('third place') } },
-  { key: 'final',  label: 'Final',     match: s => {
+// Each chip defines which stage strings it matches (labels resolved dynamically from lang)
+const PHASE_CHIP_DEFS = [
+  { key: 'group',  labels: { es: 'Grupos',    en: 'Groups'     }, match: s => s?.toLowerCase().includes('group') },
+  { key: 'r32',    labels: { es: '32avos',    en: 'Round of 32'}, match: s => s?.toLowerCase().includes('round of 32') },
+  { key: 'r16',    labels: { es: '16avos',    en: 'Round of 16'}, match: s => s?.toLowerCase().includes('round of 16') },
+  { key: 'qf',     labels: { es: 'Cuartos',   en: 'Quarters'   }, match: s => s?.toLowerCase().includes('quarter') },
+  { key: 'sf',     labels: { es: 'Semis',     en: 'Semis'      }, match: s => s?.toLowerCase().includes('semi') },
+  { key: 'tpf',    labels: { es: '3er Lugar', en: '3rd Place'  }, match: s => { const l = s?.toLowerCase(); return l?.includes('3rd place') || l?.includes('third place') } },
+  { key: 'final',  labels: { es: 'Final',     en: 'Final'      }, match: s => {
     const l = s?.toLowerCase()
     return l?.includes('final') && !l?.includes('semi') && !l?.includes('quarter') && !l?.includes('3rd') && !l?.includes('third') && !l?.includes('place')
   }},
@@ -144,7 +144,7 @@ function PaginationBar({ page, totalPages, changePage, t }) {
 }
 
 export default function MatchesView({ fixtures }) {
-  const { t }                             = useLang()
+  const { t, lang }                       = useLang()
   const [page, setPage]                   = useState(0)
   const [selectedMatch, setSelected]      = useState(null)
   const [scrollTick, setScrollTick]       = useState(0)
@@ -159,10 +159,12 @@ export default function MatchesView({ fixtures }) {
   const totalPages  = Math.max(1, Math.ceil(sortedMatches.length / PAGE_SIZE))
   const pageMatches = sortedMatches.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
-  // Only show phase chips that have at least one match
+  // Only show phase chips that have at least one match, with labels resolved by lang
   const activeChips = useMemo(
-    () => PHASE_CHIPS.filter(chip => sortedMatches.some(m => chip.match(m.stage))),
-    [sortedMatches]
+    () => PHASE_CHIP_DEFS
+      .filter(chip => sortedMatches.some(m => chip.match(m.stage)))
+      .map(chip => ({ ...chip, label: chip.labels[lang] ?? chip.labels.en })),
+    [sortedMatches, lang]
   )
 
   // Group current page matches by stage (preserving date order)

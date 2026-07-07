@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X, Zap } from 'lucide-react'
 import Flag from '../ui/Flag'
 import { useLang } from '../../contexts/LangContext'
 
@@ -27,17 +27,23 @@ function ScoreInput({ value, onChange, label }) {
   )
 }
 
-export default function PredictionModal({ match, prediction, isOpen, onClose, onSave }) {
+export default function PredictionModal({ match, prediction, isOpen, onClose, onSave, extraPointsEnabled = false, isExtraStage = false }) {
   const { t } = useLang()
   const [homeScore, setHomeScore] = useState(0)
   const [awayScore, setAwayScore] = useState(0)
+  const [firstScorer, setFirstScorer] = useState(null)
+  const [firstGoalHalf, setFirstGoalHalf] = useState(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
+
+  const showExtra = extraPointsEnabled && isExtraStage
 
   useEffect(() => {
     if (isOpen) {
       setHomeScore(prediction?.home_score ?? 0)
       setAwayScore(prediction?.away_score ?? 0)
+      setFirstScorer(prediction?.first_scorer ?? null)
+      setFirstGoalHalf(prediction?.first_goal_half ?? null)
       setSaveError(null)
     }
   }, [isOpen, prediction])
@@ -46,7 +52,10 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
     setSaving(true)
     setSaveError(null)
     try {
-      await onSave(match.id, homeScore, awayScore)
+      const extras = showExtra
+        ? { first_scorer: firstScorer, first_goal_half: firstScorer === 'none' ? null : firstGoalHalf }
+        : {}
+      await onSave(match.id, homeScore, awayScore, extras)
       onClose()
     } catch (err) {
       const isSessionErr = err?.message === 'session_expired'
@@ -59,6 +68,9 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
   }
 
   if (!match) return null
+
+  const homeName = t.countries[match.home_team] || match.home_team
+  const awayName = t.countries[match.away_team] || match.away_team
 
   return (
     <AnimatePresence>
@@ -96,20 +108,20 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
               <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="text-center">
                   <div className="flex justify-center mb-2"><Flag code={match.home_flag} size="xl" /></div>
-                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{t.countries[match.home_team] || match.home_team}</div>
+                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{homeName}</div>
                 </div>
                 <span className="text-slate-600 font-bold">vs</span>
                 <div className="text-center">
                   <div className="flex justify-center mb-2"><Flag code={match.away_flag} size="xl" /></div>
-                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{t.countries[match.away_team] || match.away_team}</div>
+                  <div className="text-sm font-semibold text-white leading-tight max-w-[80px] truncate">{awayName}</div>
                 </div>
               </div>
 
               {/* Score inputs */}
               <div className="flex items-center justify-center gap-6 mb-8">
-                <ScoreInput value={homeScore} onChange={setHomeScore} label={t.countries[match.home_team] || match.home_team} />
+                <ScoreInput value={homeScore} onChange={setHomeScore} label={homeName} />
                 <div className="text-2xl font-black text-slate-600 mt-5">–</div>
-                <ScoreInput value={awayScore} onChange={setAwayScore} label={t.countries[match.away_team] || match.away_team} />
+                <ScoreInput value={awayScore} onChange={setAwayScore} label={awayName} />
               </div>
 
               {/* Points guide */}
@@ -125,6 +137,80 @@ export default function PredictionModal({ match, prediction, isOpen, onClose, on
                   </div>
                 ))}
               </div>
+
+              {/* Extra points section — QF+ when quiniela has extra_points_enabled */}
+              {showExtra && (
+                <div className="mb-6 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Zap className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-black text-amber-400 uppercase tracking-widest">Puntos Extra</span>
+                  </div>
+
+                  {/* First scorer */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-slate-400 font-medium">¿Quién anota primero?</span>
+                      <span className="text-[10px] text-amber-400/70 font-bold">+1 pt</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { value: 'home', label: homeName, flag: match.home_flag },
+                        { value: 'away', label: awayName, flag: match.away_flag },
+                        { value: 'none', label: 'Sin Gol', flag: null },
+                      ].map(opt => (
+                        <motion.button
+                          key={opt.value}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            setFirstScorer(opt.value)
+                            if (opt.value === 'none') setFirstGoalHalf(null)
+                          }}
+                          className={`flex flex-col items-center gap-1.5 py-2.5 px-1 rounded-xl border text-xs font-bold transition-colors ${
+                            firstScorer === opt.value
+                              ? 'bg-amber-400/20 border-amber-400/50 text-amber-300'
+                              : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                          }`}
+                        >
+                          {opt.flag
+                            ? <Flag code={opt.flag} size="sm" />
+                            : <span className="text-base">—</span>
+                          }
+                          <span className="leading-tight text-center line-clamp-1">{opt.label}</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* First goal half — only when a team is selected as scorer */}
+                  {firstScorer != null && firstScorer !== 'none' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-slate-400 font-medium">¿En qué tiempo?</span>
+                        <span className="text-[10px] text-amber-400/70 font-bold">+1 pt</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { value: 'first', label: '1er Tiempo' },
+                          { value: 'second', label: '2do Tiempo' },
+                        ].map(opt => (
+                          <motion.button
+                            key={opt.value}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setFirstGoalHalf(opt.value)}
+                            className={`py-2.5 rounded-xl border text-xs font-bold transition-colors ${
+                              firstGoalHalf === opt.value
+                                ? 'bg-amber-400/20 border-amber-400/50 text-amber-300'
+                                : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                            }`}
+                          >
+                            {opt.label}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Error message */}
               {saveError && (

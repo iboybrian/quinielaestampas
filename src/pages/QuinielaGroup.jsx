@@ -1,14 +1,15 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Copy, Check, Loader2, Clock, Users, Phone, EyeOff, Trophy, Settings, Ticket, Coins, RefreshCw } from 'lucide-react'
+import { ArrowLeft, Copy, Check, Loader2, Clock, Users, Phone, EyeOff, Trophy, Settings, Ticket, Coins, RefreshCw, Lock, Zap } from 'lucide-react'
 import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuiniela'
 import { useAuth } from '../contexts/AuthContext'
-import { isKnockoutStage, normalizeBracket, MOCK_BRACKET, clearFixturesCache } from '../lib/footballApi'
+import { isKnockoutStage, isExtraPointsStage, normalizeBracket, MOCK_BRACKET, clearFixturesCache } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
 import { rankMembers, calculatePoints } from '../lib/scoring'
 import Standings from '../components/quiniela/Standings'
 import RankChangeNotification from '../components/animations/RankChangeNotification'
+import AchievementOverlay from '../components/animations/AchievementOverlay'
 import GroupsView from '../components/quiniela/GroupsView'
 import PredictionsView from '../components/quiniela/PredictionsView'
 import MatchesView from '../components/quiniela/MatchesView'
@@ -16,6 +17,20 @@ import BracketView from '../components/quiniela/BracketView'
 import ResultsMatrix from '../components/quiniela/ResultsMatrix'
 import PredictionModal from '../components/quiniela/PredictionModal'
 import PageTransition from '../components/layout/PageTransition'
+import AdminFeatureModal from '../components/ui/AdminFeatureModal'
+
+// Phase rank — used to zero out predictions beyond close_at_phase
+const CLOSE_PHASE_RANK = { r16: 2, qf: 3, sf: 4, final: 5 }
+function getStageRank(stage) {
+  const s = stage ?? ''
+  if (/group/i.test(s))              return 0
+  if (/round of 32|r32/i.test(s))    return 1
+  if (/round of 16|r16/i.test(s))    return 2
+  if (/quarter/i.test(s))            return 3
+  if (/semi/i.test(s))               return 4
+  if (/^final$/i.test(s.trim()))     return 5
+  return 0
+}
 
 export default function QuinielaGroup() {
   const { id } = useParams()
@@ -35,29 +50,73 @@ export default function QuinielaGroup() {
 
   // Override points_earned from DB (DEFAULT 0, never updated by trigger) with
   // client-side calculation. Null for unfinished/hidden so Standings counts correctly.
+  // When close_at_phase is set, matches beyond that phase rank as null (don't count).
   const enrichedPredictions = useMemo(() => {
     const fixtureMap = new Map(fixtures.map((f) => [String(f.id), f]))
+    const extraEnabled = quiniela?.extra_points_enabled ?? false
+    const closeRank = quiniela?.close_at_phase ? (CLOSE_PHASE_RANK[quiniela.close_at_phase] ?? 99) : 99
     return visiblePredictions.map((p) => {
       if (p.hidden) return p
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
-      return { ...p, points_earned: calculatePoints(p, fix) }
+      if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
+      if (extraEnabled && fix.first_scorer == null) return { ...p }
+      return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
     })
-  }, [visiblePredictions, fixtures])
+  }, [visiblePredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
 
   const myEnrichedPredictions = useMemo(() => {
     const fixtureMap = new Map(fixtures.map((f) => [String(f.id), f]))
+    const extraEnabled = quiniela?.extra_points_enabled ?? false
+    const closeRank = quiniela?.close_at_phase ? (CLOSE_PHASE_RANK[quiniela.close_at_phase] ?? 99) : 99
     return myPredictions.map((p) => {
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
-      return { ...p, points_earned: calculatePoints(p, fix) }
+      if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
+      if (extraEnabled && fix.first_scorer == null) return { ...p }
+      return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
     })
-  }, [myPredictions, fixtures])
+  }, [myPredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
 
   const hiddenMatchCount = useMemo(
     () => fixtures.filter((f) => f.status === 'scheduled' || f.status === 'not_started').length,
     [fixtures]
   )
+
+  // Determine if quiniela is closed (all matches in close_at_phase are finished)
+  const quinielaClosed = useMemo(() => {
+    const phase = quiniela?.close_at_phase
+    if (!phase) return false
+    const stageMatch = {
+      r16:   (s) => /round of 16|r16/i.test(s ?? ''),
+      qf:    (s) => /quarter/i.test(s ?? ''),
+      sf:    (s) => /semi/i.test(s ?? ''),
+      final: (s) => /^final$/i.test((s ?? '').trim()),
+    }[phase]
+    if (!stageMatch) return false
+    const phaseFixtures = fixtures.filter((f) => stageMatch(f.stage))
+    return phaseFixtures.length > 0 && phaseFixtures.every((f) => f.status === 'finished')
+  }, [quiniela?.close_at_phase, fixtures])
+
+  // Winner: #1 ranked member once quiniela is closed
+  const winnerMember = useMemo(() => {
+    if (!quinielaClosed || members.length === 0) return null
+    return rankMembers(members, enrichedPredictions)[0] ?? null
+  }, [quinielaClosed, members, enrichedPredictions])
+
+  const [winnerOverlay, setWinnerOverlay] = useState(null)
+  const winnerShownRef = useRef(false)
+  useEffect(() => {
+    if (!quinielaClosed || !winnerMember || winnerShownRef.current) return
+    const key = `winner_seen_${id}`
+    if (localStorage.getItem(key)) return
+    winnerShownRef.current = true
+    setWinnerOverlay({
+      type: 'quiniela_winner',
+      title: winnerMember.username ?? 'Ganador',
+      description: quiniela?.name ?? '',
+    })
+  }, [quinielaClosed, winnerMember, id, quiniela?.name])
 
   const [activeTab, setActiveTab] = useState('Standings')
   const [showPredictions, setShowPredictions] = useState(false)
@@ -141,9 +200,18 @@ export default function QuinielaGroup() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const openPredict  = (match) => setPredModal({ open: true, match })
+  const closePhaseRank = quiniela?.close_at_phase ? (CLOSE_PHASE_RANK[quiniela.close_at_phase] ?? 99) : 99
+  const predictableFixtures = useMemo(
+    () => fixtures.filter((f) => getStageRank(f.stage) <= closePhaseRank),
+    [fixtures, closePhaseRank]
+  )
+
+  const openPredict  = (match) => {
+    if (getStageRank(match?.stage) > closePhaseRank) return
+    setPredModal({ open: true, match })
+  }
   const closePredict = () => setPredModal({ open: false, match: null })
-  const handleSave   = async (matchId, home, away) => { await savePrediction(matchId, home, away) }
+  const handleSave   = async (matchId, home, away, extras = {}) => { await savePrediction(matchId, home, away, extras) }
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true)
@@ -296,6 +364,20 @@ export default function QuinielaGroup() {
               }
               label={lang === 'es' ? 'Participantes' : 'Players'}
             />
+            <StatCard
+              icon={Lock}
+              color="sky"
+              labelFirst
+              label={lang === 'es' ? 'Fase de cierre' : 'Close phase'}
+              value={({ r16: lang === 'es' ? 'Octavos' : 'R16', qf: lang === 'es' ? 'Cuartos' : 'QF', sf: lang === 'es' ? 'Semis' : 'SF', final: 'Final' })[quiniela?.close_at_phase] ?? (lang === 'es' ? 'Completa' : 'Full')}
+            />
+            <StatCard
+              icon={Zap}
+              color={quiniela?.extra_points_enabled ? 'amber' : 'slate'}
+              labelFirst
+              label={lang === 'es' ? 'Puntos Extra' : 'Extra Points'}
+              value={quiniela?.extra_points_enabled ? (lang === 'es' ? 'Activo' : 'Active') : (lang === 'es' ? 'Inactivo' : 'Inactive')}
+            />
           </div>
 
           {/* Members + contact in single row */}
@@ -384,6 +466,21 @@ export default function QuinielaGroup() {
                     </span>
                   </div>
                 )}
+                {quinielaClosed && winnerMember && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mb-4 rounded-2xl border border-amber-400/30 bg-gradient-to-br from-amber-400/10 to-yellow-500/5 p-5 text-center"
+                  >
+                    <div className="text-3xl mb-2">🏆</div>
+                    <p className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-1">
+                      {t.quiniela_winner?.closedPhase?.[quiniela?.close_at_phase] ?? t.quiniela_winner?.closed}
+                    </p>
+                    <p className="text-xl font-black text-white">{winnerMember.username ?? 'Ganador'}</p>
+                    <p className="text-xs text-amber-400/70 font-semibold mt-0.5">{t.quiniela_winner?.champion}</p>
+                  </motion.div>
+                )}
                 <Standings quinielaId={id} members={members} predictions={enrichedPredictions} />
               </>
             )}
@@ -430,7 +527,7 @@ export default function QuinielaGroup() {
                 </div>
               ) : (
                 <PredictionsView
-                  fixtures={fixtures}
+                  fixtures={predictableFixtures}
                   myPredictions={myEnrichedPredictions}
                   onBack={() => setShowPredictions(false)}
                   onPredict={openPredict}
@@ -479,6 +576,8 @@ export default function QuinielaGroup() {
         isOpen={predModal.open}
         onClose={closePredict}
         onSave={handleSave}
+        extraPointsEnabled={quiniela?.extra_points_enabled ?? false}
+        isExtraStage={predModal.match ? isExtraPointsStage(predModal.match) : false}
       />
 
       {/* Rank-change notification overlay */}
@@ -486,6 +585,18 @@ export default function QuinielaGroup() {
         change={activeRankChange}
         quinielaName={quiniela?.name}
         onDismiss={handleRankChangeDismiss}
+      />
+
+      {/* Admin feature announcement — only shown to admin of this specific quiniela */}
+      <AdminFeatureModal quinielaId={id} isAdmin={isAdmin} />
+
+      {/* Quiniela winner overlay — shown once per device when quiniela closes */}
+      <AchievementOverlay
+        achievement={winnerOverlay}
+        onDismiss={() => {
+          localStorage.setItem(`winner_seen_${id}`, '1')
+          setWinnerOverlay(null)
+        }}
       />
     </PageTransition>
   )
@@ -498,16 +609,26 @@ const STAT_COLORS = {
   emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', icon: 'text-emerald-400' },
   sky:     { bg: 'bg-sky-500/10',     border: 'border-sky-500/20',     icon: 'text-sky-400'     },
   violet:  { bg: 'bg-violet-500/10',  border: 'border-violet-500/20',  icon: 'text-violet-400'  },
+  slate:   { bg: 'bg-slate-700/30',   border: 'border-slate-600/30',   icon: 'text-slate-400'   },
 }
 
-function StatCard({ icon: Icon, color, value, label }) {
+function StatCard({ icon: Icon, color, value, label, labelFirst = false }) {
   const c = STAT_COLORS[color] ?? STAT_COLORS.violet
   return (
     <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border ${c.bg} ${c.border}`}>
       <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${c.icon}`} />
       <div className="min-w-0">
-        <div className="text-xs font-bold text-white truncate leading-tight">{value}</div>
-        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-tight">{label}</div>
+        {labelFirst ? (
+          <>
+            <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-tight">{label}</div>
+            <div className="text-xs font-bold text-white truncate leading-tight">{value}</div>
+          </>
+        ) : (
+          <>
+            <div className="text-xs font-bold text-white truncate leading-tight">{value}</div>
+            <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-tight">{label}</div>
+          </>
+        )}
       </div>
     </div>
   )

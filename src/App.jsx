@@ -57,6 +57,7 @@ export default function App() {
 
       {/* Mobile bottom nav (md:hidden, fixed) */}
       <Footer />
+
     </div>
   )
 }

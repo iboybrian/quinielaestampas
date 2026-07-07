@@ -27,10 +27,11 @@ function generateParticles(count = 60) {
 }
 
 const ACHIEVEMENT_TYPES = {
-  team_complete: { icon: '🌟', title: 'Team Complete!', color: 'from-amber-400 to-yellow-300', iconBg: 'bg-amber-400/20' },
-  legendary: { icon: '👑', title: 'Legendary Sticker!', color: 'from-purple-400 to-pink-400', iconBg: 'bg-purple-400/20' },
-  rank_1: { icon: '🏆', title: '#1 on the Board!', color: 'from-amber-400 to-orange-400', iconBg: 'bg-amber-400/20' },
-  album_complete: { icon: '📖', title: 'Album Complete!', color: 'from-emerald-400 to-cyan-400', iconBg: 'bg-emerald-400/20' },
+  team_complete:    { icon: '🌟', title: 'Team Complete!',    color: 'from-amber-400 to-yellow-300',  iconBg: 'bg-amber-400/20' },
+  legendary:        { icon: '👑', title: 'Legendary Sticker!', color: 'from-purple-400 to-pink-400',   iconBg: 'bg-purple-400/20' },
+  rank_1:           { icon: '🏆', title: '#1 on the Board!',   color: 'from-amber-400 to-orange-400',  iconBg: 'bg-amber-400/20' },
+  album_complete:   { icon: '📖', title: 'Album Complete!',    color: 'from-emerald-400 to-cyan-400',  iconBg: 'bg-emerald-400/20' },
+  quiniela_winner:  { icon: '🏆', title: '¡Quiniela Cerrada!', color: 'from-amber-400 to-yellow-300',  iconBg: 'bg-amber-400/20' },
 }
 
 export default function AchievementOverlay({ achievement, onDismiss }) {
