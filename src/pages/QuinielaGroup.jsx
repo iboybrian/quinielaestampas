@@ -60,7 +60,6 @@ export default function QuinielaGroup() {
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
-      if (extraEnabled && fix.first_scorer == null) return { ...p }
       return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
     })
   }, [visiblePredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
@@ -73,7 +72,6 @@ export default function QuinielaGroup() {
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
-      if (extraEnabled && fix.first_scorer == null) return { ...p }
       return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
     })
   }, [myPredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
