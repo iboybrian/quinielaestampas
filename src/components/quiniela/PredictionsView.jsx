@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronUp } from 'lucide-react'
 import { format } from 'date-fns'
 import MatchCard from './MatchCard'
 import { isGroupStage } from '../../lib/footballApi'
@@ -131,6 +131,18 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
           {t.quiniela.loadingFixtures}
         </div>
       )}
+
+      {/* Scroll-to-top — always visible */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'tween', ease: 'easeOut', duration: 0.2 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-2xl bg-slate-800/90 border border-white/10 backdrop-blur-sm flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/90 shadow-lg transition-colors md:bottom-8"
+      >
+        <ChevronUp className="w-5 h-5" />
+      </motion.button>
     </div>
   )
 }
