@@ -77,7 +77,11 @@ export function useFixtures() {
         }
       }
 
-      setFixtures(all)
+      const fixturesWithEvents = all.map((f) => {
+        const ep = eventsMap[f.id]
+        return ep ? { ...f, first_scorer: ep.first_scorer, first_goal_half: ep.first_goal_half } : f
+      })
+      setFixtures(fixturesWithEvents)
     } catch (e) {
       console.error('[useFixtures]', e)
       setFixtures(MOCK_FIXTURES)

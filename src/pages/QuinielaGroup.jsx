@@ -6,7 +6,7 @@ import { useQuinielaGroup, useFixtures, maskPredictions } from '../hooks/useQuin
 import { useAuth } from '../contexts/AuthContext'
 import { isKnockoutStage, isExtraPointsStage, normalizeBracket, MOCK_BRACKET, clearFixturesCache } from '../lib/footballApi'
 import { useLang } from '../contexts/LangContext'
-import { rankMembers, calculatePoints } from '../lib/scoring'
+import { rankMembers, getPointsBreakdown } from '../lib/scoring'
 import Standings from '../components/quiniela/Standings'
 import RankChangeNotification from '../components/animations/RankChangeNotification'
 import AchievementOverlay from '../components/animations/AchievementOverlay'
@@ -60,7 +60,8 @@ export default function QuinielaGroup() {
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
-      return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
+      const { base, extra, total } = getPointsBreakdown(p, fix, extraEnabled)
+      return { ...p, points_earned: total, base_points: base, extra_points: extra }
     })
   }, [visiblePredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
 
@@ -72,7 +73,8 @@ export default function QuinielaGroup() {
       const fix = fixtureMap.get(String(p.match_id))
       if (!fix || fix.status !== 'finished') return { ...p, points_earned: null }
       if (getStageRank(fix.stage) > closeRank) return { ...p, points_earned: null }
-      return { ...p, points_earned: calculatePoints(p, fix, extraEnabled) }
+      const { base, extra, total } = getPointsBreakdown(p, fix, extraEnabled)
+      return { ...p, points_earned: total, base_points: base, extra_points: extra }
     })
   }, [myPredictions, fixtures, quiniela?.extra_points_enabled, quiniela?.close_at_phase])
 
@@ -136,8 +138,8 @@ export default function QuinielaGroup() {
       return {
         ...m,
         totalPoints: preds.reduce((s, p) => s + (p.points_earned || 0), 0),
-        exact:   preds.filter((p) => p.points_earned === 5).length,
-        correct: preds.filter((p) => p.points_earned >= 2).length,
+        exact:   preds.filter((p) => (p.base_points ?? p.points_earned) === 5).length,
+        correct: preds.filter((p) => (p.base_points ?? p.points_earned) >= 2).length,
         played:  preds.filter((p) => p.points_earned !== null).length,
       }
     })
@@ -532,6 +534,7 @@ export default function QuinielaGroup() {
                   t={t}
                   scrollToDate={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()}
                   deadlineMinutes={quiniela?.prediction_deadline_minutes ?? 10}
+                  extraPointsEnabled={quiniela?.extra_points_enabled ?? false}
                 />
               )
             )}

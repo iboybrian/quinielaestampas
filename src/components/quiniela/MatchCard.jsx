@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Lock, Clock, CheckCircle, Edit3 } from 'lucide-react'
+import { Lock, Clock, CheckCircle, Edit3, Zap } from 'lucide-react'
 import { format, isPast } from 'date-fns'
 import { getPointLabel } from '../../lib/scoring'
 import Flag from '../ui/Flag'
@@ -7,7 +7,7 @@ import { useLang } from '../../contexts/LangContext'
 import { es } from 'date-fns/locale'
 import { translateStage } from '../../lib/translations'
 
-export default function MatchCard({ match, prediction, onPredict, deadlineMinutes = 10 }) {
+export default function MatchCard({ match, prediction, onPredict, deadlineMinutes = 10, extraPointsEnabled = false }) {
   const { lang, t } = useLang()
   const matchTime = new Date(match.starts_at)
   const matchTimeMs = matchTime.getTime()
@@ -18,7 +18,18 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
     (match.status === 'scheduled' && nowMs >= matchTimeMs && nowMs <= matchTimeMs + 120 * 60 * 1000)
   const isFinished = match.status === 'finished'
   const hasPrediction = prediction != null
-  const pointInfo = isFinished && hasPrediction ? getPointLabel(prediction.points_earned) : null
+  const pointInfo = isFinished && hasPrediction ? getPointLabel(prediction.base_points ?? prediction.points_earned) : null
+  const homeName = t.countries[match.home_team] || match.home_team
+  const awayName = t.countries[match.away_team] || match.away_team
+  const hasExtraPick = hasPrediction && extraPointsEnabled && prediction.first_scorer != null
+  const extraPickLabel = hasExtraPick
+    ? prediction.first_scorer === 'none'
+      ? 'Sin gol en el partido'
+      : `${prediction.first_scorer === 'home' ? homeName : awayName} primer anotador` +
+        (prediction.first_goal_half
+          ? ` · ${prediction.first_goal_half === 'first' ? '1er' : '2do'} tiempo de primer gol`
+          : '')
+    : null
 
   return (
     <motion.div
@@ -71,6 +82,7 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
                     className={`text-xs font-bold mt-1 px-2 py-0.5 rounded-full ${pointInfo.color} ${pointInfo.bg}`}
                   >
                     +{prediction.points_earned} · {pointInfo.label}
+                    {prediction.extra_points > 0 && ` (+${prediction.extra_points} extra)`}
                   </motion.div>
                 )}
               </div>
@@ -95,19 +107,30 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
         {!isLocked && !isFinished && (
           <div className="mt-4 pt-4 border-t border-white/5">
             {hasPrediction ? (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-400 text-sm">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>{t.quiniela.yourPick}: <span className="font-bold">{prediction.home_score} – {prediction.away_score}</span></span>
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-emerald-400 text-sm">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>{t.quiniela.yourPick}: <span className="font-bold">{prediction.home_score} – {prediction.away_score}</span></span>
+                  </div>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => onPredict(match)}
+                    className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-white/5"
+                  >
+                    <Edit3 className="w-3 h-3" />
+                    {t.quiniela.editBtn}
+                  </motion.button>
                 </div>
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => onPredict(match)}
-                  className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-white/5"
-                >
-                  <Edit3 className="w-3 h-3" />
-                  {t.quiniela.editBtn}
-                </motion.button>
+                {hasExtraPick && (
+                  <div className="mt-2 flex items-center justify-between text-sm">
+                    <span className="text-slate-500 flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5 text-amber-400" />
+                      Puntos Extra
+                    </span>
+                    <span className="text-slate-300 font-bold text-right">{extraPickLabel}</span>
+                  </div>
+                )}
               </div>
             ) : (
               <motion.button
@@ -124,11 +147,22 @@ export default function MatchCard({ match, prediction, onPredict, deadlineMinute
 
         {/* Finished — show my prediction vs actual */}
         {isFinished && hasPrediction && (
-          <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-sm">
-            <span className="text-slate-500">{t.quiniela.yourPredictionLabel}</span>
-            <span className="text-slate-300 font-bold">
-              {prediction.home_score} – {prediction.away_score}
-            </span>
+          <div className="mt-4 pt-4 border-t border-white/5">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-slate-500">{t.quiniela.yourPredictionLabel}</span>
+              <span className="text-slate-300 font-bold">
+                {prediction.home_score} – {prediction.away_score}
+              </span>
+            </div>
+            {hasExtraPick && (
+              <div className="mt-2 flex items-center justify-between text-sm">
+                <span className="text-slate-500 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  Puntos Extra
+                </span>
+                <span className="text-slate-300 font-bold text-right">{extraPickLabel}</span>
+              </div>
+            )}
           </div>
         )}
         {isFinished && !hasPrediction && (

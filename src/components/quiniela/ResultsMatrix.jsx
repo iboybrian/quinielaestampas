@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Lock } from 'lucide-react'
-import { calculatePoints } from '../../lib/scoring'
+import { calculatePoints, getPointLabel } from '../../lib/scoring'
 import Flag from '../ui/Flag'
 import { useLang } from '../../contexts/LangContext'
 
@@ -87,9 +87,13 @@ function PredCell({ match, prediction }) {
   const points = finished
     ? (prediction.points_earned ?? calculatePoints(prediction, match))
     : null
+  const hasExtra = finished && prediction.extra_points > 0
+  const cellTitle = hasExtra
+    ? `${prediction.base_points} pts (${getPointLabel(prediction.base_points).label}) + ${prediction.extra_points} pt${prediction.extra_points > 1 ? 's' : ''} extra`
+    : undefined
 
   return (
-    <td className={`p-0 border min-w-[72px] transition-colors duration-300 ${cellStyle(points, finished)}`}>
+    <td title={cellTitle} className={`p-0 border min-w-[72px] transition-colors duration-300 ${cellStyle(points, finished)}`}>
       <div className="flex flex-col items-center justify-center gap-0.5 h-[52px] px-2">
         <PredWinner
           pred={prediction}
@@ -106,7 +110,7 @@ function PredCell({ match, prediction }) {
             points >= 2  ? 'text-amber-400'   :
             'text-slate-600'
           }`}>
-            +{points}
+            +{points}{hasExtra && ' ⚡'}
           </span>
         )}
       </div>

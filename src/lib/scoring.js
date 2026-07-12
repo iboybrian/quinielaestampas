@@ -10,14 +10,14 @@
  *  +1 — correct first goal half ('first'|'second')  [skipped when first_scorer = 'none']
  */
 
-export function calculatePoints(pred, actual, extraPointsEnabled = false) {
+export function getPointsBreakdown(pred, actual, extraPointsEnabled = false) {
   if (
     pred.home_score == null ||
     pred.away_score == null ||
     actual.home_score == null ||
     actual.away_score == null
   ) {
-    return 0
+    return { base: 0, extra: 0, total: 0 }
   }
 
   const pH = pred.home_score
@@ -25,33 +25,37 @@ export function calculatePoints(pred, actual, extraPointsEnabled = false) {
   const aH = actual.home_score
   const aA = actual.away_score
 
-  let pts
+  let base
   if (pH === aH && pA === aA) {
-    pts = 5
+    base = 5
   } else {
     const predDiff   = pH - pA
     const actualDiff = aH - aA
-    if (predDiff === actualDiff) pts = 3
-    else if (Math.sign(predDiff) === Math.sign(actualDiff)) pts = 2
-    else pts = 0
+    if (predDiff === actualDiff) base = 3
+    else if (Math.sign(predDiff) === Math.sign(actualDiff)) base = 2
+    else base = 0
   }
-
-  if (!extraPointsEnabled || actual.first_scorer == null) return pts
 
   let extra = 0
-  if (pred.first_scorer != null && pred.first_scorer === actual.first_scorer) {
-    extra += 1
-  }
-  if (
-    actual.first_scorer !== 'none' &&
-    actual.first_goal_half != null &&
-    pred.first_goal_half != null &&
-    pred.first_goal_half === actual.first_goal_half
-  ) {
-    extra += 1
+  if (extraPointsEnabled && actual.first_scorer != null) {
+    if (pred.first_scorer != null && pred.first_scorer === actual.first_scorer) {
+      extra += 1
+    }
+    if (
+      actual.first_scorer !== 'none' &&
+      actual.first_goal_half != null &&
+      pred.first_goal_half != null &&
+      pred.first_goal_half === actual.first_goal_half
+    ) {
+      extra += 1
+    }
   }
 
-  return pts + extra
+  return { base, extra, total: base + extra }
+}
+
+export function calculatePoints(pred, actual, extraPointsEnabled = false) {
+  return getPointsBreakdown(pred, actual, extraPointsEnabled).total
 }
 
 export function getPointLabel(points) {

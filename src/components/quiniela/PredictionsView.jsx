@@ -7,17 +7,25 @@ import { isGroupStage } from '../../lib/footballApi'
 import { useLang } from '../../contexts/LangContext'
 import { es } from 'date-fns/locale'
 
-export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t, scrollToDate, deadlineMinutes = 10 }) {
+export default function PredictionsView({ fixtures, myPredictions, onBack, onPredict, t, scrollToDate, deadlineMinutes = 10, extraPointsEnabled = false }) {
   const { lang } = useLang()
 
   useEffect(() => {
     if (!scrollToDate) return
-    const el = document.getElementById(`pred-date-${scrollToDate}`)
-    if (el) setTimeout(() => {
-      const top = el.getBoundingClientRect().top + window.scrollY - 80
-      window.scrollTo({ top, behavior: 'smooth' })
-    }, 150)
-  }, [scrollToDate])
+    setTimeout(() => {
+      let el = document.getElementById(`pred-date-${scrollToDate}`)
+      if (!el) {
+        const sorted = fixtures.slice().sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
+        const firstPending = sorted.find(m => m.status !== 'finished' && m.starts_at)
+        if (firstPending) {
+          const d = new Date(firstPending.starts_at)
+          const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+          el = document.getElementById(`pred-date-${dateKey}`)
+        }
+      }
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' })
+    }, 200)
+  }, [scrollToDate, fixtures])
 
   const allMatches = useMemo(
     () => fixtures.slice().sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at)),
@@ -117,6 +125,7 @@ export default function PredictionsView({ fixtures, myPredictions, onBack, onPre
                       prediction={pred}
                       onPredict={onPredict}
                       deadlineMinutes={deadlineMinutes}
+                      extraPointsEnabled={extraPointsEnabled}
                     />
                   )
                 })}

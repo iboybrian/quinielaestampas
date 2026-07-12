@@ -34,8 +34,8 @@ export default function Standings({ quinielaId, members, predictions }) {
       return {
         ...m,
         totalPoints: memberPreds.reduce((s, p) => s + (p.points_earned || 0), 0),
-        exact: memberPreds.filter((p) => p.points_earned === 5).length,
-        correct: memberPreds.filter((p) => p.points_earned >= 2).length,
+        exact: memberPreds.filter((p) => (p.base_points ?? p.points_earned) === 5).length,
+        correct: memberPreds.filter((p) => (p.base_points ?? p.points_earned) >= 2).length,
         played: memberPreds.filter((p) => p.points_earned !== null).length,
       }
     })
