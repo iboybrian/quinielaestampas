@@ -14,6 +14,7 @@ const PHASES = [
   { key: 'r16',     label: 'Octavos',        match: (s) => /round of 16|r16/i.test(s)      },
   { key: 'qf',      label: 'Cuartos',        match: (s) => /quarter/i.test(s)              },
   { key: 'sf',      label: 'Semis',          match: (s) => /semi/i.test(s)                 },
+  { key: 'third',   label: '3er Puesto',     match: (s) => /3rd|third|place/i.test(s)      },
   { key: 'final',   label: 'Final',          match: (s) => /^final$/i.test(s?.trim())      },
 ]
 
