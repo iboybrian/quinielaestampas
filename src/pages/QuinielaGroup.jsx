@@ -98,10 +98,21 @@ export default function QuinielaGroup() {
     return phaseFixtures.length > 0 && phaseFixtures.every((f) => f.status === 'finished')
   }, [quiniela?.close_at_phase, fixtures])
 
-  // Winner: #1 ranked member once quiniela is closed
+  // Winner: #1 ranked member once quiniela is closed.
+  // rankMembers expects member objects carrying totalPoints/exact/correct — build
+  // those stats from each member's enriched predictions first (same as Standings).
   const winnerMember = useMemo(() => {
     if (!quinielaClosed || members.length === 0) return null
-    return rankMembers(members, enrichedPredictions)[0] ?? null
+    const memberStats = members.map((m) => {
+      const preds = enrichedPredictions.filter((p) => p.user_id === m.id)
+      return {
+        ...m,
+        totalPoints: preds.reduce((s, p) => s + (p.points_earned || 0), 0),
+        exact:   preds.filter((p) => (p.base_points ?? p.points_earned) === 5).length,
+        correct: preds.filter((p) => (p.base_points ?? p.points_earned) >= 2).length,
+      }
+    })
+    return rankMembers(memberStats)[0] ?? null
   }, [quinielaClosed, members, enrichedPredictions])
 
   const [winnerOverlay, setWinnerOverlay] = useState(null)
